@@ -1,0 +1,23 @@
+const ACTIONS = {
+    JOIN: 'join',
+    JOINED: 'joined',
+    JOIN_REJECTED: 'join:rejected',
+    DISCONNECTED: 'disconnected',
+    CODE_CHANGE: 'code-change',
+    CURSOR_MOVE: 'cursor:move',
+    TYPING_START: 'typing:start',
+    TYPING_STOP: 'typing:stop',
+    PRESENCE_UPDATE: 'presence:update',
+    ROOM_STATE_UPDATE: 'room-state-update',
+    SUBMISSION_ADD: 'submission-add',
+    HOST_SET_PROBLEM: 'host:setProblem',
+    PROBLEM_REQUEST_SWITCH: 'problem:requestSwitch',
+    PROBLEM_SWITCH_REQUESTED: 'problem:switchRequested',
+    PROBLEM_SWITCH_RESPONSE: 'problem:switchResponse',
+    WHITEBOARD_SYNC: 'whiteboard:sync',
+    WHITEBOARD_CLEAR: 'whiteboard:clear',
+    SYNC_CODE: 'sync-code',
+    LEAVE: 'leave',
+};
+
+module.exports = ACTIONS;

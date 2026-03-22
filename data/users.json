@@ -1,0 +1,52 @@
+[
+  {
+    "uid": "local-1773587487885-deb08b",
+    "email": "localuser_a5c7f4@mail.com",
+    "displayName": "LocalUser",
+    "passwordHash": "d51ae96f3075fc331ce6d4300ff9cbb9:73146316ca52804f3276acc0ac9ae8617889975db3dfdd268783a63b84576fd8a3838ffa010b44e6d34b9774ea65658777492daee067a701c51d0ad0dee883b4",
+    "createdAt": "2026-03-15T15:11:27.926Z"
+  },
+  {
+    "uid": "local-1773587609511-54f6ea",
+    "email": "anujyadav11112003@gmail.com",
+    "displayName": "anujyadav11112003",
+    "passwordHash": "048abfda4f290bb4d4cc8eda80a133ca:2aa0e169fad5008bddd4b96b59f9c800e0b0c73548b26214b97434558fc27fb24bcabaf11a2fad6bb7435d5c126d4481f80cb7f0051a7e9e2c2331ec65829c3a",
+    "createdAt": "2026-03-15T15:13:29.548Z",
+    "passwordReset": {
+      "otpHash": null,
+      "tokenHash": "c5eb70464ffcce502d5f884a390470f323ecb087656bb27aa2dfc7eb97d73bf6",
+      "expiresAt": 1773661511759,
+      "attempts": 0,
+      "requestedAt": "2026-03-16T11:30:11.759Z"
+    }
+  },
+  {
+    "uid": "local-1773636680023-b1fa45",
+    "email": "ashish6245@gmail.com",
+    "displayName": "ashish6245",
+    "passwordHash": "c35bdef4dd28e2f394c7b44f21a428de:0f19c21506f76c6d61ee3dac992ad685497cd8aa924bbbd2cc372decc2d488909c4a4581e30fea81b1b913ecdb1200e6e75f9a29d18eb8ccc0059cc0a70fe7d8",
+    "createdAt": "2026-03-16T04:51:20.058Z"
+  },
+  {
+    "uid": "local-1773645564927-2cd093",
+    "email": "mailtest@example.com",
+    "displayName": "mailtest",
+    "passwordHash": "f213024e37cc6f4e8574b9f533c9c553:3e92f9d050d1a769cb3e56668d6d125a91f7f1a7aa9341283bf845c6b4e3b0b10f981a09d1b6e780fa44f92930d2e73ae01f845b29b7493cd5783fb1c989eda5",
+    "createdAt": "2026-03-16T07:19:24.969Z",
+    "passwordReset": {
+      "otpHash": "822064270bb4ed152a249370277b848911ae7e862c05fe7178b3f8f7af073483",
+      "tokenHash": null,
+      "expiresAt": 1773646666760,
+      "attempts": 0,
+      "requestedAt": "2026-03-16T07:22:46.761Z"
+    }
+  },
+  {
+    "uid": "local-1773659780289-a2e1df",
+    "email": "anuj11112003@gmail.com",
+    "displayName": "anuj11112003",
+    "passwordHash": "6bea2ba45d15ae1295267427ff27c9ee:62326c6105d5935499fe9aa5a82957fbb8b16aec4bbfdc90278c0fbe27b2fdb45f2c067062467eb4a0348177d33d020324e6468c4b4c210a6aba767b67afe984",
+    "createdAt": "2026-03-16T11:16:20.357Z",
+    "passwordReset": null
+  }
+]
