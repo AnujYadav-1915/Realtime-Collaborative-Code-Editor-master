@@ -16,6 +16,8 @@ const ACTIONS = {
     PROBLEM_SWITCH_RESPONSE: 'problem:switchResponse',
     WHITEBOARD_SYNC: 'whiteboard:sync',
     WHITEBOARD_CLEAR: 'whiteboard:clear',
+    VOICE_SIGNAL: 'voice:signal',
+    VOICE_STATUS: 'voice:status',
     SYNC_CODE: 'sync-code',
     LEAVE: 'leave',
 };

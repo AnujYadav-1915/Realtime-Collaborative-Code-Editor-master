@@ -2537,6 +2537,8 @@ function getAllConnectedClients(roomId) {
                 color: userState.color,
                 isTyping: Boolean(userState.isTyping),
                 cursorPosition: userState.cursorPosition || null,
+                selectionRange: userState.selectionRange || null,
+                voiceEnabled: Boolean(userState.voiceEnabled),
                 isOnline: true,
             };
         }
@@ -2578,6 +2580,8 @@ io.on('connection', (socket) => {
             color: pickUserColorForRoom(roomId),
             isTyping: false,
             cursorPosition: null,
+            selectionRange: null,
+            voiceEnabled: false,
         };
         socket.join(roomId);
         if (!roomStateMap[roomId].ownerUsername) {
@@ -2631,18 +2635,20 @@ io.on('connection', (socket) => {
         emitRoomStateToRoom(roomId);
     });
 
-    socket.on(ACTIONS.CURSOR_MOVE, ({roomId, cursorPosition}) => {
+    socket.on(ACTIONS.CURSOR_MOVE, ({roomId, cursorPosition, selectionRange}) => {
         if (!roomId || !userSocketMap[socket.id]) {
             return;
         }
 
         userSocketMap[socket.id].cursorPosition = cursorPosition;
+        userSocketMap[socket.id].selectionRange = selectionRange || null;
 
         socket.in(roomId).emit(ACTIONS.CURSOR_MOVE, {
             userId: socket.id,
             username: getSocketUsername(socket.id),
             color: userSocketMap[socket.id].color,
             cursorPosition,
+            selectionRange: selectionRange || null,
         });
     });
 
@@ -2692,6 +2698,26 @@ io.on('connection', (socket) => {
         }
 
         socket.in(roomId).emit(ACTIONS.WHITEBOARD_CLEAR);
+    });
+
+    socket.on(ACTIONS.VOICE_SIGNAL, ({toSocketId, signal}) => {
+        if (!toSocketId || !signal) {
+            return;
+        }
+
+        io.to(toSocketId).emit(ACTIONS.VOICE_SIGNAL, {
+            fromSocketId: socket.id,
+            signal,
+        });
+    });
+
+    socket.on(ACTIONS.VOICE_STATUS, ({roomId, enabled}) => {
+        if (!roomId || !userSocketMap[socket.id]) {
+            return;
+        }
+
+        userSocketMap[socket.id].voiceEnabled = Boolean(enabled);
+        emitPresenceToRoom(roomId);
     });
 
     socket.on(ACTIONS.HOST_SET_PROBLEM, ({roomId, problemId, title, description, testCases = {}, problem = {}}) => {

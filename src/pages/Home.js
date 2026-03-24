@@ -58,6 +58,36 @@ const testimonials = [
     'The closest experience to real pair-programming interviews.',
 ];
 
+const contestLeaderboardStorageKey = 'sync-code-contest-leaderboard';
+const defaultContestLeaderboard = [
+    { username: 'Anuj', solved: 5, penalty: 12, score: 488 },
+    { username: 'Priya', solved: 4, penalty: 8, score: 432 },
+    { username: 'Rahul', solved: 4, penalty: 17, score: 423 },
+];
+
+const homeFeatureHighlights = [
+    {
+        title: 'Real-Time Collaboration',
+        points: ['Live cursors', 'Shared editing', 'Typing indicators', 'Selection presence'],
+        accent: 'from-[#6366F1] to-[#8B5CF6]',
+    },
+    {
+        title: 'Voice + Presence',
+        points: ['Optional in-room voice', 'Online participant cards', 'Cursor line chips', 'Speaker activity states'],
+        accent: 'from-[#0EA5E9] to-[#22D3EE]',
+    },
+    {
+        title: 'Contest Mode',
+        points: ['Timed multi-problem rounds', 'Penalty controls', 'Leaderboard snapshots', 'Quick launch to editor'],
+        accent: 'from-[#10B981] to-[#22C55E]',
+    },
+    {
+        title: 'Interview Toolkit',
+        points: ['Custom test cases', 'Runtime trend charts', 'Whiteboard collaboration', 'Shareable read-only links'],
+        accent: 'from-[#F59E0B] to-[#F97316]',
+    },
+];
+
 const stylePresets = {
     A: {
         rootBg: 'bg-[radial-gradient(circle_at_15%_10%,rgba(34,211,238,0.12),transparent_28%),radial-gradient(circle_at_85%_8%,rgba(139,92,246,0.2),transparent_30%),linear-gradient(180deg,#020617_0%,#0F172A_38%,#1E1B4B_100%)]',
@@ -222,6 +252,21 @@ const Home = () => {
     const [demoFrameIndex, setDemoFrameIndex] = useState(0);
     const [demoProgress, setDemoProgress] = useState(0);
     const [isLaunchingQuestion, setIsLaunchingQuestion] = useState(false);
+    const [contestRoundCount, setContestRoundCount] = useState(3);
+    const [contestRoundMinutes, setContestRoundMinutes] = useState(18);
+    const [contestPenaltyMinutes, setContestPenaltyMinutes] = useState(8);
+    const [isLaunchingContest, setIsLaunchingContest] = useState(false);
+    const [contestLeaderboard, setContestLeaderboard] = useState(() => {
+        try {
+            const persisted = JSON.parse(localStorage.getItem(contestLeaderboardStorageKey) || 'null');
+            if (Array.isArray(persisted) && persisted.length > 0) {
+                return persisted;
+            }
+        } catch (_error) {
+        }
+        return defaultContestLeaderboard;
+    });
+    const [activeFeatureHighlight, setActiveFeatureHighlight] = useState(0);
     const profileMenuRef = useRef(null);
     const demoTimerRef = useRef(null);
     const demoTypeTimerRef = useRef(null);
@@ -292,6 +337,18 @@ const Home = () => {
 
         return () => window.clearInterval(intervalId);
     }, []);
+
+    useEffect(() => {
+        const intervalId = window.setInterval(() => {
+            setActiveFeatureHighlight((currentIndex) => (currentIndex + 1) % homeFeatureHighlights.length);
+        }, 1800);
+
+        return () => window.clearInterval(intervalId);
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem(contestLeaderboardStorageKey, JSON.stringify(contestLeaderboard.slice(0, 10)));
+    }, [contestLeaderboard]);
 
     useEffect(() => {
         const handleOutsideClick = (event) => {
@@ -697,6 +754,91 @@ const Home = () => {
         }
     };
 
+    const handleLaunchContestMode = async () => {
+        const launchUsername = `${username || getDisplayName(currentUser) || 'Guest'}`.trim();
+        if (!launchUsername) {
+            toast.error('Please set a username first.');
+            scrollToSection('cta');
+            return;
+        }
+
+        const safeRoundCount = Math.min(Math.max(Number(contestRoundCount) || 3, 2), 8);
+        const safeRoundMinutes = Math.min(Math.max(Number(contestRoundMinutes) || 18, 8), 60);
+        const safePenalty = Math.min(Math.max(Number(contestPenaltyMinutes) || 8, 0), 30);
+
+        setIsLaunchingContest(true);
+
+        try {
+            const response = await fetch(`${backendBaseUrl}/api/problems?page=1&limit=100`);
+            const payload = await response.json();
+            if (!response.ok) {
+                throw new Error(payload?.error || 'Failed to load contest problems.');
+            }
+
+            const allProblems = Array.isArray(payload?.problems) ? payload.problems : [];
+            if (allProblems.length < safeRoundCount) {
+                throw new Error('Not enough problems available to build this contest.');
+            }
+
+            const randomized = [...allProblems].sort(() => Math.random() - 0.5).slice(0, safeRoundCount);
+            const contestId = `contest-${Date.now()}`;
+            const contestState = {
+                enabled: true,
+                contestId,
+                createdAt: Date.now(),
+                roundCount: safeRoundCount,
+                roundMinutes: safeRoundMinutes,
+                penaltyMinutes: safePenalty,
+                problems: randomized.map((problem, index) => ({
+                    id: problem.id,
+                    title: problem.title,
+                    difficulty: problem.difficulty || 'medium',
+                    order: index + 1,
+                })),
+                leaderboard: contestLeaderboard.slice(0, 10),
+            };
+
+            setContestLeaderboard((prev) => {
+                const penaltyScore = safePenalty * 4;
+                const baseScore = Math.max(120, safeRoundCount * 120 - penaltyScore);
+                const nextEntry = {
+                    username: launchUsername,
+                    solved: 0,
+                    penalty: safePenalty,
+                    score: baseScore,
+                };
+
+                const merged = [
+                    ...prev.filter((entry) => entry.username !== launchUsername),
+                    nextEntry,
+                ].sort((left, right) => {
+                    if (right.solved !== left.solved) return right.solved - left.solved;
+                    if (left.penalty !== right.penalty) return left.penalty - right.penalty;
+                    return right.score - left.score;
+                });
+
+                return merged.slice(0, 10);
+            });
+
+            navigate('/editor', {
+                state: {
+                    username: launchUsername,
+                    profile: buildLaunchProfile(launchUsername),
+                    selectedProblemId: randomized[0].id,
+                    selectedProblemTitle: randomized[0].title,
+                    launchMode: 'contest',
+                    contestMode: contestState,
+                },
+            });
+
+            toast.success(`Contest mode launched: ${safeRoundCount} rounds · ${safeRoundMinutes} min each.`);
+        } catch (error) {
+            toast.error(error.message || 'Failed to launch contest mode.');
+        } finally {
+            setIsLaunchingContest(false);
+        }
+    };
+
     const joinRoom = async () => {
         if (!currentUser) {
             toast.error('Please sign in first.');
@@ -1073,6 +1215,7 @@ const Home = () => {
 
                     <nav className="hidden items-center gap-7 text-sm text-[#94A3B8] md:flex">
                         <button type="button" onClick={() => scrollToSection('features')} className="transition hover:text-[#22D3EE]">Features</button>
+                        <button type="button" onClick={() => scrollToSection('contest-mode')} className="transition hover:text-[#22D3EE]">Contest</button>
                         <button type="button" onClick={() => scrollToSection('collaborate')} className="transition hover:text-[#22D3EE]">Collaborate</button>
                         <button type="button" onClick={() => scrollToSection('problems')} className="transition hover:text-[#22D3EE]">Problems</button>
                         <button type="button" onClick={() => scrollToSection('docs')} className="transition hover:text-[#22D3EE]">Docs</button>
@@ -1220,7 +1363,7 @@ const Home = () => {
             {isMobileMenuOpen ? (
                 <div className="border-b border-[#1E293B] bg-[#020617]/98 md:hidden">
                     <nav className="flex flex-col px-4 py-3 text-sm text-[#94A3B8]">
-                        {[['features','Features'],['collaborate','Collaborate'],['problems','Problems'],['docs','Docs'],['about','About']].map(([id, label]) => (
+                        {[['features','Features'],['contest-mode','Contest'],['collaborate','Collaborate'],['problems','Problems'],['docs','Docs'],['about','About']].map(([id, label]) => (
                             <button
                                 key={id}
                                 type="button"
@@ -1322,25 +1465,21 @@ const Home = () => {
 
                 <section id="features" className="mx-auto w-full px-4 py-14 section-fade">
                     <h2 className="text-center text-3xl font-bold">Powerful Features for Collaborative Coding</h2>
-                    <div className="mt-10 grid gap-5 md:grid-cols-3">
-                        {[
-                            {
-                                title: 'Real-Time Collaboration',
-                                points: ['Live cursors', 'Shared editing', 'Typing indicators'],
-                            },
-                            {
-                                title: 'Integrated Problem Library',
-                                points: ['Coding interview problems', 'Test cases and judge system', 'Difficulty filters'],
-                            },
-                            {
-                                title: 'Instant Code Execution',
-                                points: ['Run code instantly', 'View output in real time', 'Language support'],
-                            },
-                        ].map((feature) => (
+                    <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+                        {homeFeatureHighlights.map((feature, index) => (
                             <div
                                 key={feature.title}
-                                className={`rounded-2xl border border-[#334155] p-6 transition duration-200 hover:-translate-y-1 ${activeStyle.cardBg} ${activeStyle.cardHover}`}
+                                className={`relative overflow-hidden rounded-2xl border border-[#334155] p-6 transition duration-300 hover:-translate-y-1 ${activeStyle.cardBg} ${activeStyle.cardHover} ${
+                                    activeFeatureHighlight === index
+                                        ? 'border-[#22D3EE] shadow-[0_0_24px_rgba(34,211,238,0.3)]'
+                                        : ''
+                                }`}
                             >
+                                <span
+                                    className={`pointer-events-none absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r ${feature.accent} ${
+                                        activeFeatureHighlight === index ? 'opacity-100' : 'opacity-45'
+                                    }`}
+                                />
                                 <h3 className="text-lg font-semibold">{feature.title}</h3>
                                 <ul className="mt-4 space-y-2 text-sm text-[#94A3B8]">
                                     {feature.points.map((point) => (
@@ -1452,6 +1591,93 @@ renderSharedEditor(roomId)`}
                     </div>
                 </section>
 
+                <section id="contest-mode" className="mx-auto w-full px-4 py-12 section-fade">
+                    <div className="rounded-3xl border border-[#334155] bg-[linear-gradient(145deg,rgba(2,6,23,0.95),rgba(17,24,39,0.94))] p-6 md:p-8">
+                        <div className="flex flex-wrap items-center justify-between gap-3">
+                            <div>
+                                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#22D3EE]">Contest mode</p>
+                                <h3 className="mt-2 text-2xl font-bold md:text-3xl">Timed multi-problem rounds with leaderboard + penalties</h3>
+                            </div>
+                            <span className="rounded-full border border-[#334155] bg-[#0B1120] px-3 py-1 text-xs font-semibold text-[#A78BFA]">
+                                Competitive Practice
+                            </span>
+                        </div>
+
+                        <div className="mt-7 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
+                            <div className="rounded-2xl border border-[#334155] bg-[#020617]/90 p-5">
+                                <p className="text-sm font-semibold text-[#F8FAFC]">Round planner</p>
+                                <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                                    <label className="rounded-xl border border-[#334155] bg-[#0B1120] px-3 py-2 text-xs text-[#94A3B8]">
+                                        Rounds
+                                        <input
+                                            type="number"
+                                            min={2}
+                                            max={8}
+                                            value={contestRoundCount}
+                                            onChange={(event) => setContestRoundCount(Number(event.target.value) || 3)}
+                                            className="mt-2 w-full rounded-lg border border-[#334155] bg-[#020617] px-2 py-2 text-sm text-[#F8FAFC] outline-none focus:border-[#8B5CF6]"
+                                        />
+                                    </label>
+                                    <label className="rounded-xl border border-[#334155] bg-[#0B1120] px-3 py-2 text-xs text-[#94A3B8]">
+                                        Minutes / round
+                                        <input
+                                            type="number"
+                                            min={8}
+                                            max={60}
+                                            value={contestRoundMinutes}
+                                            onChange={(event) => setContestRoundMinutes(Number(event.target.value) || 18)}
+                                            className="mt-2 w-full rounded-lg border border-[#334155] bg-[#020617] px-2 py-2 text-sm text-[#F8FAFC] outline-none focus:border-[#8B5CF6]"
+                                        />
+                                    </label>
+                                    <label className="rounded-xl border border-[#334155] bg-[#0B1120] px-3 py-2 text-xs text-[#94A3B8]">
+                                        Penalty (minutes)
+                                        <input
+                                            type="number"
+                                            min={0}
+                                            max={30}
+                                            value={contestPenaltyMinutes}
+                                            onChange={(event) => setContestPenaltyMinutes(Number(event.target.value) || 8)}
+                                            className="mt-2 w-full rounded-lg border border-[#334155] bg-[#020617] px-2 py-2 text-sm text-[#F8FAFC] outline-none focus:border-[#8B5CF6]"
+                                        />
+                                    </label>
+                                </div>
+
+                                <div className="mt-4 rounded-xl border border-[#334155] bg-[#0B1120] px-4 py-3 text-sm text-[#94A3B8]">
+                                    <p>Contest summary: <span className="text-[#F8FAFC] font-semibold">{contestRoundCount} rounds · {contestRoundMinutes} min each · {contestPenaltyMinutes} min wrong-attempt penalty</span></p>
+                                    <p className="mt-1 text-xs">Launch opens the editor with the first contest problem and a prepared contest packet.</p>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    onClick={handleLaunchContestMode}
+                                    disabled={isLaunchingContest}
+                                    className="mt-4 rounded-xl bg-[linear-gradient(135deg,#6366F1,#8B5CF6,#22D3EE)] px-5 py-3 text-sm font-semibold text-[#F8FAFC] shadow-[0_0_22px_rgba(99,102,241,0.35)] transition hover:opacity-90 disabled:opacity-60"
+                                >
+                                    {isLaunchingContest ? 'Preparing Contest...' : '🚀 Launch Contest Mode'}
+                                </button>
+                            </div>
+
+                            <div className="rounded-2xl border border-[#334155] bg-[#020617]/90 p-5">
+                                <div className="flex items-center justify-between gap-2">
+                                    <p className="text-sm font-semibold text-[#F8FAFC]">Leaderboard (preview)</p>
+                                    <span className="text-xs text-[#94A3B8]">Sorted by solved → penalty → score</span>
+                                </div>
+                                <div className="mt-4 space-y-2">
+                                    {contestLeaderboard.slice(0, 6).map((entry, index) => (
+                                        <div key={`${entry.username}-${index}`} className="grid grid-cols-[26px_1fr_auto_auto_auto] items-center gap-2 rounded-lg border border-[#334155] bg-[#0B1120] px-3 py-2 text-xs">
+                                            <span className="text-[#22D3EE]">#{index + 1}</span>
+                                            <span className="truncate text-[#F8FAFC]">{entry.username}</span>
+                                            <span className="text-[#A7F3D0]">{entry.solved} solved</span>
+                                            <span className="text-[#FCD34D]">{entry.penalty}m pen</span>
+                                            <span className="text-[#C4B5FD]">{entry.score}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
                 <section className="mx-auto w-full px-4 py-6 section-fade">
                     <div className="relative overflow-hidden rounded-[28px] border border-[#334155] bg-[linear-gradient(135deg,rgba(15,23,42,0.95),rgba(30,27,75,0.82))] px-6 py-8 md:px-8">
                         <div className="absolute left-10 top-1/2 h-36 w-36 -translate-y-1/2 rounded-full bg-[#22D3EE]/15 blur-3xl" />
@@ -1475,37 +1701,6 @@ renderSharedEditor(roomId)`}
                                     <p className="mt-2 text-sm font-semibold text-[#F8FAFC]">Graph traversal set queued</p>
                                     <p className="mt-1 text-sm text-[#A78BFA]">Multiple problems are ready to be assigned</p>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section className="mx-auto w-full px-4 py-6 section-fade" id="footer">
-                    <div className="rounded-3xl border border-[#1E293B] bg-[#020617] px-6 py-10">
-                        <div className="grid gap-8 text-sm text-[#94A3B8] md:grid-cols-4">
-                            <div>
-                                <h4 className="mb-3 font-semibold text-[#F8FAFC]">Product</h4>
-                                <p className="transition hover:text-[#22D3EE]">Editor</p>
-                                <p className="transition hover:text-[#22D3EE]">Collaboration</p>
-                                <p className="transition hover:text-[#22D3EE]">Execution</p>
-                            </div>
-                            <div>
-                                <h4 className="mb-3 font-semibold text-[#F8FAFC]">Resources</h4>
-                                <p className="transition hover:text-[#22D3EE]">Docs</p>
-                                <p className="transition hover:text-[#22D3EE]">Guides</p>
-                                <p className="transition hover:text-[#22D3EE]">API</p>
-                            </div>
-                            <div>
-                                <h4 className="mb-3 font-semibold text-[#F8FAFC]">Community</h4>
-                                <p className="transition hover:text-[#22D3EE]">Discord</p>
-                                <p className="transition hover:text-[#22D3EE]">Contributors</p>
-                                <p className="transition hover:text-[#22D3EE]">Issues</p>
-                            </div>
-                            <div>
-                                <h4 className="mb-3 font-semibold text-[#F8FAFC]">Contact</h4>
-                                <a className="block transition hover:text-[#22D3EE]" href="mailto:anujyadav1915@gmail.com">anujyadav1915@gmail.com</a>
-                                <a className="block transition hover:text-[#22D3EE]" href="https://www.linkedin.com/in/anuj-kumar-918415295/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-                                <a className="block transition hover:text-[#22D3EE]" href="https://www.github.com/AnujYadav-1915/" target="_blank" rel="noopener noreferrer">GitHub</a>
                             </div>
                         </div>
                     </div>
@@ -1739,19 +1934,48 @@ renderSharedEditor(roomId)`}
                 </section>
 
                 <section id="about" className="mx-auto w-full px-4 py-14 section-fade">
-                    <h2 className="text-3xl font-bold">What developers say</h2>
-                    <div className="mt-7 grid gap-4 md:grid-cols-3">
-                        {testimonials.map((quote, index) => (
-                            <blockquote
-                                key={quote}
-                                className={`relative overflow-hidden rounded-2xl border p-5 text-[#94A3B8] transition duration-500 ${activeStyle.cardBg} ${activeStyle.cardHover} ${activeTestimonialIndex === index ? 'border-[#22D3EE] shadow-[0_0_24px_rgba(34,211,238,0.35)]' : 'border-[#334155]'}`}
-                            >
-                                <span
-                                    className={`pointer-events-none absolute inset-y-0 left-[-34%] w-1/2 -skew-x-12 bg-[linear-gradient(90deg,transparent,rgba(34,211,238,0.28),transparent)] transition-transform duration-700 ${activeTestimonialIndex === index ? 'translate-x-[300%]' : 'translate-x-0 opacity-0'}`}
-                                />
-                                “{quote}”
-                            </blockquote>
-                        ))}
+                    <div className="rounded-3xl border border-[#334155] bg-[linear-gradient(145deg,rgba(2,6,23,0.96),rgba(30,27,75,0.7))] p-6 md:p-8">
+                        <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+                            <div>
+                                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#22D3EE]">About Sync Code</p>
+                                <h2 className="mt-2 text-3xl font-bold">Built to make collaborative coding feel interview-real, fast, and focused.</h2>
+                                <p className="mt-4 text-sm leading-7 text-[#94A3B8]">
+                                    Sync Code combines shared editing, live presence, optional voice, curated problems, and contest-style workflows in one place—so teams can practice exactly like real coding rounds.
+                                </p>
+                                <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                                    {homeFeatureHighlights.map((feature, index) => (
+                                        <div
+                                            key={`about-${feature.title}`}
+                                            className={`rounded-xl border px-4 py-3 text-sm transition duration-300 ${
+                                                activeFeatureHighlight === index
+                                                    ? 'border-[#22D3EE] bg-[#22D3EE]/10 shadow-[0_0_16px_rgba(34,211,238,0.25)]'
+                                                    : 'border-[#334155] bg-[#0B1120]'
+                                            }`}
+                                        >
+                                            <p className="font-semibold text-[#F8FAFC]">{feature.title}</p>
+                                            <p className="mt-1 text-xs text-[#94A3B8]">{feature.points[0]} · {feature.points[1]}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 className="text-lg font-semibold">What developers say</h3>
+                                <div className="mt-4 grid gap-4">
+                                    {testimonials.map((quote, index) => (
+                                        <blockquote
+                                            key={quote}
+                                            className={`relative overflow-hidden rounded-2xl border p-5 text-[#94A3B8] transition duration-500 ${activeStyle.cardBg} ${activeStyle.cardHover} ${activeTestimonialIndex === index ? 'border-[#22D3EE] shadow-[0_0_24px_rgba(34,211,238,0.35)]' : 'border-[#334155]'}`}
+                                        >
+                                            <span
+                                                className={`pointer-events-none absolute inset-y-0 left-[-34%] w-1/2 -skew-x-12 bg-[linear-gradient(90deg,transparent,rgba(34,211,238,0.28),transparent)] transition-transform duration-700 ${activeTestimonialIndex === index ? 'translate-x-[300%]' : 'translate-x-0 opacity-0'}`}
+                                            />
+                                            “{quote}”
+                                        </blockquote>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
@@ -1878,6 +2102,69 @@ renderSharedEditor(roomId)`}
                             )}
                         </div>
                     </div>
+                </section>
+
+                <section id="footer" className="mx-auto w-full px-4 pb-12 section-fade">
+                    <footer className="relative overflow-hidden rounded-[26px] border border-[#334155] bg-[linear-gradient(150deg,rgba(2,6,23,0.96),rgba(15,23,42,0.94))] p-5 md:p-6">
+                        <div className="pointer-events-none absolute inset-x-0 top-0 h-[2px] bg-[linear-gradient(90deg,transparent,#6366F1,#8B5CF6,#22D3EE,transparent)] opacity-80" />
+
+                        <div className="grid gap-4 lg:grid-cols-3">
+                            <article className="rounded-2xl border border-[#334155] bg-[#0B1120]/85 p-4 transition duration-300 hover:-translate-y-0.5 hover:border-[#6366F1] hover:shadow-[0_0_22px_rgba(99,102,241,0.22)]">
+                                <div className="flex items-start gap-3">
+                                    <span className="text-xl">⚡</span>
+                                    <div>
+                                        <h3 className="text-sm font-bold text-[#F8FAFC]">About Sync Code</h3>
+                                        <p className="mt-2 text-xs leading-6 text-[#94A3B8]">
+                                            A real-time collaborative coding environment built for developers — supporting live pair programming, technical interview practice, multi-language execution, and performance analytics.
+                                        </p>
+                                        <div className="mt-3 flex flex-wrap gap-2 text-[10px] font-semibold">
+                                            <span className="rounded-full border border-[#4F46E5]/50 bg-[#4F46E5]/12 px-2.5 py-1 text-[#A5B4FC]">React</span>
+                                            <span className="rounded-full border border-[#4F46E5]/50 bg-[#4F46E5]/12 px-2.5 py-1 text-[#A5B4FC]">Socket.IO</span>
+                                            <span className="rounded-full border border-[#4F46E5]/50 bg-[#4F46E5]/12 px-2.5 py-1 text-[#A5B4FC]">CodeMirror</span>
+                                            <span className="rounded-full border border-[#4F46E5]/50 bg-[#4F46E5]/12 px-2.5 py-1 text-[#A5B4FC]">Node.js</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <article className="rounded-2xl border border-[#334155] bg-[#0B1120]/85 p-4 transition duration-300 hover:-translate-y-0.5 hover:border-[#8B5CF6] hover:shadow-[0_0_22px_rgba(139,92,246,0.24)]">
+                                <div className="flex items-start gap-3">
+                                    <span className="text-xl">👨‍💻</span>
+                                    <div>
+                                        <h3 className="text-sm font-bold text-[#F8FAFC]">Built by Anuj Kumar</h3>
+                                        <p className="mt-2 text-xs leading-6 text-[#94A3B8]">
+                                            Full-stack developer passionate about real-time systems, developer tooling, and building experiences that make coding collaboration effortless.
+                                        </p>
+                                        <div className="mt-3 flex flex-wrap gap-2">
+                                            <a href="https://github.com/AnujYadav-1915" target="_blank" rel="noopener noreferrer" className="rounded-full border border-[#8B5CF6]/50 bg-[#8B5CF6]/10 px-3 py-1 text-[11px] font-semibold text-[#C4B5FD] transition hover:bg-[#8B5CF6]/20">GitHub</a>
+                                            <a href="https://www.linkedin.com/in/anuj-kumar-918415295/" target="_blank" rel="noopener noreferrer" className="rounded-full border border-[#8B5CF6]/50 bg-[#8B5CF6]/10 px-3 py-1 text-[11px] font-semibold text-[#C4B5FD] transition hover:bg-[#8B5CF6]/20">LinkedIn</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <article className="rounded-2xl border border-[#334155] bg-[#0B1120]/85 p-4 transition duration-300 hover:-translate-y-0.5 hover:border-[#22D3EE] hover:shadow-[0_0_22px_rgba(34,211,238,0.2)]">
+                                <div className="flex items-start gap-3">
+                                    <span className="text-xl">✉️</span>
+                                    <div>
+                                        <h3 className="text-sm font-bold text-[#F8FAFC]">Get in Touch</h3>
+                                        <p className="mt-2 text-xs leading-6 text-[#94A3B8]">
+                                            Have feedback, a feature request, or want to collaborate? Reach out directly.
+                                        </p>
+                                        <div className="mt-3 flex flex-col gap-2 text-[12px]">
+                                            <a className="text-[#67E8F9] transition hover:text-[#A5F3FC]" href="mailto:anujyadav1112@gmail.com">anujyadav1112@gmail.com</a>
+                                            <a className="text-[#67E8F9] transition hover:text-[#A5F3FC]" href="https://github.com/AnujYadav-1915/Realtime-Collaborative-Code-Editor-master" target="_blank" rel="noopener noreferrer">View Source on GitHub</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+
+                        <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-[#334155] px-1 pt-3 text-xs text-[#94A3B8]">
+                            <span>© {new Date().getFullYear()} Sync Code · Built with ❤️ by Anuj Kumar</span>
+                            <span className="rounded-full border border-[#334155] bg-[#0B1120] px-2.5 py-1 text-[10px] font-semibold text-[#A5B4FC]">v2.0 · Real-time · Open Source</span>
+                        </div>
+                    </footer>
                 </section>
             </main>
 

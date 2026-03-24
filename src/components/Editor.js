@@ -137,7 +137,7 @@ const Editor = React.forwardRef(({ socketRef, roomId, onCodeChange, isRealtime =
     }
   }, []);
 
-  const renderRemoteCursor = useCallback(({ userId, username, color, cursorPosition }) => {
+  const renderRemoteCursor = useCallback(({ userId, username, color, cursorPosition, selectionRange }) => {
     if (!editorRef.current || !userId || !cursorPosition) {
       return;
     }
@@ -167,6 +167,29 @@ const Editor = React.forwardRef(({ socketRef, roomId, onCodeChange, isRealtime =
       { line: safeLine, ch: safeCh },
       { widget: cursorWidget }
     );
+
+    const hasSelection = Boolean(
+      selectionRange &&
+      selectionRange.anchor &&
+      selectionRange.head &&
+      (selectionRange.anchor.line !== selectionRange.head.line || selectionRange.anchor.ch !== selectionRange.head.ch)
+    );
+
+    if (hasSelection) {
+      const orderedPositions = [selectionRange.anchor, selectionRange.head].sort((left, right) => {
+        if ((left?.line || 0) !== (right?.line || 0)) {
+          return (left?.line || 0) - (right?.line || 0);
+        }
+        return (left?.ch || 0) - (right?.ch || 0);
+      });
+
+      remoteSelectionMarksRef.current[userId] = editorRef.current.markText(
+        { line: orderedPositions[0].line || 0, ch: orderedPositions[0].ch || 0 },
+        { line: orderedPositions[1].line || 0, ch: orderedPositions[1].ch || 0 },
+        { className: "remote-selection" }
+      );
+      return;
+    }
 
     const highlightEndCh = Math.min(safeCh + 1, currentLineText.length || safeCh + 1);
     remoteSelectionMarksRef.current[userId] = editorRef.current.markText(
@@ -231,14 +254,21 @@ const Editor = React.forwardRef(({ socketRef, roomId, onCodeChange, isRealtime =
           return;
         }
         const cursorPosition = instance.getCursor();
+        const primarySelection = instance.listSelections?.()[0];
         socketRef.current?.emit(ACTIONS.CURSOR_MOVE, {
           roomId,
           cursorPosition,
+          selectionRange: primarySelection
+            ? {
+                anchor: primarySelection.anchor,
+                head: primarySelection.head,
+              }
+            : null,
         });
       });
     }
     init();
-  }, [isRealtime, lang, onCodeChange, roomId, socketRef]);
+  }, [isRealtime, lang, onCodeChange, readOnly, roomId, socketRef]);
 
   useEffect(() => {
     if (editorRef.current) {

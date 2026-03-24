@@ -103,6 +103,10 @@ const parseMemoryKb = (value) => {
   return Math.round(Number(matched[1]));
 };
 
+const voiceRtcConfig = {
+  iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
+};
+
 const buildLineDiffRows = (primaryText = "", secondaryText = "") => {
   const primaryLines = `${primaryText}`.split("\n");
   const secondaryLines = `${secondaryText}`.split("\n");
@@ -288,6 +292,8 @@ const EditorPage = () => {
   const [whiteboardStrokes, setWhiteboardStrokes] = useState([]);
   const [whiteboardColor, setWhiteboardColor] = useState("#8B5CF6");
   const [whiteboardBrushSize, setWhiteboardBrushSize] = useState(2);
+  const [voiceEnabled, setVoiceEnabled] = useState(false);
+  const [voiceStatusLabel, setVoiceStatusLabel] = useState("Voice off");
   const [editorTheme, setEditorTheme] = useState(() => `${localStorage.getItem("editor-ui-theme") || "midnight"}`);
   const [customStdinInput, setCustomStdinInput] = useState("");
   const [customStdinExpected, setCustomStdinExpected] = useState("");
@@ -309,6 +315,10 @@ const EditorPage = () => {
   const whiteboardCanvasRef = useRef(null);
   const drawingStrokeRef = useRef(null);
   const isDrawingRef = useRef(false);
+  const localVoiceStreamRef = useRef(null);
+  const voicePeersRef = useRef({});
+  const voiceAudioRefs = useRef({});
+  const voiceEnabledRef = useRef(false);
   const previewDragOriginRef = useRef({ x: 0, y: 0 });
   const previewResizeOriginRef = useRef({ x: 0, y: 0, width: 500, height: 620 });
   const location = useLocation();
@@ -498,6 +508,192 @@ const EditorPage = () => {
     }
   }, [isReadOnlyView, isRoomMode, roomId]);
 
+  const cleanupVoicePeer = useCallback((socketId) => {
+    if (!socketId) {
+      return;
+    }
+
+    const peer = voicePeersRef.current[socketId];
+    if (peer) {
+      peer.onicecandidate = null;
+      peer.ontrack = null;
+      peer.onconnectionstatechange = null;
+      try {
+        peer.close();
+      } catch (_error) {
+      }
+      delete voicePeersRef.current[socketId];
+    }
+
+    const audioElement = voiceAudioRefs.current[socketId];
+    if (audioElement) {
+      try {
+        audioElement.pause();
+        audioElement.srcObject = null;
+        audioElement.remove();
+      } catch (_error) {
+      }
+      delete voiceAudioRefs.current[socketId];
+    }
+  }, []);
+
+  const cleanupVoiceSession = useCallback(() => {
+    Object.keys(voicePeersRef.current).forEach((socketId) => cleanupVoicePeer(socketId));
+
+    if (localVoiceStreamRef.current) {
+      localVoiceStreamRef.current.getTracks().forEach((track) => track.stop());
+      localVoiceStreamRef.current = null;
+    }
+  }, [cleanupVoicePeer]);
+
+  const ensureVoicePeer = useCallback((targetSocketId) => {
+    if (!targetSocketId) {
+      return null;
+    }
+
+    const existingPeer = voicePeersRef.current[targetSocketId];
+    if (existingPeer) {
+      return existingPeer;
+    }
+
+    const peer = new RTCPeerConnection(voiceRtcConfig);
+
+    if (localVoiceStreamRef.current) {
+      localVoiceStreamRef.current.getTracks().forEach((track) => {
+        peer.addTrack(track, localVoiceStreamRef.current);
+      });
+    }
+
+    peer.onicecandidate = (event) => {
+      if (!event.candidate || !isRoomMode) {
+        return;
+      }
+
+      socketRef.current?.emit(ACTIONS.VOICE_SIGNAL, {
+        toSocketId: targetSocketId,
+        signal: {
+          type: "ice-candidate",
+          candidate: event.candidate,
+          roomId,
+        },
+      });
+    };
+
+    peer.ontrack = (event) => {
+      const [remoteStream] = event.streams || [];
+      if (!remoteStream) {
+        return;
+      }
+
+      let audioElement = voiceAudioRefs.current[targetSocketId];
+      if (!audioElement) {
+        audioElement = document.createElement("audio");
+        audioElement.autoplay = true;
+        audioElement.playsInline = true;
+        audioElement.dataset.peer = targetSocketId;
+        voiceAudioRefs.current[targetSocketId] = audioElement;
+        document.body.appendChild(audioElement);
+      }
+
+      audioElement.srcObject = remoteStream;
+      audioElement
+        .play()
+        .catch(() => {
+        });
+    };
+
+    peer.onconnectionstatechange = () => {
+      if (["failed", "disconnected", "closed"].includes(peer.connectionState)) {
+        cleanupVoicePeer(targetSocketId);
+      }
+    };
+
+    voicePeersRef.current[targetSocketId] = peer;
+    return peer;
+  }, [cleanupVoicePeer, isRoomMode, roomId]);
+
+  const createVoiceOffer = useCallback(async (targetSocketId) => {
+    if (!targetSocketId || !isRoomMode || !voiceEnabled) {
+      return;
+    }
+
+    const peer = ensureVoicePeer(targetSocketId);
+    if (!peer) {
+      return;
+    }
+
+    const offer = await peer.createOffer({ offerToReceiveAudio: true });
+    await peer.setLocalDescription(offer);
+
+    socketRef.current?.emit(ACTIONS.VOICE_SIGNAL, {
+      toSocketId: targetSocketId,
+      signal: {
+        type: "offer",
+        sdp: offer,
+        roomId,
+      },
+    });
+  }, [ensureVoicePeer, isRoomMode, roomId, voiceEnabled]);
+
+  const toggleVoiceSession = useCallback(async () => {
+    if (!isRoomMode) {
+      toast("Voice chat is available in rooms only.", { icon: "ℹ️" });
+      return;
+    }
+
+    if (isReadOnlyView) {
+      toast("Read-only spectators cannot join voice.", { icon: "ℹ️" });
+      return;
+    }
+
+    if (voiceEnabled) {
+      socketRef.current?.emit(ACTIONS.VOICE_STATUS, { roomId, enabled: false });
+      Object.keys(voicePeersRef.current).forEach((socketId) => {
+        socketRef.current?.emit(ACTIONS.VOICE_SIGNAL, {
+          toSocketId: socketId,
+          signal: { type: "hangup", roomId },
+        });
+      });
+      cleanupVoiceSession();
+      setVoiceEnabled(false);
+      setVoiceStatusLabel("Voice off");
+      toast.success("Voice chat disabled.");
+      return;
+    }
+
+    try {
+      const localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+      localVoiceStreamRef.current = localStream;
+      setVoiceEnabled(true);
+      setVoiceStatusLabel("Voice on");
+      socketRef.current?.emit(ACTIONS.VOICE_STATUS, { roomId, enabled: true });
+
+      const currentSocketId = socketRef.current?.id;
+      clients
+        .filter((client) => client.socketId !== currentSocketId)
+        .forEach((client) => {
+          createVoiceOffer(client.socketId).catch(() => {
+          });
+        });
+
+      toast.success("Voice chat enabled.");
+    } catch (_error) {
+      setVoiceEnabled(false);
+      setVoiceStatusLabel("Mic blocked");
+      toast.error("Microphone permission denied or unavailable.");
+    }
+  }, [cleanupVoiceSession, clients, createVoiceOffer, isReadOnlyView, isRoomMode, roomId, voiceEnabled]);
+
+  useEffect(() => {
+    voiceEnabledRef.current = voiceEnabled;
+  }, [voiceEnabled]);
+
+  useEffect(() => {
+    return () => {
+      cleanupVoiceSession();
+    };
+  }, [cleanupVoiceSession]);
+
   const currentVerdict = useMemo(() => {
     if (runState === "running") {
       return isSubmitting ? "SUBMITTING" : "RUNNING";
@@ -634,7 +830,7 @@ const EditorPage = () => {
     }
   }, [roomState.latestCode]);
 
-  const updateRoomState = (updates, shouldBroadcast = true) => {
+  const updateRoomState = useCallback((updates, shouldBroadcast = true) => {
     setRoomState((prev) => {
       const nextState = mergeRoomState(prev, updates);
       if (shouldBroadcast && isRoomMode && roomId) {
@@ -645,7 +841,7 @@ const EditorPage = () => {
       }
       return nextState;
     });
-  };
+  }, [isRoomMode, roomId]);
 
   useEffect(() => {
     const timerId = setInterval(() => setClockTick(Date.now()), 1000);
@@ -840,6 +1036,7 @@ const EditorPage = () => {
       socketRef.current.on(ACTIONS.DISCONNECTED, ({ socketId, username }) => {
         toast.success(`${username} left the room.`);
         setClients((prev) => prev.filter((client) => client.socketId !== socketId));
+        cleanupVoicePeer(socketId);
       });
 
       socketRef.current.on(ACTIONS.JOIN_REJECTED, ({ reason }) => {
@@ -874,6 +1071,72 @@ const EditorPage = () => {
       socketRef.current.on(ACTIONS.WHITEBOARD_CLEAR, () => {
         setWhiteboardStrokes([]);
       });
+
+      socketRef.current.on(ACTIONS.VOICE_SIGNAL, async ({ fromSocketId, signal }) => {
+        if (!fromSocketId || !signal || fromSocketId === socketRef.current?.id) {
+          return;
+        }
+
+        if (signal.type === "hangup") {
+          cleanupVoicePeer(fromSocketId);
+          return;
+        }
+
+        if (signal.type === "offer") {
+          if (!voiceEnabledRef.current) {
+            return;
+          }
+
+          try {
+            const peer = ensureVoicePeer(fromSocketId);
+            if (!peer) {
+              return;
+            }
+
+            await peer.setRemoteDescription(new RTCSessionDescription(signal.sdp));
+            const answer = await peer.createAnswer();
+            await peer.setLocalDescription(answer);
+
+            socketRef.current?.emit(ACTIONS.VOICE_SIGNAL, {
+              toSocketId: fromSocketId,
+              signal: {
+                type: "answer",
+                sdp: answer,
+                roomId,
+              },
+            });
+          } catch (_error) {
+            cleanupVoicePeer(fromSocketId);
+          }
+          return;
+        }
+
+        if (signal.type === "answer") {
+          const peer = voicePeersRef.current[fromSocketId];
+          if (!peer) {
+            return;
+          }
+
+          try {
+            await peer.setRemoteDescription(new RTCSessionDescription(signal.sdp));
+          } catch (_error) {
+            cleanupVoicePeer(fromSocketId);
+          }
+          return;
+        }
+
+        if (signal.type === "ice-candidate") {
+          const peer = voicePeersRef.current[fromSocketId];
+          if (!peer || !signal.candidate) {
+            return;
+          }
+
+          try {
+            await peer.addIceCandidate(new RTCIceCandidate(signal.candidate));
+          } catch (_error) {
+          }
+        }
+      });
     };
 
     const handleErrors = (error) => {
@@ -894,9 +1157,20 @@ const EditorPage = () => {
       socketRef.current?.off(ACTIONS.PROBLEM_SWITCH_RESPONSE);
       socketRef.current?.off(ACTIONS.WHITEBOARD_SYNC);
       socketRef.current?.off(ACTIONS.WHITEBOARD_CLEAR);
+      socketRef.current?.off(ACTIONS.VOICE_SIGNAL);
+      socketRef.current?.emit(ACTIONS.VOICE_STATUS, { roomId, enabled: false });
+      cleanupVoiceSession();
       socketRef.current?.disconnect();
     };
-  }, [activeUsername, isRoomMode, reactNavigator, roomId]);
+  }, [
+    activeUsername,
+    cleanupVoicePeer,
+    cleanupVoiceSession,
+    ensureVoicePeer,
+    isRoomMode,
+    reactNavigator,
+    roomId,
+  ]);
 
   const remainingSeconds = useMemo(() => {
     const { durationSeconds, startedAt } = roomState.timer;
@@ -994,12 +1268,35 @@ const EditorPage = () => {
   const readOnlyShareUrl = isRoomMode ? `${window.location.origin}/room/${roomId}/view` : "";
   const currentSocketId = socketRef.current?.id;
   const typingUsers = clients.filter((client) => client.isTyping && client.socketId !== currentSocketId);
+  const voiceParticipants = clients.filter((client) => client.voiceEnabled);
+  const voiceParticipantLabel =
+    voiceParticipants.length <= 1
+      ? voiceEnabled
+        ? "Voice: just you"
+        : "Voice off"
+      : `Voice: ${voiceParticipants.length} live`;
   const typingLabel =
     typingUsers.length === 0
       ? ""
       : typingUsers.length === 1
       ? `${typingUsers[0].username} is typing...`
       : `${typingUsers[0].username} and ${typingUsers.length - 1} others are typing...`;
+
+  useEffect(() => {
+    if (!voiceEnabled || !isRoomMode) {
+      return;
+    }
+
+    const mySocketId = socketRef.current?.id;
+    clients
+      .filter((client) => client.socketId !== mySocketId && client.voiceEnabled)
+      .forEach((client) => {
+        if (!voicePeersRef.current[client.socketId]) {
+          createVoiceOffer(client.socketId).catch(() => {
+          });
+        }
+      });
+  }, [clients, createVoiceOffer, isRoomMode, voiceEnabled]);
 
   async function copyRoomId() {
     try {
@@ -1714,7 +2011,7 @@ const EditorPage = () => {
     location.state?.selectedProblemTitle,
   ]);
 
-  const updateProblemField = (field, value) => {
+  const updateProblemField = useCallback((field, value) => {
     if (!canEditProblem) {
       return;
     }
@@ -1724,7 +2021,7 @@ const EditorPage = () => {
         [field]: value,
       },
     });
-  };
+  }, [canEditProblem, updateRoomState]);
 
   const visibleTestCaseItems = useMemo(() => {
     try {
@@ -2284,6 +2581,9 @@ const EditorPage = () => {
                     color={client.color}
                     isTyping={client.isTyping}
                     isOwner={client.username === roomState.ownerUsername}
+                    cursorPosition={client.cursorPosition}
+                    selectionRange={client.selectionRange}
+                    voiceEnabled={client.voiceEnabled}
                   />
                 ))}
               </div>
@@ -2812,6 +3112,23 @@ const EditorPage = () => {
                 >
                   🤖 AI Tools
                 </button>
+                <button
+                  className={`editorTopBtn${voiceEnabled ? " active" : ""}`}
+                  onClick={toggleVoiceSession}
+                  disabled={!isRoomMode || isReadOnlyView}
+                  title={
+                    isReadOnlyView
+                      ? "Read-only spectators cannot join voice"
+                      : isRoomMode
+                      ? "Toggle in-room voice chat"
+                      : "Voice chat is available in room mode"
+                  }
+                >
+                  {voiceEnabled ? "🔇 Leave Voice" : "🎙 Join Voice"}
+                </button>
+                <span className="voiceStatusBadge" title="Live in-room voice presence">
+                  {voiceEnabled ? voiceParticipantLabel : voiceStatusLabel}
+                </span>
                 <button className="editorTopBtn" onClick={handleCopyOutput} title="Copy current output to clipboard">Copy Out</button>
                 <button className="editorTopBtn" onClick={handleClearOutput} title="Clear output panel">Clear Out</button>
                 <button className={`editorTopBtn${showWhiteboard ? " active" : ""}`} onClick={() => setShowWhiteboard((prev) => !prev)} title="Toggle collaborative whiteboard">
