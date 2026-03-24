@@ -658,6 +658,10 @@ const getAuthMailer = () => {
         host: smtpHost,
         port: smtpPort,
         secure: smtpPort === 465,
+        connectionTimeout: Number(process.env.SMTP_CONNECTION_TIMEOUT_MS || 10000),
+        greetingTimeout: Number(process.env.SMTP_GREETING_TIMEOUT_MS || 10000),
+        socketTimeout: Number(process.env.SMTP_SOCKET_TIMEOUT_MS || 15000),
+        dnsTimeout: Number(process.env.SMTP_DNS_TIMEOUT_MS || 10000),
         auth: {
             user: smtpUser,
             pass: smtpPass,
@@ -680,13 +684,20 @@ const dispatchAuthEmail = async ({to, subject, text, html}) => {
         return {delivery: 'console'};
     }
 
-    await mailer.sendMail({
-        from: fromAddress,
-        to,
-        subject,
-        text,
-        html,
-    });
+    const sendTimeoutMs = Number(process.env.SMTP_SEND_TIMEOUT_MS || 20000);
+
+    await Promise.race([
+        mailer.sendMail({
+            from: fromAddress,
+            to,
+            subject,
+            text,
+            html,
+        }),
+        new Promise((_, reject) => {
+            setTimeout(() => reject(new Error('SMTP send timed out. Please retry.')), sendTimeoutMs);
+        }),
+    ]);
 
     return {delivery: 'smtp'};
 };
@@ -1745,7 +1756,7 @@ app.post('/api/auth/forgot-password/request', async (req, res) => {
 
         return res.status(200).json(responsePayload);
     } catch (error) {
-        return res.status(500).json({error: 'Failed to start password recovery flow.'});
+        return res.status(500).json({error: error.message || 'Failed to start password recovery flow.'});
     }
 });
 

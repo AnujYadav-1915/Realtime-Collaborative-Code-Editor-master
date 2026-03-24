@@ -8,7 +8,6 @@ import {
     createUserWithEmailAndPassword,
     onAuthStateChanged,
     reauthenticateWithCredential,
-    sendPasswordResetEmail,
     signInWithEmailAndPassword,
     signInWithPhoneNumber,
     signInWithPopup,
@@ -986,11 +985,10 @@ const Home = () => {
         setIsForgotPasswordRequesting(true);
         setForgotPasswordOtp('');
         try {
-            if (isFirebaseConfigured && auth) {
-                await sendPasswordResetEmail(auth, forgotPasswordEmail.trim());
-                toast.success('Password reset link sent to your email.');
-                return;
-            }
+            const abortController = new AbortController();
+            const timeoutId = setTimeout(() => {
+                abortController.abort();
+            }, 20000);
 
             const response = await fetch(`${backendBaseUrl}/api/auth/forgot-password/request`, {
                 method: 'POST',
@@ -999,7 +997,10 @@ const Home = () => {
                     email: forgotPasswordEmail.trim(),
                     method: 'otp',
                 }),
+                signal: abortController.signal,
             });
+
+            clearTimeout(timeoutId);
             const payload = await response.json();
             if (!response.ok) throw new Error(payload?.error || 'Failed to send recovery details.');
 
@@ -1009,6 +1010,10 @@ const Home = () => {
             }
             toast.success(payload?.message || 'Recovery details sent to your email.');
         } catch (error) {
+            if (error?.name === 'AbortError') {
+                toast.error('OTP request timed out. Please try again in a few seconds.');
+                return;
+            }
             toast.error(error.message || 'Failed to send recovery details.');
         } finally {
             setIsForgotPasswordRequesting(false);
