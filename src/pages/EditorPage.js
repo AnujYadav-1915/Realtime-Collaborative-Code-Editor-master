@@ -253,7 +253,12 @@ const EditorPage = () => {
   const [isDraggingPreview, setIsDraggingPreview] = useState(false);
   const [isResizingPreview, setIsResizingPreview] = useState(false);
   const [complexityHint, setComplexityHint] = useState(null);
-  const [outputPanelHeight, setOutputPanelHeight] = useState(280);
+  const [outputPanelHeight, setOutputPanelHeight] = useState(() => {
+    if (typeof window !== "undefined" && window.innerWidth <= 900) {
+      return 220;
+    }
+    return 280;
+  });
   const [isResizingOutput, setIsResizingOutput] = useState(false);
   const [executionMeta, setExecutionMeta] = useState({ time: "-", memory: "-" });
   const [runState, setRunState] = useState("idle");
@@ -442,6 +447,21 @@ const EditorPage = () => {
       context.stroke();
     });
   }, [showWhiteboard, whiteboardStrokes]);
+
+  useEffect(() => {
+    const handleViewportResize = () => {
+      if (window.innerWidth <= 900) {
+        setOutputPanelHeight((prevHeight) => Math.min(prevHeight, 240));
+      }
+    };
+
+    handleViewportResize();
+    window.addEventListener("resize", handleViewportResize);
+
+    return () => {
+      window.removeEventListener("resize", handleViewportResize);
+    };
+  }, []);
 
   const getCanvasPoint = useCallback((event) => {
     const canvas = whiteboardCanvasRef.current;

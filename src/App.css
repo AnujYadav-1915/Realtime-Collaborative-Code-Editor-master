@@ -4672,3 +4672,131 @@ footer h4 {
         transition: none !important;
     }
 }
+
+@media screen and (max-width: 900px) {
+    .editorPageLayout.mainWrap,
+    .editorPageLayout.mainWrap.sidebarCollapsed {
+        grid-template-columns: 1fr !important;
+        min-height: 100dvh;
+        height: auto;
+    }
+
+    .editorPageLayout .aside,
+    .editorPageLayout.mainWrap.sidebarCollapsed .aside {
+        width: 100% !important;
+        max-width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--ep-border-soft);
+        padding: 12px !important;
+        box-shadow: none;
+    }
+
+    .editorPageLayout.mainWrap.sidebarCollapsed .asideInner > *:not(.logo) {
+        display: block !important;
+    }
+
+    .editorPageLayout .sidebarCollapseBtn {
+        display: none;
+    }
+
+    .editorPageLayout .sidebarActionGap,
+    .editorPageLayout .sidebarEditorEntryGap {
+        height: 0 !important;
+    }
+
+    .editorPageLayout .challengePanel {
+        padding: 12px;
+    }
+
+    .editorPageLayout .editorWrap {
+        padding: 0 12px 14px;
+    }
+
+    .editorPageLayout .challengeHeader,
+    .editorPageLayout .challengeDetailsGrid,
+    .editorPageLayout .challengeMetaGrid,
+    .editorPageLayout .testCaseBuilderGrid,
+    .editorPageLayout .testcaseDetailGrid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .editorPageLayout .challengeStatement {
+        min-height: 140px;
+    }
+
+    .editorPageLayout .timerActions {
+        flex-wrap: wrap;
+    }
+
+    .editorPageLayout .editorTopBar {
+        gap: 8px;
+        padding: 8px 10px;
+    }
+
+    .editorPageLayout .editorTopLeft,
+    .editorPageLayout .editorTopActions {
+        width: 100%;
+    }
+
+    .editorPageLayout .editorTopActions {
+        justify-content: flex-start;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 2px;
+    }
+
+    .editorPageLayout .editorTopActions > * {
+        flex: 0 0 auto;
+    }
+
+    .editorPageLayout .editorTopLangSelect {
+        min-width: 0;
+        max-width: none;
+        flex: 1 1 150px;
+    }
+
+    .editorPageLayout .outputResizer {
+        display: none;
+    }
+
+    .editorPageLayout .executionOutputPanel {
+        height: auto !important;
+        min-height: 200px;
+    }
+
+    .editorPageLayout .executionMetaWrap {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .editorPageLayout .personalPreviewDrawer {
+        left: 8px !important;
+        right: 8px !important;
+        top: 72px !important;
+        width: auto !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+        height: 70dvh !important;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .homePageWrapper {
+        min-height: 100dvh;
+        height: auto;
+        align-items: flex-start;
+        padding: 16px 12px;
+        overflow-y: auto;
+    }
+
+    .formWrapper {
+        width: 100%;
+        max-width: 100%;
+        padding: 20px;
+    }
+
+    footer {
+        position: static;
+        padding: 12px 0 0;
+    }
+}
