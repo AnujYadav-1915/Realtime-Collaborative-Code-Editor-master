@@ -728,7 +728,9 @@ const dispatchAuthEmail = async ({to, subject, text, html}) => {
         return {delivery: 'smtp'};
     } catch (error) {
         const errorCode = `${error && error.code ? error.code : ''}`.toUpperCase();
-        const isNetworkReachabilityError = ['ENETUNREACH', 'EHOSTUNREACH', 'ETIMEDOUT'].includes(errorCode);
+        const errorMessage = `${error && error.message ? error.message : ''}`.toUpperCase();
+        const isNetworkReachabilityError = ['ENETUNREACH', 'EHOSTUNREACH', 'ETIMEDOUT', 'ECONNREFUSED', 'ECONNRESET', 'ESOCKET'].includes(errorCode)
+            || /ENETUNREACH|EHOSTUNREACH|ETIMEDOUT|ECONNREFUSED|ECONNRESET|ESOCKET/.test(errorMessage);
         const hasValidSmtpConfig = Boolean(smtpConfig.host && smtpConfig.user && smtpConfig.pass);
         const isHostName = hasValidSmtpConfig && !net.isIP(smtpConfig.host);
 
@@ -761,6 +763,8 @@ const dispatchAuthEmail = async ({to, subject, text, html}) => {
                     port: attempt.port,
                     secure: attempt.secure,
                     requireTLS: Boolean(attempt.requireTLS),
+                    family: 4,
+                    lookup: (_hostname, _options, callback) => callback(null, attempt.host, 4),
                     connectionTimeout: Number(process.env.SMTP_CONNECTION_TIMEOUT_MS || 10000),
                     greetingTimeout: Number(process.env.SMTP_GREETING_TIMEOUT_MS || 10000),
                     socketTimeout: Number(process.env.SMTP_SOCKET_TIMEOUT_MS || 15000),
