@@ -17,7 +17,7 @@ import {
 } from 'firebase/auth';
 import {auth, googleProvider, isFirebaseConfigured} from '../firebase';
 
-const backendBaseUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5001';
+const backendBaseUrl = process.env.REACT_APP_BACKEND_URL || window.location.origin;
 const LOCAL_AUTH_STORAGE_KEY = 'sync-code-local-auth-user';
 const USERNAME_PREF_STORAGE_KEY = 'sync-code-username-pref';
 

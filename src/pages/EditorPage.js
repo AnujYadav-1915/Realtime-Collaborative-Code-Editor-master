@@ -165,7 +165,7 @@ const sampleProblemTemplate = {
   ],
 };
 
-const backendBaseUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:5001";
+const backendBaseUrl = process.env.REACT_APP_BACKEND_URL || window.location.origin;
 const USERNAME_PREF_STORAGE_KEY = "sync-code-username-pref";
 
 const runtimeInstallCommandMap = {
