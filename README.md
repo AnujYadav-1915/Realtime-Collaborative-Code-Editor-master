@@ -1,117 +1,45 @@
-# Sync Code
+# Sync Code: Real-Time Collaborative Code Editor
 
-Sync Code is a room-based real-time collaborative code editor built with React, Node.js, Socket.IO, and CodeMirror.
+A real-time collaborative code editor built using React, Node.js, and Socket.IO. Users can join isolated rooms to write, edit, and view code simultaneously with instant synchronization.
 
-I built it to understand how collaborative editing actually works beyond the frontend demo layer. The main goal was to create a smooth shared editing experience where multiple users can join the same room, see updates instantly, and work on the same code session without needing refreshes or manual sync.
+## Overview
 
-## What it does
+Sync Code is designed as a monolithic full-stack application that provides a reliable real-time editing experience.
 
-Sync Code supports a few core collaboration workflows:
+## Features
 
-- Create or join a room using a shareable room ID
-- Edit code collaboratively in real time
-- See live updates from other users in the same room
-- Track active participants in a shared session
-- Use syntax highlighting through CodeMirror
-
-The project is designed as a single-server collaborative editor and is best viewed as a practical real-time systems project rather than a fully distributed production editor.
-
-## Tech stack
-
-- **Frontend:** React, Recoil, CodeMirror, Tailwind CSS
-- **Backend:** Node.js, Express, Socket.IO
-- **Real-time communication:** WebSockets via Socket.IO
-- **Tooling:** Docker, Docker Compose
+The platform provides multi-user real-time editing, live cursor and typing synchronization, room-based collaboration for isolated sessions, syntax highlighting via CodeMirror, and shareable room IDs.
 
 ## Architecture
 
-The application uses a simple monolithic structure:
+The application runs on a straightforward and performant architecture. The Frontend is a React application utilizing Recoil for state management and CodeMirror for the editor interface. The Backend is a Node.js and Express server. Real-Time Sync is handled by Socket.IO, which manages bidirectional event-based communication between clients and the server to broadcast document changes instantly to all participants in a room.
 
-- The **React frontend** handles the editor UI, room join flow, and client state.
-- The **Node.js + Express server** manages Socket.IO events and room membership.
-- **Socket.IO** handles event-based communication between connected clients so code updates can be broadcast to other users in the same room.
+## Setup
 
-This keeps the project simple to reason about and makes it easier to understand the core collaboration flow before adding distributed infrastructure.
-
-## Main features
-
-- Room-based real-time collaboration
-- Live editor synchronization
-- Multi-user session handling
-- Syntax highlighting with CodeMirror
-- Shareable room IDs
-- Docker-based local setup
-
-## Local setup
-
-Clone the repository and install dependencies:
-
-```bash
+<pre><code>
 git clone https://github.com/AnujYadav-1915/sync-code-realtime-editor.git
 cd sync-code-realtime-editor
 npm install
-```
-
-Start the backend server:
-
-```bash
 npm run server:dev
-```
+</code></pre>
 
 In a new terminal, start the frontend:
 
-```bash
+<pre><code>
 npm start
-```
+</code></pre>
 
-## Running with Docker
+## Docker
 
-You can also run the project with Docker:
-
-```bash
+<pre><code>
 docker pull anuj1915/code-editor
 docker run -p 3000:3000 -p 8000:8000 anuj1915/code-editor
-```
+</code></pre>
 
-## Environment variables
+## Environment Variables
 
-See `example.env` for available configuration options.
-
-Most variables are optional for local development. For deployment, make sure values like `ALLOWED_ORIGINS` are configured properly.
-
-## Project structure
-
-The repository is organized into these main parts:
-
-- `src/` – frontend source code
-- `public/` – static frontend assets
-- `server.js` – backend server and Socket.IO event handling
-- `scripts/` – supporting scripts
-- `docs/` – additional project notes and documentation
+See example.env for configuration options. Most environment variables are optional for local development, but you will need to configure ALLOWED_ORIGINS for production deployment.
 
 ## Limitations
 
-A few things are intentionally simple right now:
-
-- The project runs on a single Node.js instance
-- Room state is not distributed across multiple servers
-- It does not use Redis or pub/sub for horizontal scaling
-- Persistence is limited compared to a production collaboration platform
-
-## What I learned
-
-This project helped me understand:
-
-- how room-based real-time communication works
-- how to structure WebSocket event flows cleanly
-- how frontend state and backend events need to stay aligned in collaborative systems
-- where simple single-instance architectures start to break down at larger scale
-
-## Live project
-
-- **Live:** [realtime-collaborative-code-editor-master.onrender.com](https://realtime-collaborative-code-editor-master.onrender.com/)
-- **Repository:** [sync-code-realtime-editor](https://github.com/AnujYadav-1915/sync-code-realtime-editor)
-
-## Notes
-
-This is a hands-on real-time collaboration project built to understand shared editing, room management, and event-driven communication. The focus here was learning by implementing the collaboration loop end to end, not trying to imitate a full Google Docs or VS Code Live Share clone.
+This project is built for a single Node.js instance. It does not use Redis or a distributed pub/sub system, meaning all concurrent users for a given room must be connected to the same server process.
