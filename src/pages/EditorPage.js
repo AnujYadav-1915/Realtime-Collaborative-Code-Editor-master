@@ -1714,6 +1714,30 @@ const EditorPage = () => {
     toast.success("Sample problem template downloaded.");
   };
 
+  const handleDownloadCode = () => {
+    const codeContent = codeRef.current || "";
+    if (!codeContent.trim()) {
+      toast.error("Code is empty. Nothing to download!");
+      return;
+    }
+    const blob = new Blob([codeContent], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    
+    // Pick file extension based on language
+    const extMap = {
+      cpp: "cpp", java: "java", javascript: "js", python: "py", php: "php",
+      go: "go", r: "r", rust: "rs", ruby: "rb", bash: "sh", swift: "swift"
+    };
+    const ext = extMap[lang] || "txt";
+    
+    link.download = `sync-code-snippet.${ext}`;
+    link.click();
+    URL.revokeObjectURL(url);
+    toast.success("Code downloaded successfully!");
+  };
+
   const handleLoadProblemFromLibrary = useCallback(async (problemId) => {
     const targetId = problemId || selectedLibraryProblemId;
 
@@ -2543,6 +2567,9 @@ const EditorPage = () => {
               )}
               <button className="btn sidebarMiniBtn" onClick={handleDownloadTemplate} disabled={isReadOnlyView}>
                 📥 Download Template
+              </button>
+              <button className="btn sidebarMiniBtn" onClick={handleDownloadCode} style={{ marginTop: "4px" }}>
+                💾 Download Code
               </button>
               <div className={`runtimeStatusBadge ${runtimeBadgeInfo.tone}`}>
                 {runtimeBadgeInfo.label}
