@@ -20,6 +20,7 @@ export const initSocket = async () => {
     
     socketInstance.on('connect_error', (error) => {
         console.error('[Socket] Connection error:', error.message);
+        // TODO: maybe show a toast notification here later so the user knows they went offline
     });
     
     socketInstance.on('disconnect', (reason) => {
