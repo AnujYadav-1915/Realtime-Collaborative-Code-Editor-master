@@ -7,6 +7,7 @@ import { EmailAuthProvider, reauthenticateWithCredential, signOut, updatePasswor
 import ACTIONS from "../actions/Actions";
 import Client from "../components/Client";
 import Editor from "../components/Editor";
+import CopyCodeButton from "../components/CopyCodeButton";
 import { auth } from "../firebase";
 import { initSocket } from "../socket";
 
@@ -2571,6 +2572,7 @@ const EditorPage = () => {
               <button className="btn sidebarMiniBtn" onClick={handleDownloadCode} style={{ marginTop: "4px" }}>
                 💾 Download Code
               </button>
+              <CopyCodeButton codeRef={codeRef} />
               <div className={`runtimeStatusBadge ${runtimeBadgeInfo.tone}`}>
                 {runtimeBadgeInfo.label}
               </div>
