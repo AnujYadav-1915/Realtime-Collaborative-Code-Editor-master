@@ -20,14 +20,6 @@ const backendBaseUrl = process.env.REACT_APP_BACKEND_URL || window.location.orig
 const LOCAL_AUTH_STORAGE_KEY = 'sync-code-local-auth-user';
 const USERNAME_PREF_STORAGE_KEY = 'sync-code-username-pref';
 
-const trustedBy = ['Google', 'Amazon', 'Meta', 'Microsoft', 'Netflix'];
-const trustedByLinks = {
-    Google: 'https://careers.google.com/',
-    Amazon: 'https://www.amazon.jobs/',
-    Meta: 'https://www.metacareers.com/',
-    Microsoft: 'https://careers.microsoft.com/',
-    Netflix: 'https://jobs.netflix.com/',
-};
 const problemCategories = [
     'Arrays',
     'Strings',
@@ -49,12 +41,6 @@ const problemCategories = [
     'Bit Manipulation',
     'Matrix',
     'Math',
-];
-
-const testimonials = [
-    'Best platform for collaborative coding interviews.',
-    'Perfect tool for team-based coding practice.',
-    'The closest experience to real pair-programming interviews.',
 ];
 
 const contestLeaderboardStorageKey = 'sync-code-contest-leaderboard';
@@ -224,8 +210,6 @@ const Home = () => {
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [isChangingPassword, setIsChangingPassword] = useState(false);
-    const [activeTrustedByIndex, setActiveTrustedByIndex] = useState(0);
-    const [activeTestimonialIndex, setActiveTestimonialIndex] = useState(0);
     const [selectedProblemTopic, setSelectedProblemTopic] = useState('');
     const [topicProblems, setTopicProblems] = useState([]);
     const [isTopicProblemsLoading, setIsTopicProblemsLoading] = useState(false);
@@ -318,22 +302,6 @@ const Home = () => {
 
         toast.success('Username updated.');
     };
-
-    useEffect(() => {
-        const intervalId = window.setInterval(() => {
-            setActiveTrustedByIndex((currentIndex) => (currentIndex + 1) % trustedBy.length);
-        }, 1100);
-
-        return () => window.clearInterval(intervalId);
-    }, []);
-
-    useEffect(() => {
-        const intervalId = window.setInterval(() => {
-            setActiveTestimonialIndex((currentIndex) => (currentIndex + 1) % testimonials.length);
-        }, 1300);
-
-        return () => window.clearInterval(intervalId);
-    }, []);
 
     useEffect(() => {
         const intervalId = window.setInterval(() => {
@@ -1417,32 +1385,7 @@ const Home = () => {
                     </div>
                 </section>
 
-                <section className="mx-auto w-full px-4 py-10 section-fade">
-                    <p className="text-center text-sm text-[#94A3B8]">
-                        Developers preparing for interviews at top companies use Sync Code
-                    </p>
-                    <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-5">
-                        {trustedBy.map((company, index) => (
-                            <button
-                                key={company}
-                                type="button"
-                                onClick={() => window.open(trustedByLinks[company] || 'https://www.google.com', '_blank', 'noopener,noreferrer')}
-                                className={`relative overflow-hidden rounded-xl border py-3 text-center text-sm font-semibold text-[#F8FAFC] transition duration-500 ${activeStyle.cardBg} ${activeStyle.cardHover} ${
-                                    activeTrustedByIndex === index
-                                        ? 'border-[#22D3EE] shadow-[0_0_26px_rgba(34,211,238,0.4)]'
-                                        : 'border-[#334155]'
-                                }`}
-                            >
-                                <span
-                                    className={`pointer-events-none absolute inset-y-0 left-[-30%] w-1/2 -skew-x-12 bg-[linear-gradient(90deg,transparent,rgba(34,211,238,0.32),transparent)] transition-transform duration-700 ${
-                                        activeTrustedByIndex === index ? 'translate-x-[260%]' : 'translate-x-0 opacity-0'
-                                    }`}
-                                />
-                                {company}
-                            </button>
-                        ))}
-                    </div>
-                </section>
+
 
                 <section id="features" className="mx-auto w-full px-4 py-14 section-fade">
                     <h2 className="text-center text-3xl font-bold">Powerful Features for Collaborative Coding</h2>
@@ -1940,22 +1883,7 @@ renderSharedEditor(roomId)`}
                                 </div>
                             </div>
 
-                            <div>
-                                <h3 className="text-lg font-semibold">What developers say</h3>
-                                <div className="mt-4 grid gap-4">
-                                    {testimonials.map((quote, index) => (
-                                        <blockquote
-                                            key={quote}
-                                            className={`relative overflow-hidden rounded-2xl border p-5 text-[#94A3B8] transition duration-500 ${activeStyle.cardBg} ${activeStyle.cardHover} ${activeTestimonialIndex === index ? 'border-[#22D3EE] shadow-[0_0_24px_rgba(34,211,238,0.35)]' : 'border-[#334155]'}`}
-                                        >
-                                            <span
-                                                className={`pointer-events-none absolute inset-y-0 left-[-34%] w-1/2 -skew-x-12 bg-[linear-gradient(90deg,transparent,rgba(34,211,238,0.28),transparent)] transition-transform duration-700 ${activeTestimonialIndex === index ? 'translate-x-[300%]' : 'translate-x-0 opacity-0'}`}
-                                            />
-                                            “{quote}”
-                                        </blockquote>
-                                    ))}
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                 </section>
@@ -2114,7 +2042,7 @@ renderSharedEditor(roomId)`}
                                     <div>
                                         <h3 className="text-sm font-bold text-[#F8FAFC]">Built by Anuj Kumar</h3>
                                         <p className="mt-2 text-xs leading-6 text-[#94A3B8]">
-                                            Full-stack developer passionate about real-time systems, developer tooling, and building experiences that make coding collaboration effortless.
+                                            Computer Science student who built this project to learn about WebSockets, React, and real-time collaboration.
                                         </p>
                                         <div className="mt-3 flex flex-wrap gap-2">
                                             <a href="https://github.com/AnujYadav-1915" target="_blank" rel="noopener noreferrer" className="rounded-full border border-[#8B5CF6]/50 bg-[#8B5CF6]/10 px-3 py-1 text-[11px] font-semibold text-[#C4B5FD] transition hover:bg-[#8B5CF6]/20">GitHub</a>
