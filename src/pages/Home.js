@@ -344,6 +344,12 @@ const Home = () => {
     }, []);
 
     useEffect(() => {
+        if (topicProblems.length > 0 && selectedProblemTopic) {
+            window.setTimeout(() => scrollToSection("topic-questions"), 100);
+        }
+    }, [topicProblems, selectedProblemTopic]);
+
+    useEffect(() => {
         const usernameKey = username || getDisplayName(currentUser || {});
         if (!usernameKey) {
             return;
@@ -580,7 +586,6 @@ const Home = () => {
             const data = await response.json();
             if (!response.ok) throw new Error(data?.error || 'Failed to load topic questions.');
             setTopicProblems(Array.isArray(data?.problems) ? data.problems : []);
-            window.setTimeout(() => scrollToSection('topic-questions'), 80);
         } catch (error) {
             setTopicProblems([]);
             toast.error(error.message || 'Failed to load topic questions.');
@@ -1076,9 +1081,9 @@ const Home = () => {
     };
 
     return (
-        <div className="min-h-screen bg-theme-bgPrimary text-theme-textPrimary">
+        <div className="min-h-screen bg-theme-smallBoxBg text-theme-textPrimary">
 
-            <header className="sticky top-0 z-50 border-b border-theme-borderColor bg-theme-bgSurface/50 backdrop-blur">
+            <header className="sticky top-0 z-50 border-b border-theme-borderColor bg-theme-boxBg/50 backdrop-blur">
                 <div className="mx-auto flex w-full items-center justify-between px-4 py-4">
                     <button type="button" onClick={() => scrollToSection('hero')} className="flex items-center gap-2 text-left">
                         <span className="text-2xl text-theme-textPrimary">⌘</span>
@@ -1101,18 +1106,18 @@ const Home = () => {
                         onClick={() => setIsMobileMenuOpen((prev) => !prev)}
                         className="flex flex-col gap-1.5 p-2 md:hidden"
                     >
-                        <span className={`block h-0.5 w-5 bg-theme-bgPrimary transition-all duration-300 ${isMobileMenuOpen ? 'translate-y-2 rotate-45' : ''}`} />
-                        <span className={`block h-0.5 w-5 bg-theme-bgPrimary transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0' : ''}`} />
-                        <span className={`block h-0.5 w-5 bg-theme-bgPrimary transition-all duration-300 ${isMobileMenuOpen ? '-translate-y-2 -rotate-45' : ''}`} />
+                        <span className={`block h-0.5 w-5 bg-theme-smallBoxBg transition-all duration-300 ${isMobileMenuOpen ? 'translate-y-2 rotate-45' : ''}`} />
+                        <span className={`block h-0.5 w-5 bg-theme-smallBoxBg transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0' : ''}`} />
+                        <span className={`block h-0.5 w-5 bg-theme-smallBoxBg transition-all duration-300 ${isMobileMenuOpen ? '-translate-y-2 -rotate-45' : ''}`} />
                     </button>
 
                     <div ref={profileMenuRef} className="relative flex items-center gap-2">
                         <button
                             type="button"
                             onClick={() => setIsProfileMenuOpen((prev) => !prev)}
-                            className="flex items-center gap-2 rounded-xl border border-theme-borderColor bg-theme-bgPrimary px-3 py-2 text-sm font-semibold text-theme-textPrimary transition hover:border-theme-borderColor"
+                            className="flex items-center gap-2 rounded-xl border border-theme-borderColor bg-theme-smallBoxBg px-3 py-2 text-sm font-semibold text-theme-textPrimary transition hover:border-theme-borderColor"
                         >
-                            <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-theme-bgPrimary text-xs font-bold text-theme-textPrimary">
+                            <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-theme-smallBoxBg text-xs font-bold text-theme-textPrimary">
                                 {(username || getDisplayName(currentUser || {displayName: 'G'})).charAt(0).toUpperCase()}
                             </span>
                             <span className="max-w-[140px] truncate">{username || (currentUser ? getDisplayName(currentUser) : 'Profile')}</span>
@@ -1120,7 +1125,7 @@ const Home = () => {
                         </button>
 
                         {isProfileMenuOpen ? (
-                            <div className="absolute right-0 top-12 z-50 w-64 rounded-2xl border border-theme-borderColor bg-theme-bgPrimary p-3 shadow-[0_20px_55px_rgba(2,6,23,0.65)]">
+                            <div className="absolute right-0 top-12 z-50 w-64 rounded-2xl border border-theme-borderColor bg-theme-smallBoxBg p-3 shadow-[0_20px_55px_rgba(2,6,23,0.65)]">
                                 {authLoading ? (
                                     <p className="px-2 py-3 text-sm text-theme-textPrimary">Loading profile...</p>
                                 ) : !currentUser ? (
@@ -1132,7 +1137,7 @@ const Home = () => {
                                                 setIsProfileMenuOpen(false);
                                                 setShowAuthModal(true);
                                             }}
-                                            className="w-full rounded-lg border border-theme-borderColor px-3 py-2 text-left text-sm font-semibold transition hover:bg-theme-bgPrimary"
+                                            className="w-full rounded-lg border border-theme-borderColor px-3 py-2 text-left text-sm font-semibold transition hover:bg-theme-smallBoxBg"
                                         >
                                             Sign In
                                         </button>
@@ -1143,21 +1148,21 @@ const Home = () => {
                                                 setIsProfileMenuOpen(false);
                                                 setShowAuthModal(true);
                                             }}
-                                            className="w-full rounded-lg border border-theme-borderColor px-3 py-2 text-left text-sm font-semibold transition hover:bg-theme-bgPrimary"
+                                            className="w-full rounded-lg border border-theme-borderColor px-3 py-2 text-left text-sm font-semibold transition hover:bg-theme-smallBoxBg"
                                         >
                                             Create Account
                                         </button>
                                     </div>
                                 ) : (
                                     <div className="space-y-3">
-                                        <div className="rounded-lg border border-theme-borderColor bg-theme-bgPrimary px-3 py-2">
+                                        <div className="rounded-lg border border-theme-borderColor bg-theme-smallBoxBg px-3 py-2">
                                             <p className="text-sm font-semibold text-theme-textPrimary">{username || getDisplayName(currentUser)}</p>
                                             <p className="mt-1 truncate text-xs text-theme-textPrimary">{currentUser.email || 'Signed in user'}</p>
                                         </div>
-                                        <div className="space-y-2 rounded-lg border border-theme-borderColor bg-theme-bgPrimary px-3 py-3">
+                                        <div className="space-y-2 rounded-lg border border-theme-borderColor bg-theme-smallBoxBg px-3 py-3">
                                             <input
                                                 type="text"
-                                                className="w-full rounded-lg border border-theme-borderColor bg-theme-bgPrimary px-3 py-2 text-sm outline-none transition focus:border-theme-borderColor"
+                                                className="w-full rounded-lg border border-theme-borderColor bg-theme-smallBoxBg px-3 py-2 text-sm outline-none transition focus:border-theme-borderColor"
                                                 placeholder="Set username"
                                                 value={username}
                                                 onChange={(event) => setUsername(event.target.value)}
@@ -1165,7 +1170,7 @@ const Home = () => {
                                             <button
                                                 type="button"
                                                 onClick={handleSaveUsername}
-                                                className="w-full rounded-lg bg-theme-bgPrimary px-3 py-2 text-sm font-semibold transition hover:bg-theme-bgPrimary"
+                                                className="w-full rounded-lg bg-theme-smallBoxBg px-3 py-2 text-sm font-semibold transition hover:bg-theme-smallBoxBg"
                                             >
                                                 Save Username
                                             </button>
@@ -1176,29 +1181,29 @@ const Home = () => {
                                                 setIsProfileMenuOpen(false);
                                                 scrollToSection('cta');
                                             }}
-                                            className="w-full rounded-lg border border-theme-borderColor px-3 py-2 text-left text-sm font-semibold transition hover:bg-theme-bgPrimary"
+                                            className="w-full rounded-lg border border-theme-borderColor px-3 py-2 text-left text-sm font-semibold transition hover:bg-theme-smallBoxBg"
                                         >
                                             Open Room Panel
                                         </button>
                                         <button
                                             type="button"
                                             onClick={() => setShowChangePassword((prev) => !prev)}
-                                            className="w-full rounded-lg border border-theme-borderColor px-3 py-2 text-left text-sm font-semibold transition hover:bg-theme-bgPrimary"
+                                            className="w-full rounded-lg border border-theme-borderColor px-3 py-2 text-left text-sm font-semibold transition hover:bg-theme-smallBoxBg"
                                         >
                                             {showChangePassword ? 'Hide Change Password' : 'Change Password'}
                                         </button>
                                         {showChangePassword ? (
-                                            <div className="space-y-2 rounded-lg border border-theme-borderColor bg-theme-bgPrimary px-3 py-3">
+                                            <div className="space-y-2 rounded-lg border border-theme-borderColor bg-theme-smallBoxBg px-3 py-3">
                                                 <input
                                                     type="password"
-                                                    className="w-full rounded-lg border border-theme-borderColor bg-theme-bgPrimary px-3 py-2 text-sm outline-none transition focus:border-theme-borderColor"
+                                                    className="w-full rounded-lg border border-theme-borderColor bg-theme-smallBoxBg px-3 py-2 text-sm outline-none transition focus:border-theme-borderColor"
                                                     placeholder="Old password"
                                                     value={oldPassword}
                                                     onChange={(event) => setOldPassword(event.target.value)}
                                                 />
                                                 <input
                                                     type="password"
-                                                    className="w-full rounded-lg border border-theme-borderColor bg-theme-bgPrimary px-3 py-2 text-sm outline-none transition focus:border-theme-borderColor"
+                                                    className="w-full rounded-lg border border-theme-borderColor bg-theme-smallBoxBg px-3 py-2 text-sm outline-none transition focus:border-theme-borderColor"
                                                     placeholder="New password"
                                                     value={newPassword}
                                                     onChange={(event) => setNewPassword(event.target.value)}
@@ -1207,7 +1212,7 @@ const Home = () => {
                                                     type="button"
                                                     onClick={handleChangePassword}
                                                     disabled={isChangingPassword}
-                                                    className="w-full rounded-lg bg-theme-bgPrimary px-3 py-2 text-sm font-semibold transition hover:bg-theme-bgPrimary disabled:opacity-50"
+                                                    className="w-full rounded-lg bg-theme-smallBoxBg px-3 py-2 text-sm font-semibold transition hover:bg-theme-smallBoxBg disabled:opacity-50"
                                                 >
                                                     {isChangingPassword ? 'Updating...' : 'Update Password'}
                                                 </button>
@@ -1219,7 +1224,7 @@ const Home = () => {
                                                 setIsProfileMenuOpen(false);
                                                 await handleLogout();
                                             }}
-                                            className="w-full rounded-lg border border-theme-borderColor px-3 py-2 text-left text-sm font-semibold text-theme-textPrimary transition hover:bg-theme-bgPrimary"
+                                            className="w-full rounded-lg border border-theme-borderColor px-3 py-2 text-left text-sm font-semibold text-theme-textPrimary transition hover:bg-theme-smallBoxBg"
                                         >
                                             Logout
                                         </button>
@@ -1233,7 +1238,7 @@ const Home = () => {
             </header>
 
             {isMobileMenuOpen ? (
-                <div className="border-b border-theme-borderColor bg-theme-bgSurface/50 md:hidden">
+                <div className="border-b border-theme-borderColor bg-theme-boxBg/50 md:hidden">
                     <nav className="flex flex-col px-4 py-3 text-sm text-theme-textPrimary">
                         {[['features','Features'],['contest-mode','Contest'],['collaborate','Collaborate'],['problems','Problems'],['docs','Docs'],['about','About']].map(([id, label]) => (
                             <button
@@ -1249,7 +1254,7 @@ const Home = () => {
                             <button
                                 type="button"
                                 onClick={() => { setShowAuthModal(true); setIsMobileMenuOpen(false); }}
-                                className="mt-2 rounded-lg border border-theme-borderColor px-4 py-2 text-center font-semibold text-theme-textPrimary transition hover:bg-theme-bgSurface/50"
+                                className="mt-2 rounded-lg border border-theme-borderColor px-4 py-2 text-center font-semibold text-theme-textPrimary transition hover:bg-theme-boxBg/50"
                             >
                                 Sign In / Create Account
                             </button>
@@ -1260,7 +1265,7 @@ const Home = () => {
 
             <main className="relative z-10">
                 <section id="hero" className="mx-auto w-full px-4 pb-10 pt-16">
-                    <div className={`grid gap-10 overflow-hidden rounded-[36px] border border-theme-borderColor px-6 py-12 section-fade md:grid-cols-2 md:px-10 md:py-16 bg-theme-bgPrimary`}>
+                    <div className={`grid gap-10 overflow-hidden rounded-[36px] border border-theme-borderColor px-6 py-12 section-fade md:grid-cols-2 md:px-10 md:py-16 bg-theme-smallBoxBg`}>
                         <div className="section-fade">
                             <h1 className={`bg-clip-text text-4xl font-bold leading-tight text-transparent md:text-6xl text-theme-accent`}>Collaborative Coding Made Powerful</h1>
                             <p className="mt-5 max-w-xl text-lg text-theme-textPrimary">
@@ -1286,22 +1291,22 @@ const Home = () => {
 
                         <div className="relative min-h-[360px] section-fade">
                             <div className="absolute inset-0 rounded-3xl bg-purple-500/20" />
-                            <div className="absolute left-2 top-8 w-64 rounded-2xl border border-theme-borderColor bg-theme-bgSurface/50 p-4 shadow-glow animate-float">
+                            <div className="absolute left-2 top-8 w-64 rounded-2xl border border-theme-borderColor bg-theme-boxBg/50 p-4 shadow-glow animate-float">
                                 <p className="text-xs text-theme-textPrimary">Collaborative editor</p>
                                 <p className="mt-2 font-mono text-sm text-theme-textPrimary">const team = ['Alice','Bob'];</p>
                             </div>
-                            <div className="absolute right-3 top-20 w-60 rotate-2 rounded-2xl border border-theme-borderColor bg-theme-bgSurface/50 p-4 shadow-cyan animate-float [animation-delay:0.8s]">
+                            <div className="absolute right-3 top-20 w-60 rotate-2 rounded-2xl border border-theme-borderColor bg-theme-boxBg/50 p-4 shadow-cyan animate-float [animation-delay:0.8s]">
                                 <p className="text-xs text-theme-textPrimary">User cursors</p>
                                 <div className="mt-3 space-y-2 text-sm">
                                     <p className="text-theme-textPrimary">● Alice typing...</p>
                                     <p className="text-theme-textPrimary">● Bob at line 14</p>
                                 </div>
                             </div>
-                            <div className="absolute bottom-24 left-8 w-64 -rotate-2 rounded-2xl border border-theme-borderColor bg-theme-bgSurface/50 p-4 shadow-glow animate-float [animation-delay:1.5s]">
+                            <div className="absolute bottom-24 left-8 w-64 -rotate-2 rounded-2xl border border-theme-borderColor bg-theme-boxBg/50 p-4 shadow-glow animate-float [animation-delay:1.5s]">
                                 <p className="text-xs text-theme-textPrimary">Problem panel</p>
                                 <p className="mt-2 text-sm text-theme-textPrimary">Two Sum Medium Test cases ready</p>
                             </div>
-                            <div className="absolute bottom-6 right-8 rounded-xl border border-theme-borderColor bg-theme-bgSurface/50 px-5 py-3 shadow-glow animate-pulseSoft">
+                            <div className="absolute bottom-6 right-8 rounded-xl border border-theme-borderColor bg-theme-boxBg/50 px-5 py-3 shadow-glow animate-pulseSoft">
                                 <span className="text-sm font-semibold text-theme-textPrimary">▶ Run Code</span>
                             </div>
                         </div>
@@ -1316,7 +1321,7 @@ const Home = () => {
                         {homeFeatureHighlights.map((feature, index) => (
                             <div
                                 key={feature.title}
-                                className={`relative overflow-hidden rounded-2xl border border-theme-borderColor p-6 transition duration-300 hover:-translate-y-1 bg-theme-bgSurface hover:border-theme-accent ${
+                                className={`relative overflow-hidden rounded-2xl border border-theme-borderColor p-6 transition duration-300 hover:-translate-y-1 bg-theme-boxBg hover:border-theme-accent ${
                                     activeFeatureHighlight === index
                                         ? 'border-theme-borderColor shadow-md'
                                         : ''
@@ -1339,20 +1344,20 @@ const Home = () => {
                 </section>
 
                 <section id="docs" className="mx-auto w-full px-4 py-14 section-fade">
-                    <div className={`rounded-3xl border border-theme-borderColor p-6 md:p-8 bg-theme-bgSurface`}>
+                    <div className={`rounded-3xl border border-theme-borderColor p-6 md:p-8 bg-theme-boxBg`}>
                         <h2 className="text-center text-3xl font-bold">Product Demo</h2>
                         <div className="mt-8 grid gap-5 md:grid-cols-12">
-                            <aside className="rounded-2xl border border-theme-borderColor bg-theme-bgPrimary p-4 md:col-span-4">
+                            <aside className="rounded-2xl border border-theme-borderColor bg-theme-smallBoxBg p-4 md:col-span-4">
                                 <p className="text-xs uppercase tracking-wide text-theme-textPrimary">Problem</p>
                                 <h4 className="mt-2 font-semibold">Longest Substring Without Repeating Characters</h4>
                                 <p className="mt-3 text-sm text-theme-textPrimary">Given a string, find the length of the longest substring without repeating characters.</p>
                             </aside>
 
-                            <div className="rounded-2xl border border-theme-borderColor bg-theme-bgPrimary p-4 md:col-span-8">
+                            <div className="rounded-2xl border border-theme-borderColor bg-theme-smallBoxBg p-4 md:col-span-8">
                                 <div className="mb-3 flex items-center justify-between">
                                     <div className="flex -space-x-2">
                                         {['A', 'B', 'C'].map((avatar) => (
-                                            <span key={avatar} className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-theme-borderColor bg-theme-bgPrimary text-xs">
+                                            <span key={avatar} className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-theme-borderColor bg-theme-smallBoxBg text-xs">
                                                 {avatar}
                                             </span>
                                         ))}
@@ -1362,7 +1367,7 @@ const Home = () => {
                                         <select
                                             value={selectedDemoInput}
                                             onChange={(event) => setSelectedDemoInput(event.target.value)}
-                                            className="rounded border border-theme-borderColor bg-theme-bgPrimary px-2 py-1 text-[11px] text-theme-textPrimary"
+                                            className="rounded border border-theme-borderColor bg-theme-smallBoxBg px-2 py-1 text-[11px] text-theme-textPrimary"
                                         >
                                             {demoInputOptions.map((inputValue) => (
                                                 <option key={inputValue} value={inputValue}>{inputValue}</option>
@@ -1377,35 +1382,35 @@ const Home = () => {
                                         {demoRunState === 'running' ? 'Running...' : 'Run'}
                                     </button>
                                 </div>
-                                <pre className="overflow-x-auto rounded-xl bg-theme-bgPrimary p-4 text-sm text-theme-textPrimary">
+                                <pre className="overflow-x-auto rounded-xl bg-theme-smallBoxBg p-4 text-sm text-theme-textPrimary">
 {demoCodeSnippet}
                                 </pre>
-                                <div className="mt-3 rounded-xl border border-theme-borderColor bg-theme-bgPrimary p-3">
+                                <div className="mt-3 rounded-xl border border-theme-borderColor bg-theme-smallBoxBg p-3">
                                     <div className="flex items-center justify-between">
                                         <p className="text-xs font-semibold text-theme-textPrimary">Execution Console</p>
                                         <span className={`text-[10px] font-semibold ${demoRunState === 'running' ? 'text-theme-textPrimary animate-pulse' : demoRunState === 'success' ? 'text-theme-textPrimary' : 'text-theme-textPrimary'}`}>
                                             {demoRunState === 'running' ? 'RUNNING' : demoRunState === 'success' ? 'SUCCESS' : 'READY'}
                                         </span>
                                     </div>
-                                    <div className="mt-2 h-2 w-full overflow-hidden rounded bg-theme-bgPrimary">
+                                    <div className="mt-2 h-2 w-full overflow-hidden rounded bg-theme-smallBoxBg">
                                         <div
                                             className="h-2 rounded bg-gradient-to-br from-slate-800 to-slate-700 transition-all duration-300"
                                             style={{ width: `${demoProgress}%` }}
                                         />
                                     </div>
-                                    <div className="mt-2 rounded-lg border border-theme-borderColor bg-theme-bgPrimary p-2 text-[11px] text-theme-textPrimary">
+                                    <div className="mt-2 rounded-lg border border-theme-borderColor bg-theme-smallBoxBg p-2 text-[11px] text-theme-textPrimary">
                                         <p>Current input: "{selectedDemoInput}"</p>
                                         <p>Window frame: {demoFrames[demoFrameIndex]?.window || '-'}</p>
                                         <p>Best length so far: {demoFrames[demoFrameIndex]?.best ?? runLongestSubstringDemo(selectedDemoInput)}</p>
                                     </div>
-                                    <div className="mt-2 max-h-24 overflow-y-auto rounded-lg border border-theme-borderColor bg-theme-bgPrimary p-2 text-xs text-theme-textPrimary">
+                                    <div className="mt-2 max-h-24 overflow-y-auto rounded-lg border border-theme-borderColor bg-theme-smallBoxBg p-2 text-xs text-theme-textPrimary">
                                         {demoLogs.length === 0 ? (
                                             <p>No execution logs yet.</p>
                                         ) : (
                                             demoLogs.map((line) => <p key={line}>{line}</p>)
                                         )}
                                     </div>
-                                    <p className="mt-2 rounded-md bg-theme-bgPrimary px-2 py-1 text-sm font-semibold text-theme-textPrimary">
+                                    <p className="mt-2 rounded-md bg-theme-smallBoxBg px-2 py-1 text-sm font-semibold text-theme-textPrimary">
                                         {demoResultText}
                                     </p>
                                 </div>
@@ -1424,8 +1429,8 @@ const Home = () => {
                                 <li>Shared problem solving</li>
                             </ul>
                         </div>
-                        <div className="relative rounded-2xl border border-theme-borderColor bg-theme-bgPrimary p-5">
-                            <pre className="rounded-xl bg-theme-bgPrimary p-4 text-sm text-theme-textPrimary">
+                        <div className="relative rounded-2xl border border-theme-borderColor bg-theme-smallBoxBg p-5">
+                            <pre className="rounded-xl bg-theme-smallBoxBg p-4 text-sm text-theme-textPrimary">
 {`// team-session.js
 socket.on('cursor-move', updateCursor)
 socket.on('typing-start', setTyping)
@@ -1445,16 +1450,16 @@ renderSharedEditor(roomId)`}
                                 <p className="text-xs font-semibold uppercase tracking-[0.28em] text-theme-textPrimary">Contest mode</p>
                                 <h3 className="mt-2 text-2xl font-bold md:text-3xl">Timed multi-problem rounds with leaderboard + penalties</h3>
                             </div>
-                            <span className="rounded-full border border-theme-borderColor bg-theme-bgPrimary px-3 py-1 text-xs font-semibold text-theme-textPrimary">
+                            <span className="rounded-full border border-theme-borderColor bg-theme-smallBoxBg px-3 py-1 text-xs font-semibold text-theme-textPrimary">
                                 Competitive Practice
                             </span>
                         </div>
 
                         <div className="mt-7 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
-                            <div className="rounded-2xl border border-theme-borderColor bg-theme-bgSurface/50 p-5">
+                            <div className="rounded-2xl border border-theme-borderColor bg-theme-boxBg/50 p-5">
                                 <p className="text-sm font-semibold text-theme-textPrimary">Round planner</p>
                                 <div className="mt-4 grid gap-3 sm:grid-cols-3">
-                                    <label className="rounded-xl border border-theme-borderColor bg-theme-bgPrimary px-3 py-2 text-xs text-theme-textPrimary">
+                                    <label className="rounded-xl border border-theme-borderColor bg-theme-smallBoxBg px-3 py-2 text-xs text-theme-textPrimary">
                                         Rounds
                                         <input
                                             type="number"
@@ -1462,10 +1467,10 @@ renderSharedEditor(roomId)`}
                                             max={8}
                                             value={contestRoundCount}
                                             onChange={(event) => setContestRoundCount(Number(event.target.value) || 3)}
-                                            className="mt-2 w-full rounded-lg border border-theme-borderColor bg-theme-bgPrimary px-2 py-2 text-sm text-theme-textPrimary outline-none focus:border-theme-borderColor"
+                                            className="mt-2 w-full rounded-lg border border-theme-borderColor bg-theme-smallBoxBg px-2 py-2 text-sm text-theme-textPrimary outline-none focus:border-theme-borderColor"
                                         />
                                     </label>
-                                    <label className="rounded-xl border border-theme-borderColor bg-theme-bgPrimary px-3 py-2 text-xs text-theme-textPrimary">
+                                    <label className="rounded-xl border border-theme-borderColor bg-theme-smallBoxBg px-3 py-2 text-xs text-theme-textPrimary">
                                         Minutes / round
                                         <input
                                             type="number"
@@ -1473,10 +1478,10 @@ renderSharedEditor(roomId)`}
                                             max={60}
                                             value={contestRoundMinutes}
                                             onChange={(event) => setContestRoundMinutes(Number(event.target.value) || 18)}
-                                            className="mt-2 w-full rounded-lg border border-theme-borderColor bg-theme-bgPrimary px-2 py-2 text-sm text-theme-textPrimary outline-none focus:border-theme-borderColor"
+                                            className="mt-2 w-full rounded-lg border border-theme-borderColor bg-theme-smallBoxBg px-2 py-2 text-sm text-theme-textPrimary outline-none focus:border-theme-borderColor"
                                         />
                                     </label>
-                                    <label className="rounded-xl border border-theme-borderColor bg-theme-bgPrimary px-3 py-2 text-xs text-theme-textPrimary">
+                                    <label className="rounded-xl border border-theme-borderColor bg-theme-smallBoxBg px-3 py-2 text-xs text-theme-textPrimary">
                                         Penalty (minutes)
                                         <input
                                             type="number"
@@ -1484,12 +1489,12 @@ renderSharedEditor(roomId)`}
                                             max={30}
                                             value={contestPenaltyMinutes}
                                             onChange={(event) => setContestPenaltyMinutes(Number(event.target.value) || 8)}
-                                            className="mt-2 w-full rounded-lg border border-theme-borderColor bg-theme-bgPrimary px-2 py-2 text-sm text-theme-textPrimary outline-none focus:border-theme-borderColor"
+                                            className="mt-2 w-full rounded-lg border border-theme-borderColor bg-theme-smallBoxBg px-2 py-2 text-sm text-theme-textPrimary outline-none focus:border-theme-borderColor"
                                         />
                                     </label>
                                 </div>
 
-                                <div className="mt-4 rounded-xl border border-theme-borderColor bg-theme-bgPrimary px-4 py-3 text-sm text-theme-textPrimary">
+                                <div className="mt-4 rounded-xl border border-theme-borderColor bg-theme-smallBoxBg px-4 py-3 text-sm text-theme-textPrimary">
                                     <p>Contest summary: <span className="text-theme-textPrimary font-semibold">{contestRoundCount} rounds · {contestRoundMinutes} min each · {contestPenaltyMinutes} min wrong-attempt penalty</span></p>
                                     <p className="mt-1 text-xs">Launch opens the editor with the first contest problem and a prepared contest packet.</p>
                                 </div>
@@ -1504,14 +1509,14 @@ renderSharedEditor(roomId)`}
                                 </button>
                             </div>
 
-                            <div className="rounded-2xl border border-theme-borderColor bg-theme-bgSurface/50 p-5">
+                            <div className="rounded-2xl border border-theme-borderColor bg-theme-boxBg/50 p-5">
                                 <div className="flex items-center justify-between gap-2">
                                     <p className="text-sm font-semibold text-theme-textPrimary">Leaderboard (preview)</p>
                                     <span className="text-xs text-theme-textPrimary">Sorted by solved → penalty → score</span>
                                 </div>
                                 <div className="mt-4 space-y-2">
                                     {[].map((entry, index) => (
-                                        <div key={`${entry.username}-${index}`} className="grid grid-cols-[26px_1fr_auto_auto_auto] items-center gap-2 rounded-lg border border-theme-borderColor bg-theme-bgPrimary px-3 py-2 text-xs">
+                                        <div key={`${entry.username}-${index}`} className="grid grid-cols-[26px_1fr_auto_auto_auto] items-center gap-2 rounded-lg border border-theme-borderColor bg-theme-smallBoxBg px-3 py-2 text-xs">
                                             <span className="text-theme-textPrimary">#{index + 1}</span>
                                             <span className="truncate text-theme-textPrimary">{entry.username}</span>
                                             <span className="text-theme-textPrimary">{entry.solved} solved</span>
@@ -1527,8 +1532,8 @@ renderSharedEditor(roomId)`}
 
                 <section className="mx-auto w-full px-4 py-6 section-fade">
                     <div className="relative overflow-hidden rounded-[28px] border border-theme-borderColor bg-[linear-gradient(135deg,rgba(15,23,42,0.95),rgba(30,27,75,0.82))] px-6 py-8 md:px-8">
-                        <div className="absolute left-10 top-1/2 h-36 w-36 -translate-y-1/2 rounded-full bg-theme-bgSurface/50 blur-3xl" />
-                        <div className="absolute right-12 top-8 h-32 w-32 rounded-full bg-theme-bgSurface/50 blur-3xl" />
+                        <div className="absolute left-10 top-1/2 h-36 w-36 -translate-y-1/2 rounded-full bg-theme-boxBg/50 blur-3xl" />
+                        <div className="absolute right-12 top-8 h-32 w-32 rounded-full bg-theme-boxBg/50 blur-3xl" />
                         <div className="relative grid gap-6 md:grid-cols-[1.1fr_0.9fr] md:items-center">
                             <div>
                                 <p className="text-xs font-semibold uppercase tracking-[0.28em] text-theme-textPrimary">Shared workflow</p>
@@ -1538,12 +1543,12 @@ renderSharedEditor(roomId)`}
                                 </p>
                             </div>
                             <div className="grid gap-3 sm:grid-cols-2">
-                                <div className="rounded-2xl border border-theme-borderColor bg-theme-bgSurface/50 p-4">
+                                <div className="rounded-2xl border border-theme-borderColor bg-theme-boxBg/50 p-4">
                                     <p className="text-xs uppercase tracking-wide text-theme-textPrimary">Live room</p>
                                     <p className="mt-2 text-sm font-semibold text-theme-textPrimary">Multiple Collaborators Active</p>
                                     <p className="mt-1 text-sm text-theme-textPrimary">Cursor sync and typing indicators online</p>
                                 </div>
-                                <div className="rounded-2xl border border-theme-borderColor bg-theme-bgSurface/50 p-4">
+                                <div className="rounded-2xl border border-theme-borderColor bg-theme-boxBg/50 p-4">
                                     <p className="text-xs uppercase tracking-wide text-theme-textPrimary">Next challenge</p>
                                     <p className="mt-2 text-sm font-semibold text-theme-textPrimary">Graph traversal set queued</p>
                                     <p className="mt-1 text-sm text-theme-textPrimary">Multiple problems are ready to be assigned</p>
@@ -1556,7 +1561,7 @@ renderSharedEditor(roomId)`}
                 <section id="problems" className="mx-auto w-full px-4 py-14 section-fade">
                     <div className="flex flex-wrap items-center gap-3">
                         <h2 className="text-3xl font-bold">Problem Library Preview</h2>
-                        <span className="rounded-full border border-theme-borderColor bg-theme-bgPrimary px-3 py-1 text-xs font-semibold text-theme-textPrimary">
+                        <span className="rounded-full border border-theme-borderColor bg-theme-smallBoxBg px-3 py-1 text-xs font-semibold text-theme-textPrimary">
                             Total Questions: {totalQuestionCount}
                         </span>
                     </div>
@@ -1564,7 +1569,7 @@ renderSharedEditor(roomId)`}
                         {problemCategories.map((category) => (
                             <div
                                 key={category}
-                                className={`rounded-2xl border p-5 text-center transition duration-200 hover:-translate-y-1 bg-theme-bgSurface hover:border-theme-accent ${selectedProblemTopic === category ? 'border-theme-borderColor shadow-md' : 'border-theme-borderColor'}`}
+                                className={`rounded-2xl border p-5 text-center transition duration-200 hover:-translate-y-1 bg-theme-boxBg hover:border-theme-accent ${selectedProblemTopic === category ? 'border-theme-borderColor shadow-md' : 'border-theme-borderColor'}`}
                             >
                                 <button
                                     type="button"
@@ -1576,7 +1581,7 @@ renderSharedEditor(roomId)`}
                                 <button
                                     type="button"
                                     onClick={() => handleCategoryClick(category)}
-                                    className="mt-3 rounded-lg border border-theme-borderColor px-3 py-1 text-xs font-semibold text-theme-textPrimary transition hover:bg-theme-bgSurface/50"
+                                    className="mt-3 rounded-lg border border-theme-borderColor px-3 py-1 text-xs font-semibold text-theme-textPrimary transition hover:bg-theme-boxBg/50"
                                 >
                                     {selectedProblemTopic === category ? 'Unload Questions' : 'Load Questions'}
                                 </button>
@@ -1587,7 +1592,7 @@ renderSharedEditor(roomId)`}
 
                 {selectedProblemTopic ? (
                     <section id="topic-questions" className="mx-auto w-full px-4 pb-8 section-fade">
-                        <div className="rounded-2xl border border-theme-borderColor bg-theme-bgSurface/50 p-6">
+                        <div className="rounded-2xl border border-theme-borderColor bg-theme-boxBg/50 p-6">
                             <h3 className="text-2xl font-bold">{selectedProblemTopic} Questions</h3>
                             {isTopicProblemsLoading ? (
                                 <p className="mt-4 text-sm text-theme-textPrimary">Loading questions...</p>
@@ -1596,7 +1601,7 @@ renderSharedEditor(roomId)`}
                             ) : (
                                 <div className="mt-5 grid gap-3 md:grid-cols-2">
                                     {topicProblems.map((problem) => (
-                                        <div key={problem.id} className="rounded-xl border border-theme-borderColor bg-theme-bgPrimary p-4">
+                                        <div key={problem.id} className="rounded-xl border border-theme-borderColor bg-theme-smallBoxBg p-4">
                                             <p className="font-semibold text-theme-textPrimary">{problem.title}</p>
                                             <p className="mt-2 text-sm text-theme-textPrimary">{(problem.statement || '').slice(0, 120)}{(problem.statement || '').length > 120 ? '...' : ''}</p>
                                             <div className="mt-3 flex items-center justify-between text-xs text-theme-textPrimary">
@@ -1607,7 +1612,7 @@ renderSharedEditor(roomId)`}
                                                 type="button"
                                                 onClick={() => handleLaunchQuestion(problem.id, problem.title)}
                                                 disabled={isLaunchingQuestion}
-                                                className="mt-3 rounded-lg border border-theme-borderColor px-3 py-1 text-xs font-semibold text-theme-textPrimary transition hover:bg-theme-bgSurface/50 disabled:opacity-50"
+                                                className="mt-3 rounded-lg border border-theme-borderColor px-3 py-1 text-xs font-semibold text-theme-textPrimary transition hover:bg-theme-boxBg/50 disabled:opacity-50"
                                             >
                                                 {isLaunchingQuestion ? 'Opening...' : 'Open in Editor'}
                                             </button>
@@ -1620,18 +1625,18 @@ renderSharedEditor(roomId)`}
                 ) : null}
 
                 <section id="adaptive-feed" className="mx-auto w-full px-4 py-10 section-fade">
-                    <div className="rounded-2xl border border-theme-borderColor bg-theme-bgSurface/50 p-6">
+                    <div className="rounded-2xl border border-theme-borderColor bg-theme-boxBg/50 p-6">
                         <h3 className="text-2xl font-bold">Adaptive Practice Feed</h3>
                         <p className="mt-2 text-sm text-theme-textPrimary">Weak topics: {weakTopics.length > 0 ? weakTopics.join(', ') : 'No weakness data yet (run problems to unlock).'}</p>
                         <div className="mt-4 grid gap-4 md:grid-cols-2">
                             {isDashboardLoading ? (
                                 [1,2,3,4].map((n) => (
-                                    <div key={n} className="rounded-xl border border-theme-borderColor bg-theme-bgPrimary p-4">
-                                        <div className="h-4 w-2/3 animate-pulse rounded bg-theme-bgPrimary" />
+                                    <div key={n} className="rounded-xl border border-theme-borderColor bg-theme-smallBoxBg p-4">
+                                        <div className="h-4 w-2/3 animate-pulse rounded bg-theme-smallBoxBg" />
                                         <div className="mt-3 space-y-2">
-                                            <div className="h-3 animate-pulse rounded bg-theme-bgPrimary" />
-                                            <div className="h-3 w-4/5 animate-pulse rounded bg-theme-bgPrimary" />
-                                            <div className="h-3 w-3/5 animate-pulse rounded bg-theme-bgPrimary" />
+                                            <div className="h-3 animate-pulse rounded bg-theme-smallBoxBg" />
+                                            <div className="h-3 w-4/5 animate-pulse rounded bg-theme-smallBoxBg" />
+                                            <div className="h-3 w-3/5 animate-pulse rounded bg-theme-smallBoxBg" />
                                         </div>
                                     </div>
                                 ))
@@ -1639,7 +1644,7 @@ renderSharedEditor(roomId)`}
                                 <p className="text-sm text-theme-textPrimary">No recommendations yet.</p>
                             ) : (
                                 adaptiveRecommendations.map((entry) => (
-                                    <div key={entry.topic} className="rounded-xl border border-theme-borderColor bg-theme-bgPrimary p-4">
+                                    <div key={entry.topic} className="rounded-xl border border-theme-borderColor bg-theme-smallBoxBg p-4">
                                         <p className="font-semibold capitalize text-theme-textPrimary">{entry.topic.replace(/-/g, ' ')}</p>
                                         <ul className="mt-2 space-y-1 text-sm text-theme-textPrimary">
                                             {(entry.problems || []).slice(0, 4).map((problem) => (
@@ -1649,7 +1654,7 @@ renderSharedEditor(roomId)`}
                                                         type="button"
                                                         onClick={() => handleLaunchQuestion(problem.id, problem.title)}
                                                         disabled={isLaunchingQuestion}
-                                                        className="rounded border border-theme-borderColor px-2 py-1 text-[10px] font-semibold text-theme-textPrimary transition hover:bg-theme-bgSurface/50 disabled:opacity-50"
+                                                        className="rounded border border-theme-borderColor px-2 py-1 text-[10px] font-semibold text-theme-textPrimary transition hover:bg-theme-boxBg/50 disabled:opacity-50"
                                                     >
                                                         Open
                                                     </button>
@@ -1665,28 +1670,28 @@ renderSharedEditor(roomId)`}
                 </section>
 
                 <section id="company-tracks" className="mx-auto w-full px-4 py-10 section-fade">
-                    <div className="rounded-2xl border border-theme-borderColor bg-theme-bgSurface/50 p-6">
+                    <div className="rounded-2xl border border-theme-borderColor bg-theme-boxBg/50 p-6">
                         <h3 className="text-2xl font-bold">Company Prep Tracks</h3>
                         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
                             {isDashboardLoading ? (
                                 [1,2,3,4,5].map((n) => (
-                                    <div key={n} className="rounded-xl border border-theme-borderColor bg-theme-bgPrimary p-3">
-                                        <div className="h-4 w-3/4 animate-pulse rounded bg-theme-bgPrimary" />
-                                        <div className="mt-2 h-3 w-1/2 animate-pulse rounded bg-theme-bgPrimary" />
-                                        <div className="mt-3 h-7 animate-pulse rounded-lg bg-theme-bgPrimary" />
+                                    <div key={n} className="rounded-xl border border-theme-borderColor bg-theme-smallBoxBg p-3">
+                                        <div className="h-4 w-3/4 animate-pulse rounded bg-theme-smallBoxBg" />
+                                        <div className="mt-2 h-3 w-1/2 animate-pulse rounded bg-theme-smallBoxBg" />
+                                        <div className="mt-3 h-7 animate-pulse rounded-lg bg-theme-smallBoxBg" />
                                     </div>
                                 ))
                             ) : companyTracks.length === 0 ? <p className="text-sm text-theme-textPrimary">No company tracks available right now.</p> : companyTracks.map((track) => (
                                 <div
                                     key={track.id}
-                                    className={`rounded-xl border p-3 text-left transition ${selectedTrackId === track.id ? 'border-theme-borderColor bg-theme-bgSurface/50' : 'border-theme-borderColor bg-theme-bgPrimary'}`}
+                                    className={`rounded-xl border p-3 text-left transition ${selectedTrackId === track.id ? 'border-theme-borderColor bg-theme-boxBg/50' : 'border-theme-borderColor bg-theme-smallBoxBg'}`}
                                 >
                                     <p className="font-semibold">{track.company}</p>
                                     <p className="mt-1 text-xs text-theme-textPrimary">{track.totalProblems} problems</p>
                                     <button
                                         type="button"
                                         onClick={() => handleOpenTrack(track.id)}
-                                        className="mt-3 rounded-lg border border-theme-borderColor px-3 py-1 text-xs font-semibold text-theme-textPrimary transition hover:bg-theme-bgSurface/50"
+                                        className="mt-3 rounded-lg border border-theme-borderColor px-3 py-1 text-xs font-semibold text-theme-textPrimary transition hover:bg-theme-boxBg/50"
                                     >
                                         {selectedTrackId === track.id
                                             ? 'Unload Questions'
@@ -1702,11 +1707,11 @@ renderSharedEditor(roomId)`}
 
                 {selectedTrackId ? (
                     <section id="company-track-preview" className="mx-auto w-full px-4 pb-8 section-fade">
-                        <div className="rounded-2xl border border-theme-borderColor bg-theme-bgSurface/50 p-6">
+                        <div className="rounded-2xl border border-theme-borderColor bg-theme-boxBg/50 p-6">
                             <h3 className="text-2xl font-bold">Track Questions</h3>
                             <div className="mt-5 grid gap-3 md:grid-cols-2">
                                 {selectedTrackProblems.slice(0, 12).map((problem) => (
-                                    <div key={problem.id} className="rounded-xl border border-theme-borderColor bg-theme-bgPrimary p-4">
+                                    <div key={problem.id} className="rounded-xl border border-theme-borderColor bg-theme-smallBoxBg p-4">
                                         <p className="font-semibold text-theme-textPrimary">{problem.title}</p>
                                         <div className="mt-2 flex items-center justify-between text-xs text-theme-textPrimary">
                                             <span>{(problem.category || '').replace(/-/g, ' ')}</span>
@@ -1716,7 +1721,7 @@ renderSharedEditor(roomId)`}
                                             type="button"
                                             onClick={() => handleLaunchQuestion(problem.id, problem.title)}
                                             disabled={isLaunchingQuestion}
-                                            className="mt-3 rounded-lg border border-theme-borderColor px-3 py-1 text-xs font-semibold text-theme-textPrimary transition hover:bg-theme-bgSurface/50 disabled:opacity-50"
+                                            className="mt-3 rounded-lg border border-theme-borderColor px-3 py-1 text-xs font-semibold text-theme-textPrimary transition hover:bg-theme-boxBg/50 disabled:opacity-50"
                                         >
                                             {isLaunchingQuestion ? 'Opening...' : 'Open in Editor'}
                                         </button>
@@ -1728,24 +1733,24 @@ renderSharedEditor(roomId)`}
                 ) : null}
 
                 <section id="sheet-reminders" className="mx-auto w-full px-4 py-10 section-fade">
-                    <div className="rounded-2xl border border-theme-borderColor bg-theme-bgSurface/50 p-6">
+                    <div className="rounded-2xl border border-theme-borderColor bg-theme-boxBg/50 p-6">
                         <h3 className="text-2xl font-bold">Sheets & Reminders</h3>
                         <p className="mt-2 text-sm text-theme-textPrimary">Blind 75 / NeetCode / custom sheets with collaborative check-ins.</p>
                         <div className="mt-4 grid gap-4 md:grid-cols-2">
                             {isDashboardLoading ? (
                                 [1,2].map((n) => (
-                                    <div key={n} className="rounded-xl border border-theme-borderColor bg-theme-bgPrimary p-4">
-                                        <div className="h-4 w-1/2 animate-pulse rounded bg-theme-bgPrimary" />
+                                    <div key={n} className="rounded-xl border border-theme-borderColor bg-theme-smallBoxBg p-4">
+                                        <div className="h-4 w-1/2 animate-pulse rounded bg-theme-smallBoxBg" />
                                         <div className="mt-3 space-y-2">
-                                            <div className="h-3 animate-pulse rounded bg-theme-bgPrimary" />
-                                            <div className="h-3 w-4/5 animate-pulse rounded bg-theme-bgPrimary" />
+                                            <div className="h-3 animate-pulse rounded bg-theme-smallBoxBg" />
+                                            <div className="h-3 w-4/5 animate-pulse rounded bg-theme-smallBoxBg" />
                                         </div>
                                     </div>
                                 ))
                             ) : null}
                             {!isDashboardLoading ? (
                             <>
-                            <div className="rounded-xl border border-theme-borderColor bg-theme-bgPrimary p-4">
+                            <div className="rounded-xl border border-theme-borderColor bg-theme-smallBoxBg p-4">
                                 <p className="font-semibold">Available Sheets</p>
                                 <ul className="mt-2 space-y-1 text-sm text-theme-textPrimary">
                                     {(sheetSummary.templates || []).length === 0 ? <li>No sheets available yet.</li> : (sheetSummary.templates || []).map((sheet) => (
@@ -1754,7 +1759,7 @@ renderSharedEditor(roomId)`}
                                             <button
                                                 type="button"
                                                 onClick={() => handleQuickSheetCheckIn(sheet.id)}
-                                                className="rounded border border-theme-borderColor px-2 py-1 text-xs transition hover:bg-theme-bgPrimary"
+                                                className="rounded border border-theme-borderColor px-2 py-1 text-xs transition hover:bg-theme-smallBoxBg"
                                             >
                                                 Check-in
                                             </button>
@@ -1762,7 +1767,7 @@ renderSharedEditor(roomId)`}
                                     ))}
                                 </ul>
                             </div>
-                            <div className="rounded-xl border border-theme-borderColor bg-theme-bgPrimary p-4">
+                            <div className="rounded-xl border border-theme-borderColor bg-theme-smallBoxBg p-4">
                                 <p className="font-semibold">Upcoming Reminders</p>
                                 <ul className="mt-2 space-y-1 text-sm text-theme-textPrimary">
                                     {(sheetSummary.reminders || []).length === 0 ? (
@@ -1795,8 +1800,8 @@ renderSharedEditor(roomId)`}
                                             key={`about-${feature.title}`}
                                             className={`rounded-xl border px-4 py-3 text-sm transition duration-300 ${
                                                 activeFeatureHighlight === index
-                                                    ? 'border-theme-borderColor bg-theme-bgSurface/50 shadow-md'
-                                                    : 'border-theme-borderColor bg-theme-bgPrimary'
+                                                    ? 'border-theme-borderColor bg-theme-boxBg/50 shadow-md'
+                                                    : 'border-theme-borderColor bg-theme-smallBoxBg'
                                             }`}
                                         >
                                             <p className="font-semibold text-theme-textPrimary">{feature.title}</p>
@@ -1812,7 +1817,7 @@ renderSharedEditor(roomId)`}
                 </section>
 
                 <section id="cta" className="mx-auto w-full px-4 py-16 section-fade">
-                    <div className="rounded-3xl border border-theme-borderColor bg-theme-bgSurface/50 p-6 md:p-8">
+                    <div className="rounded-3xl border border-theme-borderColor bg-theme-boxBg/50 p-6 md:p-8">
                         <h2 className="text-center text-3xl font-bold">Start Coding Together Today</h2>
                         <div className="mx-auto mt-4 flex flex-wrap justify-center gap-4">
                             <button
@@ -1826,14 +1831,14 @@ renderSharedEditor(roomId)`}
                                 <button
                                     type="button"
                                     onClick={() => setShowAuthModal(true)}
-                                    className="rounded-xl border border-theme-borderColor px-7 py-3 font-semibold text-theme-textPrimary transition duration-200 hover:bg-theme-bgSurface/50"
+                                    className="rounded-xl border border-theme-borderColor px-7 py-3 font-semibold text-theme-textPrimary transition duration-200 hover:bg-theme-boxBg/50"
                                 >
                                     Sign In / Create Account
                                 </button>
                             ) : null}
                         </div>
 
-                        <div className="mx-auto mt-10 w-full max-w-2xl rounded-2xl border border-theme-borderColor bg-theme-bgPrimary p-6">
+                        <div className="mx-auto mt-10 w-full max-w-2xl rounded-2xl border border-theme-borderColor bg-theme-smallBoxBg p-6">
                             {authLoading ? (
                                 <p className="text-sm text-theme-textPrimary">Loading authentication...</p>
                             ) : !currentUser ? (
@@ -1849,42 +1854,42 @@ renderSharedEditor(roomId)`}
                                     <button
                                         type="button"
                                         onClick={() => { setAuthMode('signup'); setShowAuthModal(true); }}
-                                        className="w-full rounded-xl border border-theme-borderColor px-4 py-3 font-semibold transition hover:bg-theme-bgPrimary"
+                                        className="w-full rounded-xl border border-theme-borderColor px-4 py-3 font-semibold transition hover:bg-theme-smallBoxBg"
                                     >
                                         Create Account
                                     </button>
                                     <button
                                         type="button"
                                         onClick={handleContinueAsGuest}
-                                        className="w-full rounded-xl border border-theme-borderColor px-4 py-3 font-semibold text-theme-textPrimary transition hover:bg-theme-bgSurface/50"
+                                        className="w-full rounded-xl border border-theme-borderColor px-4 py-3 font-semibold text-theme-textPrimary transition hover:bg-theme-boxBg/50"
                                     >
                                         Continue as Guest
                                     </button>
                                 </div>
                             ) : (
                                 <div className="space-y-4">
-                                    <div className="rounded-xl border border-theme-borderColor bg-theme-bgPrimary p-4">
+                                    <div className="rounded-xl border border-theme-borderColor bg-theme-smallBoxBg p-4">
                                         <p className="font-semibold">{getDisplayName(currentUser)}</p>
                                         <p className="mt-1 text-sm text-theme-textPrimary">{currentUser.email || 'Signed in session'}</p>
                                         <button
                                             type="button"
                                             onClick={() => setShowChangePassword((prev) => !prev)}
-                                            className="mt-3 w-full rounded-lg border border-theme-borderColor px-3 py-2 text-sm font-semibold transition hover:bg-theme-bgPrimary"
+                                            className="mt-3 w-full rounded-lg border border-theme-borderColor px-3 py-2 text-sm font-semibold transition hover:bg-theme-smallBoxBg"
                                         >
                                             {showChangePassword ? 'Hide Change Password' : 'Change Password'}
                                         </button>
                                         {showChangePassword ? (
-                                            <div className="mt-3 space-y-2 rounded-lg border border-theme-borderColor bg-theme-bgPrimary p-3">
+                                            <div className="mt-3 space-y-2 rounded-lg border border-theme-borderColor bg-theme-smallBoxBg p-3">
                                                 <input
                                                     type="password"
-                                                    className="w-full rounded-lg border border-theme-borderColor bg-theme-bgPrimary px-3 py-2 text-sm outline-none transition focus:border-theme-borderColor"
+                                                    className="w-full rounded-lg border border-theme-borderColor bg-theme-smallBoxBg px-3 py-2 text-sm outline-none transition focus:border-theme-borderColor"
                                                     placeholder="Old password"
                                                     value={oldPassword}
                                                     onChange={(event) => setOldPassword(event.target.value)}
                                                 />
                                                 <input
                                                     type="password"
-                                                    className="w-full rounded-lg border border-theme-borderColor bg-theme-bgPrimary px-3 py-2 text-sm outline-none transition focus:border-theme-borderColor"
+                                                    className="w-full rounded-lg border border-theme-borderColor bg-theme-smallBoxBg px-3 py-2 text-sm outline-none transition focus:border-theme-borderColor"
                                                     placeholder="New password"
                                                     value={newPassword}
                                                     onChange={(event) => setNewPassword(event.target.value)}
@@ -1893,7 +1898,7 @@ renderSharedEditor(roomId)`}
                                                     type="button"
                                                     onClick={handleChangePassword}
                                                     disabled={isChangingPassword}
-                                                    className="w-full rounded-lg bg-theme-bgPrimary px-3 py-2 text-sm font-semibold transition hover:bg-theme-bgPrimary disabled:opacity-50"
+                                                    className="w-full rounded-lg bg-theme-smallBoxBg px-3 py-2 text-sm font-semibold transition hover:bg-theme-smallBoxBg disabled:opacity-50"
                                                 >
                                                     {isChangingPassword ? 'Updating...' : 'Update Password'}
                                                 </button>
@@ -1902,7 +1907,7 @@ renderSharedEditor(roomId)`}
                                         <button
                                             type="button"
                                             onClick={handleLogout}
-                                            className="mt-3 w-full rounded-lg border border-theme-borderColor px-3 py-2 text-sm font-semibold transition hover:bg-theme-bgPrimary"
+                                            className="mt-3 w-full rounded-lg border border-theme-borderColor px-3 py-2 text-sm font-semibold transition hover:bg-theme-smallBoxBg"
                                         >
                                             Logout
                                         </button>
@@ -1910,24 +1915,24 @@ renderSharedEditor(roomId)`}
 
                                     <input
                                         type="text"
-                                        className="w-full rounded-xl border border-theme-borderColor bg-theme-bgPrimary px-4 py-3 text-sm outline-none transition focus:border-theme-borderColor"
+                                        className="w-full rounded-xl border border-theme-borderColor bg-theme-smallBoxBg px-4 py-3 text-sm outline-none transition focus:border-theme-borderColor"
                                         placeholder="ROOM ID"
                                         value={roomId}
                                         onChange={(event) => setRoomId(event.target.value)}
                                     />
                                     <input
                                         type="text"
-                                        className="w-full rounded-xl border border-theme-borderColor bg-theme-bgPrimary px-4 py-3 text-sm outline-none transition focus:border-theme-borderColor"
+                                        className="w-full rounded-xl border border-theme-borderColor bg-theme-smallBoxBg px-4 py-3 text-sm outline-none transition focus:border-theme-borderColor"
                                         placeholder="USERNAME"
                                         value={username}
                                         onChange={(event) => setUsername(event.target.value)}
                                     />
 
                                     <div className="grid gap-3 sm:grid-cols-2">
-                                        <button type="button" onClick={joinRoom} className="rounded-xl bg-theme-bgPrimary px-4 py-3 font-semibold transition hover:bg-theme-bgPrimary">Join Room</button>
+                                        <button type="button" onClick={joinRoom} className="rounded-xl bg-theme-smallBoxBg px-4 py-3 font-semibold transition hover:bg-theme-smallBoxBg">Join Room</button>
                                         <button type="button" onClick={createNewRoom} className="rounded-xl bg-gradient-to-br from-slate-800 to-slate-700 px-4 py-3 font-semibold">Create New Room</button>
                                     </div>
-                                    <button type="button" onClick={solveSolo} className="w-full rounded-xl border border-theme-borderColor bg-theme-bgPrimary px-4 py-3 font-semibold transition hover:bg-theme-bgPrimary">
+                                    <button type="button" onClick={solveSolo} className="w-full rounded-xl border border-theme-borderColor bg-theme-smallBoxBg px-4 py-3 font-semibold transition hover:bg-theme-smallBoxBg">
                                         Solve Solo (No Room)
                                     </button>
                                 </div>
@@ -1937,11 +1942,11 @@ renderSharedEditor(roomId)`}
                 </section>
 
                 <section id="footer" className="mx-auto w-full px-4 pb-12 section-fade">
-                    <footer className="relative overflow-hidden rounded-[26px] border border-theme-borderColor bg-[linear-gradient(150deg,rgba(2,6,23,0.96),rgba(15,23,42,0.94))] p-5 md:p-6">
+                    <footer className="relative overflow-hidden rounded-[26px] border border-theme-borderColor bg-theme-boxBg p-5 md:p-6">
                         <div className="pointer-events-none absolute inset-x-0 top-0 h-[2px] bg-gradient-to-br from-slate-800 to-slate-700 opacity-80" />
 
                         <div className="grid gap-4 lg:grid-cols-3">
-                            <article className="rounded-2xl border border-theme-borderColor bg-theme-bgSurface/50 p-4 transition duration-300 hover:-translate-y-0.5 hover:border-theme-borderColor hover:shadow-md">
+                            <article className="rounded-2xl border border-theme-borderColor bg-theme-boxBg/50 p-4 transition duration-300 hover:-translate-y-0.5 hover:border-theme-borderColor hover:shadow-md">
                                 <div className="flex items-start gap-3">
                                     <span className="text-xl">⚡</span>
                                     <div>
@@ -1950,16 +1955,16 @@ renderSharedEditor(roomId)`}
                                             A real-time collaborative coding environment built for developers — supporting live pair programming, technical interview practice, multi-language execution, and performance analytics.
                                         </p>
                                         <div className="mt-3 flex flex-wrap gap-2 text-[10px] font-semibold">
-                                            <span className="rounded-full border border-theme-borderColor/50 bg-theme-bgSurface/50 px-2.5 py-1 text-theme-textPrimary">React</span>
-                                            <span className="rounded-full border border-theme-borderColor/50 bg-theme-bgSurface/50 px-2.5 py-1 text-theme-textPrimary">Socket.IO</span>
-                                            <span className="rounded-full border border-theme-borderColor/50 bg-theme-bgSurface/50 px-2.5 py-1 text-theme-textPrimary">CodeMirror</span>
-                                            <span className="rounded-full border border-theme-borderColor/50 bg-theme-bgSurface/50 px-2.5 py-1 text-theme-textPrimary">Node.js</span>
+                                            <span className="rounded-full border border-theme-borderColor/50 bg-theme-boxBg/50 px-2.5 py-1 text-theme-textPrimary">React</span>
+                                            <span className="rounded-full border border-theme-borderColor/50 bg-theme-boxBg/50 px-2.5 py-1 text-theme-textPrimary">Socket.IO</span>
+                                            <span className="rounded-full border border-theme-borderColor/50 bg-theme-boxBg/50 px-2.5 py-1 text-theme-textPrimary">CodeMirror</span>
+                                            <span className="rounded-full border border-theme-borderColor/50 bg-theme-boxBg/50 px-2.5 py-1 text-theme-textPrimary">Node.js</span>
                                         </div>
                                     </div>
                                 </div>
                             </article>
 
-                            <article className="rounded-2xl border border-theme-borderColor bg-theme-bgSurface/50 p-4 transition duration-300 hover:-translate-y-0.5 hover:border-theme-borderColor hover:shadow-md">
+                            <article className="rounded-2xl border border-theme-borderColor bg-theme-boxBg/50 p-4 transition duration-300 hover:-translate-y-0.5 hover:border-theme-borderColor hover:shadow-md">
                                 <div className="flex items-start gap-3">
                                     <span className="text-xl">👨‍💻</span>
                                     <div>
@@ -1968,14 +1973,14 @@ renderSharedEditor(roomId)`}
                                             Computer Science student who built this project to learn about WebSockets, React, and real-time collaboration.
                                         </p>
                                         <div className="mt-3 flex flex-wrap gap-2">
-                                            <a href="https://github.com/AnujYadav-1915" target="_blank" rel="noopener noreferrer" className="rounded-full border border-theme-borderColor/50 bg-theme-bgSurface/50 px-3 py-1 text-[11px] font-semibold text-theme-textPrimary transition hover:bg-theme-bgSurface/50">GitHub</a>
-                                            <a href="https://www.linkedin.com/in/anuj-kumar-918415295/" target="_blank" rel="noopener noreferrer" className="rounded-full border border-theme-borderColor/50 bg-theme-bgSurface/50 px-3 py-1 text-[11px] font-semibold text-theme-textPrimary transition hover:bg-theme-bgSurface/50">LinkedIn</a>
+                                            <a href="https://github.com/AnujYadav-1915" target="_blank" rel="noopener noreferrer" className="rounded-full border border-theme-borderColor/50 bg-theme-boxBg/50 px-3 py-1 text-[11px] font-semibold text-theme-textPrimary transition hover:bg-theme-boxBg/50">GitHub</a>
+                                            <a href="https://www.linkedin.com/in/anuj-kumar-918415295/" target="_blank" rel="noopener noreferrer" className="rounded-full border border-theme-borderColor/50 bg-theme-boxBg/50 px-3 py-1 text-[11px] font-semibold text-theme-textPrimary transition hover:bg-theme-boxBg/50">LinkedIn</a>
                                         </div>
                                     </div>
                                 </div>
                             </article>
 
-                            <article className="rounded-2xl border border-theme-borderColor bg-theme-bgSurface/50 p-4 transition duration-300 hover:-translate-y-0.5 hover:border-theme-borderColor hover:shadow-md">
+                            <article className="rounded-2xl border border-theme-borderColor bg-theme-boxBg/50 p-4 transition duration-300 hover:-translate-y-0.5 hover:border-theme-borderColor hover:shadow-md">
                                 <div className="flex items-start gap-3">
                                     <span className="text-xl">✉️</span>
                                     <div>
@@ -1994,7 +1999,7 @@ renderSharedEditor(roomId)`}
 
                         <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-theme-borderColor px-1 pt-3 text-xs text-theme-textPrimary">
                             <span>© {new Date().getFullYear()} Sync Code · Built with ❤️ by Anuj Kumar</span>
-                            <span className="rounded-full border border-theme-borderColor bg-theme-bgPrimary px-2.5 py-1 text-[10px] font-semibold text-theme-textPrimary">v2.0 · Real-time · Open Source</span>
+                            <span className="rounded-full border border-theme-borderColor bg-theme-smallBoxBg px-2.5 py-1 text-[10px] font-semibold text-theme-textPrimary">v2.0 · Real-time · Open Source</span>
                         </div>
                     </footer>
                 </section>
@@ -2006,7 +2011,7 @@ renderSharedEditor(roomId)`}
                     onClick={() => setShowAuthModal(false)}
                 >
                     <div
-                        className="relative mx-4 w-full max-w-md overflow-y-auto rounded-2xl border border-theme-borderColor bg-theme-bgPrimary p-6 shadow-[0_24px_80px_rgba(2,6,23,0.8)]"
+                        className="relative mx-4 w-full max-w-md overflow-y-auto rounded-2xl border border-theme-borderColor bg-theme-smallBoxBg p-6 shadow-[0_24px_80px_rgba(2,6,23,0.8)]"
                         style={{maxHeight: '90vh'}}
                         onClick={(e) => e.stopPropagation()}
                     >
@@ -2024,28 +2029,28 @@ renderSharedEditor(roomId)`}
                                 <button
                                     type="button"
                                     onClick={() => setAuthMode('signin')}
-                                    className={`flex-1 rounded-xl border px-4 py-2 font-semibold transition ${authMode === 'signin' ? 'border-theme-borderColor bg-theme-bgSurface/50 text-theme-textPrimary' : 'border-theme-borderColor text-theme-textPrimary'}`}
+                                    className={`flex-1 rounded-xl border px-4 py-2 font-semibold transition ${authMode === 'signin' ? 'border-theme-borderColor bg-theme-boxBg/50 text-theme-textPrimary' : 'border-theme-borderColor text-theme-textPrimary'}`}
                                 >
                                     Sign In
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => setAuthMode('signup')}
-                                    className={`flex-1 rounded-xl border px-4 py-2 font-semibold transition ${authMode === 'signup' ? 'border-theme-borderColor bg-theme-bgSurface/50 text-theme-textPrimary' : 'border-theme-borderColor text-theme-textPrimary'}`}
+                                    className={`flex-1 rounded-xl border px-4 py-2 font-semibold transition ${authMode === 'signup' ? 'border-theme-borderColor bg-theme-boxBg/50 text-theme-textPrimary' : 'border-theme-borderColor text-theme-textPrimary'}`}
                                 >
                                     Create Account
                                 </button>
                             </div>
                             <input
                                 type="email"
-                                className="w-full rounded-xl border border-theme-borderColor bg-theme-bgPrimary px-4 py-3 text-sm outline-none transition focus:border-theme-borderColor"
+                                className="w-full rounded-xl border border-theme-borderColor bg-theme-smallBoxBg px-4 py-3 text-sm outline-none transition focus:border-theme-borderColor"
                                 placeholder="Email"
                                 value={email}
                                 onChange={(event) => setEmail(event.target.value)}
                             />
                             <input
                                 type="password"
-                                className="w-full rounded-xl border border-theme-borderColor bg-theme-bgPrimary px-4 py-3 text-sm outline-none transition focus:border-theme-borderColor"
+                                className="w-full rounded-xl border border-theme-borderColor bg-theme-smallBoxBg px-4 py-3 text-sm outline-none transition focus:border-theme-borderColor"
                                 placeholder="Password"
                                 value={password}
                                 onChange={(event) => setPassword(event.target.value)}
@@ -2058,19 +2063,19 @@ renderSharedEditor(roomId)`}
                             <button
                                 type="button"
                                 onClick={() => { setShowForgotPassword((prev) => !prev); setForgotPasswordOtp(''); }}
-                                className="w-full rounded-xl border border-theme-borderColor px-4 py-2 text-sm font-semibold text-theme-textPrimary transition hover:bg-theme-bgSurface/50"
+                                className="w-full rounded-xl border border-theme-borderColor px-4 py-2 text-sm font-semibold text-theme-textPrimary transition hover:bg-theme-boxBg/50"
                             >
                                 {showForgotPassword ? 'Hide Forgot Password' : 'Forgot Password?'}
                             </button>
                             {showForgotPassword ? (
-                                <div className="space-y-3 rounded-xl border border-theme-borderColor bg-theme-bgPrimary p-4">
+                                <div className="space-y-3 rounded-xl border border-theme-borderColor bg-theme-smallBoxBg p-4">
                                     <div className="space-y-2">
-                                        <input type="email" className="w-full rounded-xl border border-theme-borderColor bg-theme-bgPrimary px-4 py-3 text-sm outline-none transition focus:border-theme-borderColor" placeholder="Registered email" value={forgotPasswordEmail} onChange={(e) => setForgotPasswordEmail(e.target.value)} />
-                                        <input type="text" className="w-full rounded-xl border border-theme-borderColor bg-theme-bgPrimary px-4 py-3 text-sm outline-none transition focus:border-theme-borderColor" placeholder="OTP (from email)" value={forgotPasswordOtp} onChange={(e) => setForgotPasswordOtp(e.target.value)} />
-                                        <input type="password" className="w-full rounded-xl border border-theme-borderColor bg-theme-bgPrimary px-4 py-3 text-sm outline-none transition focus:border-theme-borderColor" placeholder="New password" value={forgotPasswordNewPassword} onChange={(e) => setForgotPasswordNewPassword(e.target.value)} />
+                                        <input type="email" className="w-full rounded-xl border border-theme-borderColor bg-theme-smallBoxBg px-4 py-3 text-sm outline-none transition focus:border-theme-borderColor" placeholder="Registered email" value={forgotPasswordEmail} onChange={(e) => setForgotPasswordEmail(e.target.value)} />
+                                        <input type="text" className="w-full rounded-xl border border-theme-borderColor bg-theme-smallBoxBg px-4 py-3 text-sm outline-none transition focus:border-theme-borderColor" placeholder="OTP (from email)" value={forgotPasswordOtp} onChange={(e) => setForgotPasswordOtp(e.target.value)} />
+                                        <input type="password" className="w-full rounded-xl border border-theme-borderColor bg-theme-smallBoxBg px-4 py-3 text-sm outline-none transition focus:border-theme-borderColor" placeholder="New password" value={forgotPasswordNewPassword} onChange={(e) => setForgotPasswordNewPassword(e.target.value)} />
                                         <div className="grid gap-2 sm:grid-cols-2">
-                                            <button type="button" onClick={handleForgotPasswordRequest} disabled={isForgotPasswordRequesting} className="rounded-xl border border-theme-borderColor px-4 py-3 text-sm font-semibold transition hover:bg-theme-bgPrimary disabled:opacity-50">{isForgotPasswordRequesting ? 'Sending...' : 'Send OTP'}</button>
-                                            <button type="button" onClick={handleForgotPasswordReset} disabled={isForgotPasswordResetting} className="rounded-xl bg-theme-bgPrimary px-4 py-3 text-sm font-semibold transition hover:bg-theme-bgPrimary disabled:opacity-50">{isForgotPasswordResetting ? 'Updating...' : 'Set New Password'}</button>
+                                            <button type="button" onClick={handleForgotPasswordRequest} disabled={isForgotPasswordRequesting} className="rounded-xl border border-theme-borderColor px-4 py-3 text-sm font-semibold transition hover:bg-theme-smallBoxBg disabled:opacity-50">{isForgotPasswordRequesting ? 'Sending...' : 'Send OTP'}</button>
+                                            <button type="button" onClick={handleForgotPasswordReset} disabled={isForgotPasswordResetting} className="rounded-xl bg-theme-smallBoxBg px-4 py-3 text-sm font-semibold transition hover:bg-theme-smallBoxBg disabled:opacity-50">{isForgotPasswordResetting ? 'Updating...' : 'Set New Password'}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -2078,19 +2083,19 @@ renderSharedEditor(roomId)`}
                             {isFirebaseConfigured ? (
                                 <>
                                     <div className="relative flex items-center gap-3 py-1"><span className="flex-1 border-t border-theme-borderColor"/><span className="text-xs text-theme-textPrimary">or</span><span className="flex-1 border-t border-theme-borderColor"/></div>
-                                    <button type="button" onClick={handleGoogleSignIn} className="w-full rounded-xl border border-theme-borderColor px-4 py-3 font-semibold text-theme-textPrimary transition hover:bg-theme-bgSurface/50">Continue with Google</button>
+                                    <button type="button" onClick={handleGoogleSignIn} className="w-full rounded-xl border border-theme-borderColor px-4 py-3 font-semibold text-theme-textPrimary transition hover:bg-theme-boxBg/50">Continue with Google</button>
                                     <div className="grid gap-2 sm:grid-cols-3">
-                                        <input type="text" className="sm:col-span-2 rounded-xl border border-theme-borderColor bg-theme-bgPrimary px-3 py-2 text-sm outline-none transition focus:border-theme-borderColor" placeholder="Mobile (+91xxxxxxxxxx)" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
-                                        <button type="button" onClick={handleSendOtp} className="rounded-xl border border-theme-borderColor px-3 py-2 text-sm font-semibold transition hover:bg-theme-bgPrimary">Send OTP</button>
+                                        <input type="text" className="sm:col-span-2 rounded-xl border border-theme-borderColor bg-theme-smallBoxBg px-3 py-2 text-sm outline-none transition focus:border-theme-borderColor" placeholder="Mobile (+91xxxxxxxxxx)" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+                                        <button type="button" onClick={handleSendOtp} className="rounded-xl border border-theme-borderColor px-3 py-2 text-sm font-semibold transition hover:bg-theme-smallBoxBg">Send OTP</button>
                                     </div>
                                     <div className="grid gap-2 sm:grid-cols-3">
-                                        <input type="text" className="sm:col-span-2 rounded-xl border border-theme-borderColor bg-theme-bgPrimary px-3 py-2 text-sm outline-none transition focus:border-theme-borderColor" placeholder="Enter OTP" value={otp} onChange={(e) => setOtp(e.target.value)} />
-                                        <button type="button" onClick={handleVerifyOtp} className="rounded-xl border border-theme-borderColor px-3 py-2 text-sm font-semibold transition hover:bg-theme-bgPrimary">Verify OTP</button>
+                                        <input type="text" className="sm:col-span-2 rounded-xl border border-theme-borderColor bg-theme-smallBoxBg px-3 py-2 text-sm outline-none transition focus:border-theme-borderColor" placeholder="Enter OTP" value={otp} onChange={(e) => setOtp(e.target.value)} />
+                                        <button type="button" onClick={handleVerifyOtp} className="rounded-xl border border-theme-borderColor px-3 py-2 text-sm font-semibold transition hover:bg-theme-smallBoxBg">Verify OTP</button>
                                     </div>
                                     <div id="otp-recaptcha" />
                                 </>
                             ) : null}
-                            <button type="button" onClick={() => { handleContinueAsGuest(); setShowAuthModal(false); }} className="w-full rounded-xl border border-theme-borderColor px-4 py-2 text-sm font-semibold text-theme-textPrimary transition hover:bg-theme-bgSurface/50">Continue as Guest</button>
+                            <button type="button" onClick={() => { handleContinueAsGuest(); setShowAuthModal(false); }} className="w-full rounded-xl border border-theme-borderColor px-4 py-2 text-sm font-semibold text-theme-textPrimary transition hover:bg-theme-boxBg/50">Continue as Guest</button>
                         </div>
                     </div>
                 </div>

@@ -4,14 +4,14 @@ import {Toaster} from 'react-hot-toast';
 import Home from './pages/Home';
 import EditorPage from './pages/EditorPage';
 import {RecoilRoot} from "recoil";
-import {ThemeProvider} from "./ThemeContext";
-import ThemeSwitcher from "./components/ThemeSwitcher";
+import {ColorProvider} from "./ColorContext";
+import ColorSwitcher from "./components/ColorSwitcher";
 
 function App() {
 
     return (
-        <ThemeProvider>
-            <ThemeSwitcher />
+        <ColorProvider>
+            <ColorSwitcher />
             <div>
                 <Toaster
                     position="top-center"
@@ -43,7 +43,7 @@ function App() {
                     </Routes>
                 </RecoilRoot>
             </BrowserRouter>
-        </ThemeProvider>
+        </ColorProvider>
     );
 }
 
