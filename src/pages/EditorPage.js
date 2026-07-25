@@ -168,50 +168,6 @@ const sampleProblemTemplate = {
 const backendBaseUrl = process.env.REACT_APP_BACKEND_URL || window.location.origin;
 const USERNAME_PREF_STORAGE_KEY = "sync-code-username-pref";
 
-const runtimeInstallCommandMap = {
-  macos: {
-    node: "brew install node",
-    python3: "brew install python",
-    bash: "brew install bash",
-    "c++": "xcode-select --install",
-    javac: "brew install openjdk",
-    java: "brew install openjdk",
-    php: "brew install php",
-    go: "brew install go",
-    Rscript: "brew install --cask r",
-    rustc: "brew install rust",
-    ruby: "brew install ruby",
-    swift: "xcode-select --install",
-  },
-  linux: {
-    node: "sudo apt update && sudo apt install -y nodejs npm",
-    python3: "sudo apt update && sudo apt install -y python3",
-    bash: "sudo apt update && sudo apt install -y bash",
-    "c++": "sudo apt update && sudo apt install -y g++",
-    javac: "sudo apt update && sudo apt install -y openjdk-17-jdk",
-    java: "sudo apt update && sudo apt install -y openjdk-17-jdk",
-    php: "sudo apt update && sudo apt install -y php",
-    go: "sudo apt update && sudo apt install -y golang-go",
-    Rscript: "sudo apt update && sudo apt install -y r-base",
-    rustc: "sudo apt update && sudo apt install -y rustc cargo",
-    ruby: "sudo apt update && sudo apt install -y ruby",
-    swift: "Install Swift toolchain from swift.org for your distro",
-  },
-  windows: {
-    node: "winget install OpenJS.NodeJS.LTS",
-    python3: "winget install Python.Python.3.12",
-    bash: "winget install Git.Git",
-    "c++": "winget install Microsoft.VisualStudio.2022.BuildTools",
-    javac: "winget install Oracle.JDK.21",
-    java: "winget install Oracle.JDK.21",
-    php: "winget install PHP.PHP",
-    go: "winget install GoLang.Go",
-    Rscript: "winget install RProject.R",
-    rustc: "winget install Rustlang.Rustup",
-    ruby: "winget install RubyInstallerTeam.Ruby",
-    swift: "Use WSL for Swift development on Windows",
-  },
-};
 
 const detectClientOs = () => {
   const platform = `${navigator.platform || ""}`.toLowerCase();
