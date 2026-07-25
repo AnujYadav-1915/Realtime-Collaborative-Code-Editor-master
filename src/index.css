@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
+/* Base variables (moved out of @layer to prevent purging) */
     :root {
         /* Default: Dracula */
         --tw-bg-primary: #282a36;
@@ -63,7 +63,6 @@
         --tw-accent-hover: #81a1c1;
         --tw-border-color: #4c566a;
     }
-}
 
 body {
     background-color: var(--tw-bg-primary);
