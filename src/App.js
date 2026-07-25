@@ -1,49 +1,35 @@
-
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import {Toaster} from 'react-hot-toast';
 import Home from './pages/Home';
 import EditorPage from './pages/EditorPage';
 import {RecoilRoot} from "recoil";
-import {ColorProvider} from "./ColorContext";
-import ColorSwitcher from "./components/ColorSwitcher";
 
 function App() {
-
     return (
-        <ColorProvider>
-            <ColorSwitcher />
+        <>
             <div>
                 <Toaster
                     position="top-center"
                     toastOptions={{
                         success: {
                             theme: {
-                                primary: '#4aed88',
+                                primary: '#10b981',
                             },
                         },
                     }}
-                ></Toaster>
+                />
             </div>
             <BrowserRouter>
                 <RecoilRoot>
                     <Routes>
-                        <Route path="/" element={<Home />}></Route>
-                        <Route
-                            path="/editor"
-                            element={<EditorPage />}
-                        ></Route>
-                        <Route
-                            path="/editor/:roomId"
-                            element={<EditorPage />}
-                        ></Route>
-                        <Route
-                            path="/room/:roomId/view"
-                            element={<EditorPage />}
-                        ></Route>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/editor" element={<EditorPage />} />
+                        <Route path="/editor/:roomId" element={<EditorPage />} />
+                        <Route path="/room/:roomId/view" element={<EditorPage />} />
                     </Routes>
                 </RecoilRoot>
             </BrowserRouter>
-        </ColorProvider>
+        </>
     );
 }
 

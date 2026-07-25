@@ -1190,8 +1190,6 @@ const EditorPage = () => {
       return [];
     }
 
-    const detectedOs = detectClientOs();
-    const selectedOsKey = runtimeInstallOs === "auto" ? detectedOs : runtimeInstallOs;
     const osCommands = {};
 
     const commands = selectedRuntimeStatus.missingBinaries
@@ -1199,7 +1197,7 @@ const EditorPage = () => {
       .filter(Boolean);
 
     return [...new Set(commands)];
-  }, [selectedRuntimeStatus, runtimeInstallOs]);
+  }, [selectedRuntimeStatus]);
 
   const runtimeInstallOsLabel = useMemo(() => {
     const detectedOs = detectClientOs();

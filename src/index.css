@@ -9,31 +9,7 @@
     --tw-text-muted: #64748b;
     --tw-border-color: #e2e8f0;
     
-    /* Default theme: Corporate Navy */
-    --tw-accent: #2563eb;
-    --tw-accent-hover: #1d4ed8;
-    --tw-box-bg: #1e293b;
-    --tw-box-text: #ffffff;
-    --tw-small-box-bg: #ffffff;
-    --tw-small-box-text: #0f172a;
-    --tw-box-border: #334155;
-    --tw-button-bg: #2563eb;
-    --tw-button-text: #ffffff;
-}
-
-.color-navy {
-    --tw-accent: #2563eb;
-    --tw-accent-hover: #1d4ed8;
-    --tw-box-bg: #1e293b;
-    --tw-box-text: #ffffff;
-    --tw-small-box-bg: #ffffff;
-    --tw-small-box-text: #0f172a;
-    --tw-box-border: #334155;
-    --tw-button-bg: #2563eb;
-    --tw-button-text: #ffffff;
-}
-
-.color-emerald {
+    /* Forest Emerald Theme */
     --tw-accent: #059669;
     --tw-accent-hover: #047857;
     --tw-box-bg: #064e3b;
@@ -45,49 +21,12 @@
     --tw-button-text: #ffffff;
 }
 
-.color-amethyst {
-    --tw-accent: #7c3aed;
-    --tw-accent-hover: #6d28d9;
-    --tw-box-bg: #4c1d95;
-    --tw-box-text: #ffffff;
-    --tw-small-box-bg: #ffffff;
-    --tw-small-box-text: #4c1d95;
-    --tw-box-border: #6d28d9;
-    --tw-button-bg: #7c3aed;
-    --tw-button-text: #ffffff;
-}
-
-.color-sunset {
-    --tw-accent: #ea580c;
-    --tw-accent-hover: #c2410c;
-    --tw-box-bg: #7c2d12;
-    --tw-box-text: #ffffff;
-    --tw-small-box-bg: #ffffff;
-    --tw-small-box-text: #7c2d12;
-    --tw-box-border: #9a3412;
-    --tw-button-bg: #ea580c;
-    --tw-button-text: #ffffff;
-}
-
-.color-slate {
-    --tw-accent: #475569;
-    --tw-accent-hover: #334155;
-    --tw-box-bg: #334155;
-    --tw-box-text: #ffffff;
-    --tw-small-box-bg: #ffffff;
-    --tw-small-box-text: #1e293b;
-    --tw-box-border: #475569;
-    --tw-button-bg: #475569;
-    --tw-button-text: #ffffff;
-}
-
 body {
     background-color: var(--tw-bg-primary);
     color: var(--tw-text-primary);
     margin: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 @layer utilities {
