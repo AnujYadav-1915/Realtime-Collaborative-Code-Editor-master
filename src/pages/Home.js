@@ -1076,22 +1076,22 @@ const Home = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[var(--tw-bg-primary)] text-slate-300">
+        <div className="min-h-screen bg-[var(--tw-bg-primary)] text-[var(--tw-text-primary)]">
 
             <header className="sticky top-0 z-50 border-b border-[var(--tw-border-color)] bg-[var(--tw-bg-surface)]/50 backdrop-blur">
                 <div className="mx-auto flex w-full items-center justify-between px-4 py-4">
                     <button type="button" onClick={() => scrollToSection('hero')} className="flex items-center gap-2 text-left">
-                        <span className="text-2xl text-slate-300">⌘</span>
+                        <span className="text-2xl text-[var(--tw-text-primary)]">⌘</span>
                         <span className="text-lg font-semibold tracking-wide">SYNC CODE</span>
                     </button>
 
-                    <nav className="hidden items-center gap-7 text-sm text-slate-300 md:flex">
-                        <button type="button" onClick={() => scrollToSection('features')} className="transition hover:text-slate-300">Features</button>
-                        <button type="button" onClick={() => scrollToSection('contest-mode')} className="transition hover:text-slate-300">Contest</button>
-                        <button type="button" onClick={() => scrollToSection('collaborate')} className="transition hover:text-slate-300">Collaborate</button>
-                        <button type="button" onClick={() => scrollToSection('problems')} className="transition hover:text-slate-300">Problems</button>
-                        <button type="button" onClick={() => scrollToSection('docs')} className="transition hover:text-slate-300">Docs</button>
-                        <button type="button" onClick={() => scrollToSection('about')} className="transition hover:text-slate-300">About</button>
+                    <nav className="hidden items-center gap-7 text-sm text-[var(--tw-text-primary)] md:flex">
+                        <button type="button" onClick={() => scrollToSection('features')} className="transition hover:text-[var(--tw-text-primary)]">Features</button>
+                        <button type="button" onClick={() => scrollToSection('contest-mode')} className="transition hover:text-[var(--tw-text-primary)]">Contest</button>
+                        <button type="button" onClick={() => scrollToSection('collaborate')} className="transition hover:text-[var(--tw-text-primary)]">Collaborate</button>
+                        <button type="button" onClick={() => scrollToSection('problems')} className="transition hover:text-[var(--tw-text-primary)]">Problems</button>
+                        <button type="button" onClick={() => scrollToSection('docs')} className="transition hover:text-[var(--tw-text-primary)]">Docs</button>
+                        <button type="button" onClick={() => scrollToSection('about')} className="transition hover:text-[var(--tw-text-primary)]">About</button>
                     </nav>
 
                     <div className="flex items-center gap-2">
@@ -1110,19 +1110,19 @@ const Home = () => {
                         <button
                             type="button"
                             onClick={() => setIsProfileMenuOpen((prev) => !prev)}
-                            className="flex items-center gap-2 rounded-xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-3 py-2 text-sm font-semibold text-slate-300 transition hover:border-[var(--tw-border-color)]"
+                            className="flex items-center gap-2 rounded-xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-3 py-2 text-sm font-semibold text-[var(--tw-text-primary)] transition hover:border-[var(--tw-border-color)]"
                         >
-                            <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[var(--tw-bg-primary)] text-xs font-bold text-slate-300">
+                            <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[var(--tw-bg-primary)] text-xs font-bold text-[var(--tw-text-primary)]">
                                 {(username || getDisplayName(currentUser || {displayName: 'G'})).charAt(0).toUpperCase()}
                             </span>
                             <span className="max-w-[140px] truncate">{username || (currentUser ? getDisplayName(currentUser) : 'Profile')}</span>
-                            <span className="text-xs text-slate-300">▾</span>
+                            <span className="text-xs text-[var(--tw-text-primary)]">▾</span>
                         </button>
 
                         {isProfileMenuOpen ? (
                             <div className="absolute right-0 top-12 z-50 w-64 rounded-2xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] p-3 shadow-[0_20px_55px_rgba(2,6,23,0.65)]">
                                 {authLoading ? (
-                                    <p className="px-2 py-3 text-sm text-slate-300">Loading profile...</p>
+                                    <p className="px-2 py-3 text-sm text-[var(--tw-text-primary)]">Loading profile...</p>
                                 ) : !currentUser ? (
                                     <div className="space-y-2">
                                         <button
@@ -1151,8 +1151,8 @@ const Home = () => {
                                 ) : (
                                     <div className="space-y-3">
                                         <div className="rounded-lg border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-3 py-2">
-                                            <p className="text-sm font-semibold text-slate-300">{username || getDisplayName(currentUser)}</p>
-                                            <p className="mt-1 truncate text-xs text-slate-300">{currentUser.email || 'Signed in user'}</p>
+                                            <p className="text-sm font-semibold text-[var(--tw-text-primary)]">{username || getDisplayName(currentUser)}</p>
+                                            <p className="mt-1 truncate text-xs text-[var(--tw-text-primary)]">{currentUser.email || 'Signed in user'}</p>
                                         </div>
                                         <div className="space-y-2 rounded-lg border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-3 py-3">
                                             <input
@@ -1219,7 +1219,7 @@ const Home = () => {
                                                 setIsProfileMenuOpen(false);
                                                 await handleLogout();
                                             }}
-                                            className="w-full rounded-lg border border-[var(--tw-border-color)] px-3 py-2 text-left text-sm font-semibold text-slate-300 transition hover:bg-[var(--tw-bg-primary)]"
+                                            className="w-full rounded-lg border border-[var(--tw-border-color)] px-3 py-2 text-left text-sm font-semibold text-[var(--tw-text-primary)] transition hover:bg-[var(--tw-bg-primary)]"
                                         >
                                             Logout
                                         </button>
@@ -1234,13 +1234,13 @@ const Home = () => {
 
             {isMobileMenuOpen ? (
                 <div className="border-b border-[var(--tw-border-color)] bg-[var(--tw-bg-surface)]/50 md:hidden">
-                    <nav className="flex flex-col px-4 py-3 text-sm text-slate-300">
+                    <nav className="flex flex-col px-4 py-3 text-sm text-[var(--tw-text-primary)]">
                         {[['features','Features'],['contest-mode','Contest'],['collaborate','Collaborate'],['problems','Problems'],['docs','Docs'],['about','About']].map(([id, label]) => (
                             <button
                                 key={id}
                                 type="button"
                                 onClick={() => { scrollToSection(id); setIsMobileMenuOpen(false); }}
-                                className="border-b border-[var(--tw-border-color)] py-3 text-left transition hover:text-slate-300"
+                                className="border-b border-[var(--tw-border-color)] py-3 text-left transition hover:text-[var(--tw-text-primary)]"
                             >
                                 {label}
                             </button>
@@ -1249,7 +1249,7 @@ const Home = () => {
                             <button
                                 type="button"
                                 onClick={() => { setShowAuthModal(true); setIsMobileMenuOpen(false); }}
-                                className="mt-2 rounded-lg border border-[var(--tw-border-color)] px-4 py-2 text-center font-semibold text-slate-300 transition hover:bg-[var(--tw-bg-surface)]/50"
+                                className="mt-2 rounded-lg border border-[var(--tw-border-color)] px-4 py-2 text-center font-semibold text-[var(--tw-text-primary)] transition hover:bg-[var(--tw-bg-surface)]/50"
                             >
                                 Sign In / Create Account
                             </button>
@@ -1263,7 +1263,7 @@ const Home = () => {
                     <div className={`grid gap-10 overflow-hidden rounded-[36px] border border-[var(--tw-border-color)] px-6 py-12 section-fade md:grid-cols-2 md:px-10 md:py-16 bg-[var(--tw-bg-primary)]`}>
                         <div className="section-fade">
                             <h1 className={`bg-clip-text text-4xl font-bold leading-tight text-transparent md:text-6xl text-[var(--tw-accent)]`}>Collaborative Coding Made Powerful</h1>
-                            <p className="mt-5 max-w-xl text-lg text-slate-300">
+                            <p className="mt-5 max-w-xl text-lg text-[var(--tw-text-primary)]">
                                 Write, run, and solve coding problems together in real time.
                             </p>
                             <div className="mt-8 flex flex-wrap gap-4">
@@ -1277,7 +1277,7 @@ const Home = () => {
                                 <button
                                     type="button"
                                     onClick={() => scrollToSection('problems')}
-                                    className={`rounded-xl border px-6 py-3 font-semibold transition border border-[var(--tw-accent)] text-[var(--tw-accent)] hover:bg-cyan-900`}
+                                    className={`rounded-xl border px-6 py-3 font-semibold transition border border-[var(--tw-accent)] text-[var(--tw-accent)] hover:bg-[var(--tw-accent-hover)]`}
                                 >
                                     Explore Problems
                                 </button>
@@ -1287,22 +1287,22 @@ const Home = () => {
                         <div className="relative min-h-[360px] section-fade">
                             <div className="absolute inset-0 rounded-3xl bg-purple-500/20" />
                             <div className="absolute left-2 top-8 w-64 rounded-2xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-surface)]/50 p-4 shadow-glow animate-float">
-                                <p className="text-xs text-slate-300">Collaborative editor</p>
-                                <p className="mt-2 font-mono text-sm text-slate-300">const team = ['Alice','Bob'];</p>
+                                <p className="text-xs text-[var(--tw-text-primary)]">Collaborative editor</p>
+                                <p className="mt-2 font-mono text-sm text-[var(--tw-text-primary)]">const team = ['Alice','Bob'];</p>
                             </div>
                             <div className="absolute right-3 top-20 w-60 rotate-2 rounded-2xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-surface)]/50 p-4 shadow-cyan animate-float [animation-delay:0.8s]">
-                                <p className="text-xs text-slate-300">User cursors</p>
+                                <p className="text-xs text-[var(--tw-text-primary)]">User cursors</p>
                                 <div className="mt-3 space-y-2 text-sm">
-                                    <p className="text-slate-300">● Alice typing...</p>
-                                    <p className="text-slate-300">● Bob at line 14</p>
+                                    <p className="text-[var(--tw-text-primary)]">● Alice typing...</p>
+                                    <p className="text-[var(--tw-text-primary)]">● Bob at line 14</p>
                                 </div>
                             </div>
                             <div className="absolute bottom-24 left-8 w-64 -rotate-2 rounded-2xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-surface)]/50 p-4 shadow-glow animate-float [animation-delay:1.5s]">
-                                <p className="text-xs text-slate-300">Problem panel</p>
-                                <p className="mt-2 text-sm text-slate-300">Two Sum Medium Test cases ready</p>
+                                <p className="text-xs text-[var(--tw-text-primary)]">Problem panel</p>
+                                <p className="mt-2 text-sm text-[var(--tw-text-primary)]">Two Sum Medium Test cases ready</p>
                             </div>
                             <div className="absolute bottom-6 right-8 rounded-xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-surface)]/50 px-5 py-3 shadow-glow animate-pulseSoft">
-                                <span className="text-sm font-semibold text-slate-300">▶ Run Code</span>
+                                <span className="text-sm font-semibold text-[var(--tw-text-primary)]">▶ Run Code</span>
                             </div>
                         </div>
                     </div>
@@ -1316,7 +1316,7 @@ const Home = () => {
                         {homeFeatureHighlights.map((feature, index) => (
                             <div
                                 key={feature.title}
-                                className={`relative overflow-hidden rounded-2xl border border-[var(--tw-border-color)] p-6 transition duration-300 hover:-translate-y-1 bg-[var(--tw-bg-surface)] hover:border-indigo-500 ${
+                                className={`relative overflow-hidden rounded-2xl border border-[var(--tw-border-color)] p-6 transition duration-300 hover:-translate-y-1 bg-[var(--tw-bg-surface)] hover:border-[var(--tw-accent)] ${
                                     activeFeatureHighlight === index
                                         ? 'border-[var(--tw-border-color)] shadow-md'
                                         : ''
@@ -1328,7 +1328,7 @@ const Home = () => {
                                     }`}
                                 />
                                 <h3 className="text-lg font-semibold">{feature.title}</h3>
-                                <ul className="mt-4 space-y-2 text-sm text-slate-300">
+                                <ul className="mt-4 space-y-2 text-sm text-[var(--tw-text-primary)]">
                                     {feature.points.map((point) => (
                                         <li key={point}>{point}</li>
                                     ))}
@@ -1343,9 +1343,9 @@ const Home = () => {
                         <h2 className="text-center text-3xl font-bold">Product Demo</h2>
                         <div className="mt-8 grid gap-5 md:grid-cols-12">
                             <aside className="rounded-2xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] p-4 md:col-span-4">
-                                <p className="text-xs uppercase tracking-wide text-slate-300">Problem</p>
+                                <p className="text-xs uppercase tracking-wide text-[var(--tw-text-primary)]">Problem</p>
                                 <h4 className="mt-2 font-semibold">Longest Substring Without Repeating Characters</h4>
-                                <p className="mt-3 text-sm text-slate-300">Given a string, find the length of the longest substring without repeating characters.</p>
+                                <p className="mt-3 text-sm text-[var(--tw-text-primary)]">Given a string, find the length of the longest substring without repeating characters.</p>
                             </aside>
 
                             <div className="rounded-2xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] p-4 md:col-span-8">
@@ -1358,11 +1358,11 @@ const Home = () => {
                                         ))}
                                     </div>
                                     <div className="mr-2 flex items-center gap-2">
-                                        <span className="text-[11px] text-slate-300">Input</span>
+                                        <span className="text-[11px] text-[var(--tw-text-primary)]">Input</span>
                                         <select
                                             value={selectedDemoInput}
                                             onChange={(event) => setSelectedDemoInput(event.target.value)}
-                                            className="rounded border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-2 py-1 text-[11px] text-slate-300"
+                                            className="rounded border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-2 py-1 text-[11px] text-[var(--tw-text-primary)]"
                                         >
                                             {demoInputOptions.map((inputValue) => (
                                                 <option key={inputValue} value={inputValue}>{inputValue}</option>
@@ -1377,13 +1377,13 @@ const Home = () => {
                                         {demoRunState === 'running' ? 'Running...' : 'Run'}
                                     </button>
                                 </div>
-                                <pre className="overflow-x-auto rounded-xl bg-[var(--tw-bg-primary)] p-4 text-sm text-slate-300">
+                                <pre className="overflow-x-auto rounded-xl bg-[var(--tw-bg-primary)] p-4 text-sm text-[var(--tw-text-primary)]">
 {demoCodeSnippet}
                                 </pre>
                                 <div className="mt-3 rounded-xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] p-3">
                                     <div className="flex items-center justify-between">
-                                        <p className="text-xs font-semibold text-slate-300">Execution Console</p>
-                                        <span className={`text-[10px] font-semibold ${demoRunState === 'running' ? 'text-slate-300 animate-pulse' : demoRunState === 'success' ? 'text-slate-300' : 'text-slate-300'}`}>
+                                        <p className="text-xs font-semibold text-[var(--tw-text-primary)]">Execution Console</p>
+                                        <span className={`text-[10px] font-semibold ${demoRunState === 'running' ? 'text-[var(--tw-text-primary)] animate-pulse' : demoRunState === 'success' ? 'text-[var(--tw-text-primary)]' : 'text-[var(--tw-text-primary)]'}`}>
                                             {demoRunState === 'running' ? 'RUNNING' : demoRunState === 'success' ? 'SUCCESS' : 'READY'}
                                         </span>
                                     </div>
@@ -1393,19 +1393,19 @@ const Home = () => {
                                             style={{ width: `${demoProgress}%` }}
                                         />
                                     </div>
-                                    <div className="mt-2 rounded-lg border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] p-2 text-[11px] text-slate-300">
+                                    <div className="mt-2 rounded-lg border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] p-2 text-[11px] text-[var(--tw-text-primary)]">
                                         <p>Current input: "{selectedDemoInput}"</p>
                                         <p>Window frame: {demoFrames[demoFrameIndex]?.window || '-'}</p>
                                         <p>Best length so far: {demoFrames[demoFrameIndex]?.best ?? runLongestSubstringDemo(selectedDemoInput)}</p>
                                     </div>
-                                    <div className="mt-2 max-h-24 overflow-y-auto rounded-lg border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] p-2 text-xs text-slate-300">
+                                    <div className="mt-2 max-h-24 overflow-y-auto rounded-lg border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] p-2 text-xs text-[var(--tw-text-primary)]">
                                         {demoLogs.length === 0 ? (
                                             <p>No execution logs yet.</p>
                                         ) : (
                                             demoLogs.map((line) => <p key={line}>{line}</p>)
                                         )}
                                     </div>
-                                    <p className="mt-2 rounded-md bg-[var(--tw-bg-primary)] px-2 py-1 text-sm font-semibold text-slate-300">
+                                    <p className="mt-2 rounded-md bg-[var(--tw-bg-primary)] px-2 py-1 text-sm font-semibold text-[var(--tw-text-primary)]">
                                         {demoResultText}
                                     </p>
                                 </div>
@@ -1418,22 +1418,22 @@ const Home = () => {
                     <div className="grid gap-6 md:grid-cols-2">
                         <div>
                             <h2 className="text-3xl font-bold">Collaboration Features</h2>
-                            <ul className="mt-6 space-y-3 text-slate-300">
+                            <ul className="mt-6 space-y-3 text-[var(--tw-text-primary)]">
                                 <li>Live cursors</li>
                                 <li>Typing indicators</li>
                                 <li>Shared problem solving</li>
                             </ul>
                         </div>
                         <div className="relative rounded-2xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] p-5">
-                            <pre className="rounded-xl bg-[var(--tw-bg-primary)] p-4 text-sm text-slate-300">
+                            <pre className="rounded-xl bg-[var(--tw-bg-primary)] p-4 text-sm text-[var(--tw-text-primary)]">
 {`// team-session.js
 socket.on('cursor-move', updateCursor)
 socket.on('typing-start', setTyping)
 renderSharedEditor(roomId)`}
                             </pre>
-                            <span className="absolute left-10 top-12 animate-float text-slate-300">⌖</span>
-                            <span className="absolute right-12 top-20 animate-float [animation-delay:0.9s] text-slate-300">⌖</span>
-                            <span className="absolute bottom-10 left-1/2 animate-float [animation-delay:1.4s] text-slate-300">⌖</span>
+                            <span className="absolute left-10 top-12 animate-float text-[var(--tw-text-primary)]">⌖</span>
+                            <span className="absolute right-12 top-20 animate-float [animation-delay:0.9s] text-[var(--tw-text-primary)]">⌖</span>
+                            <span className="absolute bottom-10 left-1/2 animate-float [animation-delay:1.4s] text-[var(--tw-text-primary)]">⌖</span>
                         </div>
                     </div>
                 </section>
@@ -1442,19 +1442,19 @@ renderSharedEditor(roomId)`}
                     <div className="rounded-3xl border border-[var(--tw-border-color)] bg-[linear-gradient(145deg,rgba(2,6,23,0.95),rgba(17,24,39,0.94))] p-6 md:p-8">
                         <div className="flex flex-wrap items-center justify-between gap-3">
                             <div>
-                                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-300">Contest mode</p>
+                                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[var(--tw-text-primary)]">Contest mode</p>
                                 <h3 className="mt-2 text-2xl font-bold md:text-3xl">Timed multi-problem rounds with leaderboard + penalties</h3>
                             </div>
-                            <span className="rounded-full border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-3 py-1 text-xs font-semibold text-slate-300">
+                            <span className="rounded-full border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-3 py-1 text-xs font-semibold text-[var(--tw-text-primary)]">
                                 Competitive Practice
                             </span>
                         </div>
 
                         <div className="mt-7 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
                             <div className="rounded-2xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-surface)]/50 p-5">
-                                <p className="text-sm font-semibold text-slate-300">Round planner</p>
+                                <p className="text-sm font-semibold text-[var(--tw-text-primary)]">Round planner</p>
                                 <div className="mt-4 grid gap-3 sm:grid-cols-3">
-                                    <label className="rounded-xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-3 py-2 text-xs text-slate-300">
+                                    <label className="rounded-xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-3 py-2 text-xs text-[var(--tw-text-primary)]">
                                         Rounds
                                         <input
                                             type="number"
@@ -1462,10 +1462,10 @@ renderSharedEditor(roomId)`}
                                             max={8}
                                             value={contestRoundCount}
                                             onChange={(event) => setContestRoundCount(Number(event.target.value) || 3)}
-                                            className="mt-2 w-full rounded-lg border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-2 py-2 text-sm text-slate-300 outline-none focus:border-[var(--tw-border-color)]"
+                                            className="mt-2 w-full rounded-lg border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-2 py-2 text-sm text-[var(--tw-text-primary)] outline-none focus:border-[var(--tw-border-color)]"
                                         />
                                     </label>
-                                    <label className="rounded-xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-3 py-2 text-xs text-slate-300">
+                                    <label className="rounded-xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-3 py-2 text-xs text-[var(--tw-text-primary)]">
                                         Minutes / round
                                         <input
                                             type="number"
@@ -1473,10 +1473,10 @@ renderSharedEditor(roomId)`}
                                             max={60}
                                             value={contestRoundMinutes}
                                             onChange={(event) => setContestRoundMinutes(Number(event.target.value) || 18)}
-                                            className="mt-2 w-full rounded-lg border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-2 py-2 text-sm text-slate-300 outline-none focus:border-[var(--tw-border-color)]"
+                                            className="mt-2 w-full rounded-lg border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-2 py-2 text-sm text-[var(--tw-text-primary)] outline-none focus:border-[var(--tw-border-color)]"
                                         />
                                     </label>
-                                    <label className="rounded-xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-3 py-2 text-xs text-slate-300">
+                                    <label className="rounded-xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-3 py-2 text-xs text-[var(--tw-text-primary)]">
                                         Penalty (minutes)
                                         <input
                                             type="number"
@@ -1484,13 +1484,13 @@ renderSharedEditor(roomId)`}
                                             max={30}
                                             value={contestPenaltyMinutes}
                                             onChange={(event) => setContestPenaltyMinutes(Number(event.target.value) || 8)}
-                                            className="mt-2 w-full rounded-lg border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-2 py-2 text-sm text-slate-300 outline-none focus:border-[var(--tw-border-color)]"
+                                            className="mt-2 w-full rounded-lg border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-2 py-2 text-sm text-[var(--tw-text-primary)] outline-none focus:border-[var(--tw-border-color)]"
                                         />
                                     </label>
                                 </div>
 
-                                <div className="mt-4 rounded-xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-4 py-3 text-sm text-slate-300">
-                                    <p>Contest summary: <span className="text-slate-300 font-semibold">{contestRoundCount} rounds · {contestRoundMinutes} min each · {contestPenaltyMinutes} min wrong-attempt penalty</span></p>
+                                <div className="mt-4 rounded-xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-4 py-3 text-sm text-[var(--tw-text-primary)]">
+                                    <p>Contest summary: <span className="text-[var(--tw-text-primary)] font-semibold">{contestRoundCount} rounds · {contestRoundMinutes} min each · {contestPenaltyMinutes} min wrong-attempt penalty</span></p>
                                     <p className="mt-1 text-xs">Launch opens the editor with the first contest problem and a prepared contest packet.</p>
                                 </div>
 
@@ -1498,7 +1498,7 @@ renderSharedEditor(roomId)`}
                                     type="button"
                                     onClick={handleLaunchContestMode}
                                     disabled={isLaunchingContest}
-                                    className="mt-4 rounded-xl bg-gradient-to-br from-slate-800 to-slate-700 px-5 py-3 text-sm font-semibold text-slate-300 shadow-md transition hover:opacity-90 disabled:opacity-60"
+                                    className="mt-4 rounded-xl bg-gradient-to-br from-slate-800 to-slate-700 px-5 py-3 text-sm font-semibold text-[var(--tw-text-primary)] shadow-md transition hover:opacity-90 disabled:opacity-60"
                                 >
                                     {isLaunchingContest ? 'Preparing Contest...' : '🚀 Launch Contest Mode'}
                                 </button>
@@ -1506,17 +1506,17 @@ renderSharedEditor(roomId)`}
 
                             <div className="rounded-2xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-surface)]/50 p-5">
                                 <div className="flex items-center justify-between gap-2">
-                                    <p className="text-sm font-semibold text-slate-300">Leaderboard (preview)</p>
-                                    <span className="text-xs text-slate-300">Sorted by solved → penalty → score</span>
+                                    <p className="text-sm font-semibold text-[var(--tw-text-primary)]">Leaderboard (preview)</p>
+                                    <span className="text-xs text-[var(--tw-text-primary)]">Sorted by solved → penalty → score</span>
                                 </div>
                                 <div className="mt-4 space-y-2">
                                     {[].map((entry, index) => (
                                         <div key={`${entry.username}-${index}`} className="grid grid-cols-[26px_1fr_auto_auto_auto] items-center gap-2 rounded-lg border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-3 py-2 text-xs">
-                                            <span className="text-slate-300">#{index + 1}</span>
-                                            <span className="truncate text-slate-300">{entry.username}</span>
-                                            <span className="text-slate-300">{entry.solved} solved</span>
-                                            <span className="text-slate-300">{entry.penalty}m pen</span>
-                                            <span className="text-slate-300">{entry.score}</span>
+                                            <span className="text-[var(--tw-text-primary)]">#{index + 1}</span>
+                                            <span className="truncate text-[var(--tw-text-primary)]">{entry.username}</span>
+                                            <span className="text-[var(--tw-text-primary)]">{entry.solved} solved</span>
+                                            <span className="text-[var(--tw-text-primary)]">{entry.penalty}m pen</span>
+                                            <span className="text-[var(--tw-text-primary)]">{entry.score}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -1531,22 +1531,22 @@ renderSharedEditor(roomId)`}
                         <div className="absolute right-12 top-8 h-32 w-32 rounded-full bg-[var(--tw-bg-surface)]/50 blur-3xl" />
                         <div className="relative grid gap-6 md:grid-cols-[1.1fr_0.9fr] md:items-center">
                             <div>
-                                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-300">Shared workflow</p>
+                                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[var(--tw-text-primary)]">Shared workflow</p>
                                 <h3 className="mt-3 text-2xl font-bold md:text-3xl">Move from live collaboration straight into curated interview problems.</h3>
-                                <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300 md:text-base">
+                                <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--tw-text-primary)] md:text-base">
                                     Pair-program on one side, then hand the room a focused challenge with tests, difficulty tags, and ready-to-run examples without breaking session flow.
                                 </p>
                             </div>
                             <div className="grid gap-3 sm:grid-cols-2">
                                 <div className="rounded-2xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-surface)]/50 p-4">
-                                    <p className="text-xs uppercase tracking-wide text-slate-300">Live room</p>
-                                    <p className="mt-2 text-sm font-semibold text-slate-300">Multiple Collaborators Active</p>
-                                    <p className="mt-1 text-sm text-slate-300">Cursor sync and typing indicators online</p>
+                                    <p className="text-xs uppercase tracking-wide text-[var(--tw-text-primary)]">Live room</p>
+                                    <p className="mt-2 text-sm font-semibold text-[var(--tw-text-primary)]">Multiple Collaborators Active</p>
+                                    <p className="mt-1 text-sm text-[var(--tw-text-primary)]">Cursor sync and typing indicators online</p>
                                 </div>
                                 <div className="rounded-2xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-surface)]/50 p-4">
-                                    <p className="text-xs uppercase tracking-wide text-slate-300">Next challenge</p>
-                                    <p className="mt-2 text-sm font-semibold text-slate-300">Graph traversal set queued</p>
-                                    <p className="mt-1 text-sm text-slate-300">Multiple problems are ready to be assigned</p>
+                                    <p className="text-xs uppercase tracking-wide text-[var(--tw-text-primary)]">Next challenge</p>
+                                    <p className="mt-2 text-sm font-semibold text-[var(--tw-text-primary)]">Graph traversal set queued</p>
+                                    <p className="mt-1 text-sm text-[var(--tw-text-primary)]">Multiple problems are ready to be assigned</p>
                                 </div>
                             </div>
                         </div>
@@ -1556,7 +1556,7 @@ renderSharedEditor(roomId)`}
                 <section id="problems" className="mx-auto w-full px-4 py-14 section-fade">
                     <div className="flex flex-wrap items-center gap-3">
                         <h2 className="text-3xl font-bold">Problem Library Preview</h2>
-                        <span className="rounded-full border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-3 py-1 text-xs font-semibold text-slate-300">
+                        <span className="rounded-full border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-3 py-1 text-xs font-semibold text-[var(--tw-text-primary)]">
                             Total Questions: {totalQuestionCount}
                         </span>
                     </div>
@@ -1564,7 +1564,7 @@ renderSharedEditor(roomId)`}
                         {problemCategories.map((category) => (
                             <div
                                 key={category}
-                                className={`rounded-2xl border p-5 text-center transition duration-200 hover:-translate-y-1 bg-[var(--tw-bg-surface)] hover:border-indigo-500 ${selectedProblemTopic === category ? 'border-[var(--tw-border-color)] shadow-md' : 'border-[var(--tw-border-color)]'}`}
+                                className={`rounded-2xl border p-5 text-center transition duration-200 hover:-translate-y-1 bg-[var(--tw-bg-surface)] hover:border-[var(--tw-accent)] ${selectedProblemTopic === category ? 'border-[var(--tw-border-color)] shadow-md' : 'border-[var(--tw-border-color)]'}`}
                             >
                                 <button
                                     type="button"
@@ -1576,7 +1576,7 @@ renderSharedEditor(roomId)`}
                                 <button
                                     type="button"
                                     onClick={() => handleCategoryClick(category)}
-                                    className="mt-3 rounded-lg border border-[var(--tw-border-color)] px-3 py-1 text-xs font-semibold text-slate-300 transition hover:bg-[var(--tw-bg-surface)]/50"
+                                    className="mt-3 rounded-lg border border-[var(--tw-border-color)] px-3 py-1 text-xs font-semibold text-[var(--tw-text-primary)] transition hover:bg-[var(--tw-bg-surface)]/50"
                                 >
                                     {selectedProblemTopic === category ? 'Unload Questions' : 'Load Questions'}
                                 </button>
@@ -1590,16 +1590,16 @@ renderSharedEditor(roomId)`}
                         <div className="rounded-2xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-surface)]/50 p-6">
                             <h3 className="text-2xl font-bold">{selectedProblemTopic} Questions</h3>
                             {isTopicProblemsLoading ? (
-                                <p className="mt-4 text-sm text-slate-300">Loading questions...</p>
+                                <p className="mt-4 text-sm text-[var(--tw-text-primary)]">Loading questions...</p>
                             ) : topicProblems.length === 0 ? (
-                                <p className="mt-4 text-sm text-slate-300">No questions found for this topic right now.</p>
+                                <p className="mt-4 text-sm text-[var(--tw-text-primary)]">No questions found for this topic right now.</p>
                             ) : (
                                 <div className="mt-5 grid gap-3 md:grid-cols-2">
                                     {topicProblems.map((problem) => (
                                         <div key={problem.id} className="rounded-xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] p-4">
-                                            <p className="font-semibold text-slate-300">{problem.title}</p>
-                                            <p className="mt-2 text-sm text-slate-300">{(problem.statement || '').slice(0, 120)}{(problem.statement || '').length > 120 ? '...' : ''}</p>
-                                            <div className="mt-3 flex items-center justify-between text-xs text-slate-300">
+                                            <p className="font-semibold text-[var(--tw-text-primary)]">{problem.title}</p>
+                                            <p className="mt-2 text-sm text-[var(--tw-text-primary)]">{(problem.statement || '').slice(0, 120)}{(problem.statement || '').length > 120 ? '...' : ''}</p>
+                                            <div className="mt-3 flex items-center justify-between text-xs text-[var(--tw-text-primary)]">
                                                 <span>{(problem.difficulty || 'medium').toUpperCase()}</span>
                                                 <span>{(problem.targetTimeComplexity || '').trim() || 'Complexity N/A'}</span>
                                             </div>
@@ -1607,7 +1607,7 @@ renderSharedEditor(roomId)`}
                                                 type="button"
                                                 onClick={() => handleLaunchQuestion(problem.id, problem.title)}
                                                 disabled={isLaunchingQuestion}
-                                                className="mt-3 rounded-lg border border-[var(--tw-border-color)] px-3 py-1 text-xs font-semibold text-slate-300 transition hover:bg-[var(--tw-bg-surface)]/50 disabled:opacity-50"
+                                                className="mt-3 rounded-lg border border-[var(--tw-border-color)] px-3 py-1 text-xs font-semibold text-[var(--tw-text-primary)] transition hover:bg-[var(--tw-bg-surface)]/50 disabled:opacity-50"
                                             >
                                                 {isLaunchingQuestion ? 'Opening...' : 'Open in Editor'}
                                             </button>
@@ -1622,7 +1622,7 @@ renderSharedEditor(roomId)`}
                 <section id="adaptive-feed" className="mx-auto w-full px-4 py-10 section-fade">
                     <div className="rounded-2xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-surface)]/50 p-6">
                         <h3 className="text-2xl font-bold">Adaptive Practice Feed</h3>
-                        <p className="mt-2 text-sm text-slate-300">Weak topics: {weakTopics.length > 0 ? weakTopics.join(', ') : 'No weakness data yet (run problems to unlock).'}</p>
+                        <p className="mt-2 text-sm text-[var(--tw-text-primary)]">Weak topics: {weakTopics.length > 0 ? weakTopics.join(', ') : 'No weakness data yet (run problems to unlock).'}</p>
                         <div className="mt-4 grid gap-4 md:grid-cols-2">
                             {isDashboardLoading ? (
                                 [1,2,3,4].map((n) => (
@@ -1636,12 +1636,12 @@ renderSharedEditor(roomId)`}
                                     </div>
                                 ))
                             ) : adaptiveRecommendations.length === 0 ? (
-                                <p className="text-sm text-slate-300">No recommendations yet.</p>
+                                <p className="text-sm text-[var(--tw-text-primary)]">No recommendations yet.</p>
                             ) : (
                                 adaptiveRecommendations.map((entry) => (
                                     <div key={entry.topic} className="rounded-xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] p-4">
-                                        <p className="font-semibold capitalize text-slate-300">{entry.topic.replace(/-/g, ' ')}</p>
-                                        <ul className="mt-2 space-y-1 text-sm text-slate-300">
+                                        <p className="font-semibold capitalize text-[var(--tw-text-primary)]">{entry.topic.replace(/-/g, ' ')}</p>
+                                        <ul className="mt-2 space-y-1 text-sm text-[var(--tw-text-primary)]">
                                             {(entry.problems || []).slice(0, 4).map((problem) => (
                                                 <li key={problem.id} className="flex items-center justify-between gap-2">
                                                         <span>{problem.title}</span>
@@ -1649,7 +1649,7 @@ renderSharedEditor(roomId)`}
                                                         type="button"
                                                         onClick={() => handleLaunchQuestion(problem.id, problem.title)}
                                                         disabled={isLaunchingQuestion}
-                                                        className="rounded border border-[var(--tw-border-color)] px-2 py-1 text-[10px] font-semibold text-slate-300 transition hover:bg-[var(--tw-bg-surface)]/50 disabled:opacity-50"
+                                                        className="rounded border border-[var(--tw-border-color)] px-2 py-1 text-[10px] font-semibold text-[var(--tw-text-primary)] transition hover:bg-[var(--tw-bg-surface)]/50 disabled:opacity-50"
                                                     >
                                                         Open
                                                     </button>
@@ -1676,17 +1676,17 @@ renderSharedEditor(roomId)`}
                                         <div className="mt-3 h-7 animate-pulse rounded-lg bg-[var(--tw-bg-primary)]" />
                                     </div>
                                 ))
-                            ) : companyTracks.length === 0 ? <p className="text-sm text-slate-300">No company tracks available right now.</p> : companyTracks.map((track) => (
+                            ) : companyTracks.length === 0 ? <p className="text-sm text-[var(--tw-text-primary)]">No company tracks available right now.</p> : companyTracks.map((track) => (
                                 <div
                                     key={track.id}
                                     className={`rounded-xl border p-3 text-left transition ${selectedTrackId === track.id ? 'border-[var(--tw-border-color)] bg-[var(--tw-bg-surface)]/50' : 'border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)]'}`}
                                 >
                                     <p className="font-semibold">{track.company}</p>
-                                    <p className="mt-1 text-xs text-slate-300">{track.totalProblems} problems</p>
+                                    <p className="mt-1 text-xs text-[var(--tw-text-primary)]">{track.totalProblems} problems</p>
                                     <button
                                         type="button"
                                         onClick={() => handleOpenTrack(track.id)}
-                                        className="mt-3 rounded-lg border border-[var(--tw-border-color)] px-3 py-1 text-xs font-semibold text-slate-300 transition hover:bg-[var(--tw-bg-surface)]/50"
+                                        className="mt-3 rounded-lg border border-[var(--tw-border-color)] px-3 py-1 text-xs font-semibold text-[var(--tw-text-primary)] transition hover:bg-[var(--tw-bg-surface)]/50"
                                     >
                                         {selectedTrackId === track.id
                                             ? 'Unload Questions'
@@ -1707,8 +1707,8 @@ renderSharedEditor(roomId)`}
                             <div className="mt-5 grid gap-3 md:grid-cols-2">
                                 {selectedTrackProblems.slice(0, 12).map((problem) => (
                                     <div key={problem.id} className="rounded-xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] p-4">
-                                        <p className="font-semibold text-slate-300">{problem.title}</p>
-                                        <div className="mt-2 flex items-center justify-between text-xs text-slate-300">
+                                        <p className="font-semibold text-[var(--tw-text-primary)]">{problem.title}</p>
+                                        <div className="mt-2 flex items-center justify-between text-xs text-[var(--tw-text-primary)]">
                                             <span>{(problem.category || '').replace(/-/g, ' ')}</span>
                                             <span>{(problem.difficulty || 'medium').toUpperCase()}</span>
                                         </div>
@@ -1716,7 +1716,7 @@ renderSharedEditor(roomId)`}
                                             type="button"
                                             onClick={() => handleLaunchQuestion(problem.id, problem.title)}
                                             disabled={isLaunchingQuestion}
-                                            className="mt-3 rounded-lg border border-[var(--tw-border-color)] px-3 py-1 text-xs font-semibold text-slate-300 transition hover:bg-[var(--tw-bg-surface)]/50 disabled:opacity-50"
+                                            className="mt-3 rounded-lg border border-[var(--tw-border-color)] px-3 py-1 text-xs font-semibold text-[var(--tw-text-primary)] transition hover:bg-[var(--tw-bg-surface)]/50 disabled:opacity-50"
                                         >
                                             {isLaunchingQuestion ? 'Opening...' : 'Open in Editor'}
                                         </button>
@@ -1730,7 +1730,7 @@ renderSharedEditor(roomId)`}
                 <section id="sheet-reminders" className="mx-auto w-full px-4 py-10 section-fade">
                     <div className="rounded-2xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-surface)]/50 p-6">
                         <h3 className="text-2xl font-bold">Sheets & Reminders</h3>
-                        <p className="mt-2 text-sm text-slate-300">Blind 75 / NeetCode / custom sheets with collaborative check-ins.</p>
+                        <p className="mt-2 text-sm text-[var(--tw-text-primary)]">Blind 75 / NeetCode / custom sheets with collaborative check-ins.</p>
                         <div className="mt-4 grid gap-4 md:grid-cols-2">
                             {isDashboardLoading ? (
                                 [1,2].map((n) => (
@@ -1747,7 +1747,7 @@ renderSharedEditor(roomId)`}
                             <>
                             <div className="rounded-xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] p-4">
                                 <p className="font-semibold">Available Sheets</p>
-                                <ul className="mt-2 space-y-1 text-sm text-slate-300">
+                                <ul className="mt-2 space-y-1 text-sm text-[var(--tw-text-primary)]">
                                     {(sheetSummary.templates || []).length === 0 ? <li>No sheets available yet.</li> : (sheetSummary.templates || []).map((sheet) => (
                                         <li key={sheet.id} className="flex items-center justify-between gap-2">
                                             <span>{sheet.title}</span>
@@ -1764,7 +1764,7 @@ renderSharedEditor(roomId)`}
                             </div>
                             <div className="rounded-xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] p-4">
                                 <p className="font-semibold">Upcoming Reminders</p>
-                                <ul className="mt-2 space-y-1 text-sm text-slate-300">
+                                <ul className="mt-2 space-y-1 text-sm text-[var(--tw-text-primary)]">
                                     {(sheetSummary.reminders || []).length === 0 ? (
                                         <li>No reminders yet.</li>
                                     ) : (
@@ -1784,9 +1784,9 @@ renderSharedEditor(roomId)`}
                     <div className="rounded-3xl border border-[var(--tw-border-color)] bg-[linear-gradient(145deg,rgba(2,6,23,0.96),rgba(30,27,75,0.7))] p-6 md:p-8">
                         <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
                             <div>
-                                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-300">About Sync Code</p>
+                                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[var(--tw-text-primary)]">About Sync Code</p>
                                 <h2 className="mt-2 text-3xl font-bold">Built to make collaborative coding feel interview-real, fast, and focused.</h2>
-                                <p className="mt-4 text-sm leading-7 text-slate-300">
+                                <p className="mt-4 text-sm leading-7 text-[var(--tw-text-primary)]">
                                     Sync Code combines shared editing, live presence, optional voice, curated problems, and contest-style workflows in one place—so teams can practice exactly like real coding rounds.
                                 </p>
                                 <div className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -1799,8 +1799,8 @@ renderSharedEditor(roomId)`}
                                                     : 'border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)]'
                                             }`}
                                         >
-                                            <p className="font-semibold text-slate-300">{feature.title}</p>
-                                            <p className="mt-1 text-xs text-slate-300">{feature.points[0]} · {feature.points[1]}</p>
+                                            <p className="font-semibold text-[var(--tw-text-primary)]">{feature.title}</p>
+                                            <p className="mt-1 text-xs text-[var(--tw-text-primary)]">{feature.points[0]} · {feature.points[1]}</p>
                                         </div>
                                     ))}
                                 </div>
@@ -1826,7 +1826,7 @@ renderSharedEditor(roomId)`}
                                 <button
                                     type="button"
                                     onClick={() => setShowAuthModal(true)}
-                                    className="rounded-xl border border-[var(--tw-border-color)] px-7 py-3 font-semibold text-slate-300 transition duration-200 hover:bg-[var(--tw-bg-surface)]/50"
+                                    className="rounded-xl border border-[var(--tw-border-color)] px-7 py-3 font-semibold text-[var(--tw-text-primary)] transition duration-200 hover:bg-[var(--tw-bg-surface)]/50"
                                 >
                                     Sign In / Create Account
                                 </button>
@@ -1835,10 +1835,10 @@ renderSharedEditor(roomId)`}
 
                         <div className="mx-auto mt-10 w-full max-w-2xl rounded-2xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] p-6">
                             {authLoading ? (
-                                <p className="text-sm text-slate-300">Loading authentication...</p>
+                                <p className="text-sm text-[var(--tw-text-primary)]">Loading authentication...</p>
                             ) : !currentUser ? (
                                 <div className="space-y-4">
-                                    <p className="text-center text-sm text-slate-300">Sign in to access your dashboard, room controls and personalized recommendations.</p>
+                                    <p className="text-center text-sm text-[var(--tw-text-primary)]">Sign in to access your dashboard, room controls and personalized recommendations.</p>
                                     <button
                                         type="button"
                                         onClick={() => { setAuthMode('signin'); setShowAuthModal(true); }}
@@ -1856,7 +1856,7 @@ renderSharedEditor(roomId)`}
                                     <button
                                         type="button"
                                         onClick={handleContinueAsGuest}
-                                        className="w-full rounded-xl border border-[var(--tw-border-color)] px-4 py-3 font-semibold text-slate-300 transition hover:bg-[var(--tw-bg-surface)]/50"
+                                        className="w-full rounded-xl border border-[var(--tw-border-color)] px-4 py-3 font-semibold text-[var(--tw-text-primary)] transition hover:bg-[var(--tw-bg-surface)]/50"
                                     >
                                         Continue as Guest
                                     </button>
@@ -1865,7 +1865,7 @@ renderSharedEditor(roomId)`}
                                 <div className="space-y-4">
                                     <div className="rounded-xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] p-4">
                                         <p className="font-semibold">{getDisplayName(currentUser)}</p>
-                                        <p className="mt-1 text-sm text-slate-300">{currentUser.email || 'Signed in session'}</p>
+                                        <p className="mt-1 text-sm text-[var(--tw-text-primary)]">{currentUser.email || 'Signed in session'}</p>
                                         <button
                                             type="button"
                                             onClick={() => setShowChangePassword((prev) => !prev)}
@@ -1945,15 +1945,15 @@ renderSharedEditor(roomId)`}
                                 <div className="flex items-start gap-3">
                                     <span className="text-xl">⚡</span>
                                     <div>
-                                        <h3 className="text-sm font-bold text-slate-300">About Sync Code</h3>
-                                        <p className="mt-2 text-xs leading-6 text-slate-300">
+                                        <h3 className="text-sm font-bold text-[var(--tw-text-primary)]">About Sync Code</h3>
+                                        <p className="mt-2 text-xs leading-6 text-[var(--tw-text-primary)]">
                                             A real-time collaborative coding environment built for developers — supporting live pair programming, technical interview practice, multi-language execution, and performance analytics.
                                         </p>
                                         <div className="mt-3 flex flex-wrap gap-2 text-[10px] font-semibold">
-                                            <span className="rounded-full border border-[var(--tw-border-color)]/50 bg-[var(--tw-bg-surface)]/50 px-2.5 py-1 text-slate-300">React</span>
-                                            <span className="rounded-full border border-[var(--tw-border-color)]/50 bg-[var(--tw-bg-surface)]/50 px-2.5 py-1 text-slate-300">Socket.IO</span>
-                                            <span className="rounded-full border border-[var(--tw-border-color)]/50 bg-[var(--tw-bg-surface)]/50 px-2.5 py-1 text-slate-300">CodeMirror</span>
-                                            <span className="rounded-full border border-[var(--tw-border-color)]/50 bg-[var(--tw-bg-surface)]/50 px-2.5 py-1 text-slate-300">Node.js</span>
+                                            <span className="rounded-full border border-[var(--tw-border-color)]/50 bg-[var(--tw-bg-surface)]/50 px-2.5 py-1 text-[var(--tw-text-primary)]">React</span>
+                                            <span className="rounded-full border border-[var(--tw-border-color)]/50 bg-[var(--tw-bg-surface)]/50 px-2.5 py-1 text-[var(--tw-text-primary)]">Socket.IO</span>
+                                            <span className="rounded-full border border-[var(--tw-border-color)]/50 bg-[var(--tw-bg-surface)]/50 px-2.5 py-1 text-[var(--tw-text-primary)]">CodeMirror</span>
+                                            <span className="rounded-full border border-[var(--tw-border-color)]/50 bg-[var(--tw-bg-surface)]/50 px-2.5 py-1 text-[var(--tw-text-primary)]">Node.js</span>
                                         </div>
                                     </div>
                                 </div>
@@ -1963,13 +1963,13 @@ renderSharedEditor(roomId)`}
                                 <div className="flex items-start gap-3">
                                     <span className="text-xl">👨‍💻</span>
                                     <div>
-                                        <h3 className="text-sm font-bold text-slate-300">Built by Anuj Kumar</h3>
-                                        <p className="mt-2 text-xs leading-6 text-slate-300">
+                                        <h3 className="text-sm font-bold text-[var(--tw-text-primary)]">Built by Anuj Kumar</h3>
+                                        <p className="mt-2 text-xs leading-6 text-[var(--tw-text-primary)]">
                                             Computer Science student who built this project to learn about WebSockets, React, and real-time collaboration.
                                         </p>
                                         <div className="mt-3 flex flex-wrap gap-2">
-                                            <a href="https://github.com/AnujYadav-1915" target="_blank" rel="noopener noreferrer" className="rounded-full border border-[var(--tw-border-color)]/50 bg-[var(--tw-bg-surface)]/50 px-3 py-1 text-[11px] font-semibold text-slate-300 transition hover:bg-[var(--tw-bg-surface)]/50">GitHub</a>
-                                            <a href="https://www.linkedin.com/in/anuj-kumar-918415295/" target="_blank" rel="noopener noreferrer" className="rounded-full border border-[var(--tw-border-color)]/50 bg-[var(--tw-bg-surface)]/50 px-3 py-1 text-[11px] font-semibold text-slate-300 transition hover:bg-[var(--tw-bg-surface)]/50">LinkedIn</a>
+                                            <a href="https://github.com/AnujYadav-1915" target="_blank" rel="noopener noreferrer" className="rounded-full border border-[var(--tw-border-color)]/50 bg-[var(--tw-bg-surface)]/50 px-3 py-1 text-[11px] font-semibold text-[var(--tw-text-primary)] transition hover:bg-[var(--tw-bg-surface)]/50">GitHub</a>
+                                            <a href="https://www.linkedin.com/in/anuj-kumar-918415295/" target="_blank" rel="noopener noreferrer" className="rounded-full border border-[var(--tw-border-color)]/50 bg-[var(--tw-bg-surface)]/50 px-3 py-1 text-[11px] font-semibold text-[var(--tw-text-primary)] transition hover:bg-[var(--tw-bg-surface)]/50">LinkedIn</a>
                                         </div>
                                     </div>
                                 </div>
@@ -1979,22 +1979,22 @@ renderSharedEditor(roomId)`}
                                 <div className="flex items-start gap-3">
                                     <span className="text-xl">✉️</span>
                                     <div>
-                                        <h3 className="text-sm font-bold text-slate-300">Get in Touch</h3>
-                                        <p className="mt-2 text-xs leading-6 text-slate-300">
+                                        <h3 className="text-sm font-bold text-[var(--tw-text-primary)]">Get in Touch</h3>
+                                        <p className="mt-2 text-xs leading-6 text-[var(--tw-text-primary)]">
                                             Have feedback, a feature request, or want to collaborate? Reach out directly.
                                         </p>
                                         <div className="mt-3 flex flex-col gap-2 text-[12px]">
-                                            <a className="text-slate-300 transition hover:text-slate-300" href="mailto:anujyadav11112003@gmail.com">anujyadav11112003@gmail.com</a>
-                                            <a className="text-slate-300 transition hover:text-slate-300" href="https://github.com/AnujYadav-1915/Realtime-Collaborative-Code-Editor-master" target="_blank" rel="noopener noreferrer">View Source on GitHub</a>
+                                            <a className="text-[var(--tw-text-primary)] transition hover:text-[var(--tw-text-primary)]" href="mailto:anujyadav11112003@gmail.com">anujyadav11112003@gmail.com</a>
+                                            <a className="text-[var(--tw-text-primary)] transition hover:text-[var(--tw-text-primary)]" href="https://github.com/AnujYadav-1915/Realtime-Collaborative-Code-Editor-master" target="_blank" rel="noopener noreferrer">View Source on GitHub</a>
                                         </div>
                                     </div>
                                 </div>
                             </article>
                         </div>
 
-                        <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-[var(--tw-border-color)] px-1 pt-3 text-xs text-slate-300">
+                        <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-[var(--tw-border-color)] px-1 pt-3 text-xs text-[var(--tw-text-primary)]">
                             <span>© {new Date().getFullYear()} Sync Code · Built with ❤️ by Anuj Kumar</span>
-                            <span className="rounded-full border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-2.5 py-1 text-[10px] font-semibold text-slate-300">v2.0 · Real-time · Open Source</span>
+                            <span className="rounded-full border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-2.5 py-1 text-[10px] font-semibold text-[var(--tw-text-primary)]">v2.0 · Real-time · Open Source</span>
                         </div>
                     </footer>
                 </section>
@@ -2013,25 +2013,25 @@ renderSharedEditor(roomId)`}
                         <button
                             type="button"
                             onClick={() => setShowAuthModal(false)}
-                            className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full border border-[var(--tw-border-color)] text-slate-300 transition hover:border-[var(--tw-border-color)] hover:text-white"
+                            className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full border border-[var(--tw-border-color)] text-[var(--tw-text-primary)] transition hover:border-[var(--tw-border-color)] hover:text-white"
                         >
                             ✕
                         </button>
-                        <h3 className="text-xl font-bold text-slate-300">Welcome to Sync Code</h3>
-                        <p className="mt-1 text-sm text-slate-300">Sign in or create an account to continue.</p>
+                        <h3 className="text-xl font-bold text-[var(--tw-text-primary)]">Welcome to Sync Code</h3>
+                        <p className="mt-1 text-sm text-[var(--tw-text-primary)]">Sign in or create an account to continue.</p>
                         <div className="mt-5 space-y-3">
                             <div className="flex gap-3">
                                 <button
                                     type="button"
                                     onClick={() => setAuthMode('signin')}
-                                    className={`flex-1 rounded-xl border px-4 py-2 font-semibold transition ${authMode === 'signin' ? 'border-[var(--tw-border-color)] bg-[var(--tw-bg-surface)]/50 text-slate-300' : 'border-[var(--tw-border-color)] text-slate-300'}`}
+                                    className={`flex-1 rounded-xl border px-4 py-2 font-semibold transition ${authMode === 'signin' ? 'border-[var(--tw-border-color)] bg-[var(--tw-bg-surface)]/50 text-[var(--tw-text-primary)]' : 'border-[var(--tw-border-color)] text-[var(--tw-text-primary)]'}`}
                                 >
                                     Sign In
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => setAuthMode('signup')}
-                                    className={`flex-1 rounded-xl border px-4 py-2 font-semibold transition ${authMode === 'signup' ? 'border-[var(--tw-border-color)] bg-[var(--tw-bg-surface)]/50 text-slate-300' : 'border-[var(--tw-border-color)] text-slate-300'}`}
+                                    className={`flex-1 rounded-xl border px-4 py-2 font-semibold transition ${authMode === 'signup' ? 'border-[var(--tw-border-color)] bg-[var(--tw-bg-surface)]/50 text-[var(--tw-text-primary)]' : 'border-[var(--tw-border-color)] text-[var(--tw-text-primary)]'}`}
                                 >
                                     Create Account
                                 </button>
@@ -2058,7 +2058,7 @@ renderSharedEditor(roomId)`}
                             <button
                                 type="button"
                                 onClick={() => { setShowForgotPassword((prev) => !prev); setForgotPasswordOtp(''); }}
-                                className="w-full rounded-xl border border-[var(--tw-border-color)] px-4 py-2 text-sm font-semibold text-slate-300 transition hover:bg-[var(--tw-bg-surface)]/50"
+                                className="w-full rounded-xl border border-[var(--tw-border-color)] px-4 py-2 text-sm font-semibold text-[var(--tw-text-primary)] transition hover:bg-[var(--tw-bg-surface)]/50"
                             >
                                 {showForgotPassword ? 'Hide Forgot Password' : 'Forgot Password?'}
                             </button>
@@ -2077,8 +2077,8 @@ renderSharedEditor(roomId)`}
                             ) : null}
                             {isFirebaseConfigured ? (
                                 <>
-                                    <div className="relative flex items-center gap-3 py-1"><span className="flex-1 border-t border-[var(--tw-border-color)]"/><span className="text-xs text-slate-300">or</span><span className="flex-1 border-t border-[var(--tw-border-color)]"/></div>
-                                    <button type="button" onClick={handleGoogleSignIn} className="w-full rounded-xl border border-[var(--tw-border-color)] px-4 py-3 font-semibold text-slate-300 transition hover:bg-[var(--tw-bg-surface)]/50">Continue with Google</button>
+                                    <div className="relative flex items-center gap-3 py-1"><span className="flex-1 border-t border-[var(--tw-border-color)]"/><span className="text-xs text-[var(--tw-text-primary)]">or</span><span className="flex-1 border-t border-[var(--tw-border-color)]"/></div>
+                                    <button type="button" onClick={handleGoogleSignIn} className="w-full rounded-xl border border-[var(--tw-border-color)] px-4 py-3 font-semibold text-[var(--tw-text-primary)] transition hover:bg-[var(--tw-bg-surface)]/50">Continue with Google</button>
                                     <div className="grid gap-2 sm:grid-cols-3">
                                         <input type="text" className="sm:col-span-2 rounded-xl border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-3 py-2 text-sm outline-none transition focus:border-[var(--tw-border-color)]" placeholder="Mobile (+91xxxxxxxxxx)" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
                                         <button type="button" onClick={handleSendOtp} className="rounded-xl border border-[var(--tw-border-color)] px-3 py-2 text-sm font-semibold transition hover:bg-[var(--tw-bg-primary)]">Send OTP</button>
@@ -2090,7 +2090,7 @@ renderSharedEditor(roomId)`}
                                     <div id="otp-recaptcha" />
                                 </>
                             ) : null}
-                            <button type="button" onClick={() => { handleContinueAsGuest(); setShowAuthModal(false); }} className="w-full rounded-xl border border-[var(--tw-border-color)] px-4 py-2 text-sm font-semibold text-slate-300 transition hover:bg-[var(--tw-bg-surface)]/50">Continue as Guest</button>
+                            <button type="button" onClick={() => { handleContinueAsGuest(); setShowAuthModal(false); }} className="w-full rounded-xl border border-[var(--tw-border-color)] px-4 py-2 text-sm font-semibold text-[var(--tw-text-primary)] transition hover:bg-[var(--tw-bg-surface)]/50">Continue as Guest</button>
                         </div>
                     </div>
                 </div>
