@@ -1984,7 +1984,7 @@ renderSharedEditor(roomId)`}
                                             Have feedback, a feature request, or want to collaborate? Reach out directly.
                                         </p>
                                         <div className="mt-3 flex flex-col gap-2 text-[12px]">
-                                            <a className="text-slate-300 transition hover:text-slate-300" href="mailto:anujyadav1112@gmail.com">anujyadav1112@gmail.com</a>
+                                            <a className="text-slate-300 transition hover:text-slate-300" href="mailto:anujyadav11112003@gmail.com">anujyadav11112003@gmail.com</a>
                                             <a className="text-slate-300 transition hover:text-slate-300" href="https://github.com/AnujYadav-1915/Realtime-Collaborative-Code-Editor-master" target="_blank" rel="noopener noreferrer">View Source on GitHub</a>
                                         </div>
                                     </div>
