@@ -5,7 +5,7 @@ const ThemeSwitcher = () => {
     const { currentTheme, setCurrentTheme, themes } = useTheme();
 
     return (
-        <div className="fixed top-24 right-8 z-[9999] flex flex-col items-end gap-1 p-3 rounded-xl shadow-2xl bg-[var(--tw-bg-surface)] border-2 border-[var(--tw-accent)]">
+        <div className="fixed top-24 right-8 z-[9999] flex flex-col items-end gap-1 p-3 rounded-xl shadow-2xl bg-theme-bgSurface border-2 border-theme-accent">
             <label className="text-[10px] font-semibold tracking-wider text-[var(--tw-text-muted,theme('colors.slate.500'))] uppercase mr-1">
                 UI Theme
             </label>
