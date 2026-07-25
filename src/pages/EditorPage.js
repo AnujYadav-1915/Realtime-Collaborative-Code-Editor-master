@@ -1192,7 +1192,7 @@ const EditorPage = () => {
 
     const detectedOs = detectClientOs();
     const selectedOsKey = runtimeInstallOs === "auto" ? detectedOs : runtimeInstallOs;
-    const osCommands = runtimeInstallCommandMap[selectedOsKey] || runtimeInstallCommandMap.linux;
+    const osCommands = {};
 
     const commands = selectedRuntimeStatus.missingBinaries
       .map((binaryName) => osCommands[binaryName])

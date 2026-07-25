@@ -701,30 +701,8 @@ const Home = () => {
                     difficulty: problem.difficulty || 'medium',
                     order: index + 1,
                 })),
-                leaderboard: contestLeaderboard.slice(0, 10),
+                leaderboard: [],
             };
-
-            setContestLeaderboard((prev) => {
-                const penaltyScore = safePenalty * 4;
-                const baseScore = Math.max(120, safeRoundCount * 120 - penaltyScore);
-                const nextEntry = {
-                    username: launchUsername,
-                    solved: 0,
-                    penalty: safePenalty,
-                    score: baseScore,
-                };
-
-                const merged = [
-                    ...prev.filter((entry) => entry.username !== launchUsername),
-                    nextEntry,
-                ].sort((left, right) => {
-                    if (right.solved !== left.solved) return right.solved - left.solved;
-                    if (left.penalty !== right.penalty) return left.penalty - right.penalty;
-                    return right.score - left.score;
-                });
-
-                return merged.slice(0, 10);
-            });
 
             navigate('/editor', {
                 state: {
@@ -1532,7 +1510,7 @@ renderSharedEditor(roomId)`}
                                     <span className="text-xs text-slate-300">Sorted by solved → penalty → score</span>
                                 </div>
                                 <div className="mt-4 space-y-2">
-                                    {contestLeaderboard.slice(0, 6).map((entry, index) => (
+                                    {[].map((entry, index) => (
                                         <div key={`${entry.username}-${index}`} className="grid grid-cols-[26px_1fr_auto_auto_auto] items-center gap-2 rounded-lg border border-[var(--tw-border-color)] bg-[var(--tw-bg-primary)] px-3 py-2 text-xs">
                                             <span className="text-slate-300">#{index + 1}</span>
                                             <span className="truncate text-slate-300">{entry.username}</span>
