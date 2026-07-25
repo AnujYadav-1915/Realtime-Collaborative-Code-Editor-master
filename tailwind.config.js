@@ -4,6 +4,22 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        theme: {
+          bgPrimary: 'var(--tw-bg-primary)',
+          bgSurface: 'var(--tw-bg-surface)',
+          textPrimary: 'var(--tw-text-primary)',
+          textMuted: 'var(--tw-text-muted)',
+          borderColor: 'var(--tw-border-color)',
+          accent: 'var(--tw-accent)',
+          accentHover: 'var(--tw-accent-hover)',
+          boxBg: 'var(--tw-box-bg)',
+          boxText: 'var(--tw-box-text)',
+          smallBoxBg: 'var(--tw-small-box-bg)',
+          smallBoxText: 'var(--tw-small-box-text)',
+          boxBorder: 'var(--tw-box-border)',
+          buttonBg: 'var(--tw-button-bg)',
+          buttonText: 'var(--tw-button-text)',
+        },
         brand: {
           primary: '#8B5CF6',
           secondary: '#22D3EE',

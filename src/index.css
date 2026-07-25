@@ -3,18 +3,18 @@
 @tailwind utilities;
 
 :root {
-    --tw-bg-primary: #ffffff;
-    --tw-bg-surface: #f7f7f5;
-    --tw-text-primary: #37352f;
-    --tw-text-muted: #9b9a97;
-    --tw-border-color: #e9e9e7;
+    --tw-bg-primary: #f8fafc;
+    --tw-bg-surface: #ffffff;
+    --tw-text-primary: #0f172a;
+    --tw-text-muted: #64748b;
+    --tw-border-color: #e2e8f0;
     
-    /* Default color scheme (Corporate Navy) */
+    /* Default theme: Corporate Navy */
     --tw-accent: #2563eb;
     --tw-accent-hover: #1d4ed8;
     --tw-box-bg: #1e293b;
-    --tw-box-text: #f8fafc;
-    --tw-small-box-bg: #f1f5f9;
+    --tw-box-text: #ffffff;
+    --tw-small-box-bg: #ffffff;
     --tw-small-box-text: #0f172a;
     --tw-box-border: #334155;
     --tw-button-bg: #2563eb;
@@ -25,8 +25,8 @@
     --tw-accent: #2563eb;
     --tw-accent-hover: #1d4ed8;
     --tw-box-bg: #1e293b;
-    --tw-box-text: #f8fafc;
-    --tw-small-box-bg: #f1f5f9;
+    --tw-box-text: #ffffff;
+    --tw-small-box-bg: #ffffff;
     --tw-small-box-text: #0f172a;
     --tw-box-border: #334155;
     --tw-button-bg: #2563eb;
@@ -34,50 +34,50 @@
 }
 
 .color-emerald {
-    --tw-accent: #10b981;
-    --tw-accent-hover: #059669;
+    --tw-accent: #059669;
+    --tw-accent-hover: #047857;
     --tw-box-bg: #064e3b;
-    --tw-box-text: #ecfdf5;
-    --tw-small-box-bg: #ecfdf5;
-    --tw-small-box-text: #022c22;
-    --tw-box-border: #065f46;
-    --tw-button-bg: #10b981;
+    --tw-box-text: #ffffff;
+    --tw-small-box-bg: #ffffff;
+    --tw-small-box-text: #064e3b;
+    --tw-box-border: #047857;
+    --tw-button-bg: #059669;
     --tw-button-text: #ffffff;
 }
 
 .color-amethyst {
-    --tw-accent: #8b5cf6;
-    --tw-accent-hover: #7c3aed;
+    --tw-accent: #7c3aed;
+    --tw-accent-hover: #6d28d9;
     --tw-box-bg: #4c1d95;
-    --tw-box-text: #f5f3ff;
-    --tw-small-box-bg: #f5f3ff;
-    --tw-small-box-text: #2e1065;
-    --tw-box-border: #5b21b6;
-    --tw-button-bg: #8b5cf6;
+    --tw-box-text: #ffffff;
+    --tw-small-box-bg: #ffffff;
+    --tw-small-box-text: #4c1d95;
+    --tw-box-border: #6d28d9;
+    --tw-button-bg: #7c3aed;
     --tw-button-text: #ffffff;
 }
 
 .color-sunset {
-    --tw-accent: #f97316;
-    --tw-accent-hover: #ea580c;
+    --tw-accent: #ea580c;
+    --tw-accent-hover: #c2410c;
     --tw-box-bg: #7c2d12;
-    --tw-box-text: #fff7ed;
-    --tw-small-box-bg: #fff7ed;
-    --tw-small-box-text: #431407;
+    --tw-box-text: #ffffff;
+    --tw-small-box-bg: #ffffff;
+    --tw-small-box-text: #7c2d12;
     --tw-box-border: #9a3412;
-    --tw-button-bg: #f97316;
+    --tw-button-bg: #ea580c;
     --tw-button-text: #ffffff;
 }
 
 .color-slate {
-    --tw-accent: #64748b;
-    --tw-accent-hover: #475569;
+    --tw-accent: #475569;
+    --tw-accent-hover: #334155;
     --tw-box-bg: #334155;
-    --tw-box-text: #f8fafc;
-    --tw-small-box-bg: #f8fafc;
-    --tw-small-box-text: #0f172a;
+    --tw-box-text: #ffffff;
+    --tw-small-box-bg: #ffffff;
+    --tw-small-box-text: #1e293b;
     --tw-box-border: #475569;
-    --tw-button-bg: #64748b;
+    --tw-button-bg: #475569;
     --tw-button-text: #ffffff;
 }
 
