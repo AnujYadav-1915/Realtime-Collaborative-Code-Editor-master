@@ -3,14 +3,16 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 const ColorContext = createContext();
 
 export const colorSchemes = [
-    { id: 'blue', name: 'Blue UI' },
-    { id: 'green', name: 'Green UI' },
-    { id: 'purple', name: 'Purple UI' },
+    { id: 'navy', name: 'Corporate Navy' },
+    { id: 'emerald', name: 'Forest Emerald' },
+    { id: 'amethyst', name: 'Royal Amethyst' },
+    { id: 'sunset', name: 'Sunset Orange' },
+    { id: 'slate', name: 'Slate Gray' }
 ];
 
 export const ColorProvider = ({ children }) => {
     const [currentColor, setCurrentColor] = useState(() => {
-        return localStorage.getItem('app-color-scheme') || 'blue';
+        return localStorage.getItem('app-color-scheme') || 'navy';
     });
 
     useEffect(() => {
