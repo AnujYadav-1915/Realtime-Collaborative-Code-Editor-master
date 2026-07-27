@@ -234,6 +234,12 @@ const EditorPage = () => {
   const [lastRunResults, setLastRunResults] = useState([]);
 
   const [outputPanelTab, setOutputPanelTab] = useState("output");
+  const [activeLeftTab, setActiveLeftTab] = useState("description");
+  const [activeToolModal, setActiveToolModal] = useState(null);
+  const [isToolsDropdownOpen, setIsToolsDropdownOpen] = useState(false);
+  const [problemSearchQuery, setProblemSearchQuery] = useState("");
+  const [problemCategoryFilter, setProblemCategoryFilter] = useState("all");
+
   const [activeResultIndex, setActiveResultIndex] = useState(0);
   const [submissionFilterStatus, setSubmissionFilterStatus] = useState("all");
   const [submissionFilterLanguage, setSubmissionFilterLanguage] = useState("all");
@@ -1693,6 +1699,36 @@ const EditorPage = () => {
     toast.success("Code downloaded successfully!");
   };
 
+  
+  const handlePrevProblemInLibrary = () => {
+    if (!problemLibrary || problemLibrary.length === 0) return;
+    const currIdx = problemLibrary.findIndex(p => p.id === selectedLibraryProblemId || p.title === roomState.problem.title);
+    const prevIdx = currIdx > 0 ? currIdx - 1 : problemLibrary.length - 1;
+    const target = problemLibrary[prevIdx];
+    if (target) {
+      handleLoadProblemFromLibrary(target.id);
+    }
+  };
+
+  const handleNextProblemInLibrary = () => {
+    if (!problemLibrary || problemLibrary.length === 0) return;
+    const currIdx = problemLibrary.findIndex(p => p.id === selectedLibraryProblemId || p.title === roomState.problem.title);
+    const nextIdx = (currIdx >= 0 && currIdx < problemLibrary.length - 1) ? currIdx + 1 : 0;
+    const target = problemLibrary[nextIdx];
+    if (target) {
+      handleLoadProblemFromLibrary(target.id);
+    }
+  };
+
+  const handleRandomProblemInLibrary = () => {
+    if (!problemLibrary || problemLibrary.length === 0) return;
+    const randomIdx = Math.floor(Math.random() * problemLibrary.length);
+    const target = problemLibrary[randomIdx];
+    if (target) {
+      handleLoadProblemFromLibrary(target.id);
+    }
+  };
+
   const handleLoadProblemFromLibrary = useCallback(async (problemId) => {
     const targetId = problemId || selectedLibraryProblemId;
 
@@ -2253,1067 +2289,451 @@ const EditorPage = () => {
   }
 
   return (
-    <div className={`mainWrap editorPageLayout ${editorThemeClass}${isSidebarCollapsed ? " sidebarCollapsed" : ""}`}>
-      <div className="aside">
-        <div className="asideInner">
-          <div className="logo">
-            <div className="workspaceBrandRow">
-              {!isSidebarCollapsed ? <><span className="workspaceBrandIcon" aria-hidden="true">⌘</span><span className="workspaceBrandTitle">SYNC CODE</span></> : null}
-              <button
-                type="button"
-                onClick={() => setIsSidebarCollapsed((prev) => !prev)}
-                className="sidebarCollapseBtn"
-                title={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-                style={{marginLeft: isSidebarCollapsed ? 0 : 'auto'}}
-              >
-                {isSidebarCollapsed ? "›" : "‹"}
-              </button>
-            </div>
-          </div>
-          <div className="editorProfileMenuWrap" ref={profileMenuRef}>
-            <div className="editorProfileCard">
-              <div className="editorProfileInfo">
-                <strong className="editorProfileName">{profileName}</strong>
-                <span className="editorProfileEmail">{profileContact}</span>
-                <span className="editorProfileSolved">✅ {solvedCount} solved</span>
-              </div>
-              <button
-                className="editorProfileSettingsBtn"
-                onClick={() => setIsProfileMenuOpen((prev) => !prev)}
-                title="Profile settings"
-              >
-                ⚙
-              </button>
-            </div>
-            {isProfileMenuOpen && (
-              <div className="editorProfileMenuCard">
-                <strong>{profileName}</strong>
-                <span>{profileContact}</span>
-                <div className="editorInlineForm">
-                  <input
-                    type="text"
-                    placeholder="Username"
-                    value={editorUsername}
-                    onChange={(event) => setEditorUsername(event.target.value)}
-                    disabled={isRoomMode}
-                  />
-                  <button
-                    className="btn secondarySidebarBtn"
-                    onClick={handleSaveEditorUsername}
-                    disabled={isRoomMode}
-                    title={isRoomMode ? "Change username on Home before joining room" : "Save username for solo mode"}
-                  >
-                    Save Username
-                  </button>
-                </div>
-                <button
-                  className="btn secondarySidebarBtn"
-                  onClick={() => setShowChangePassword((prev) => !prev)}
-                >
-                  {showChangePassword ? "Hide Change Password" : "Change Password"}
-                </button>
-                {showChangePassword && (
-                  <div className="editorInlineForm">
-                    <input
-                      type="password"
-                      placeholder="Old password"
-                      value={oldPassword}
-                      onChange={(event) => setOldPassword(event.target.value)}
-                    />
-                    <input
-                      type="password"
-                      placeholder="New password"
-                      value={newPassword}
-                      onChange={(event) => setNewPassword(event.target.value)}
-                    />
-                    <button
-                      className="btn secondarySidebarBtn"
-                      onClick={handleChangePassword}
-                      disabled={isChangingPassword}
-                    >
-                      {isChangingPassword ? "Updating..." : "Update Password"}
-                    </button>
-                  </div>
-                )}
-                <button className="btn secondarySidebarBtn" onClick={handleLogout}>Logout</button>
-              </div>
-            )}
-          </div>
-          {isRoomMode ? (
-            <>
-              <h3>Room Members ({clients.length})</h3>
-              <div className="clientsList">
-                {clients.map((client) => (
-                  <Client
-                    key={client.socketId}
-                    username={client.username}
-                    color={client.color}
-                    isTyping={client.isTyping}
-                    isOwner={client.username === roomState.ownerUsername}
-                    cursorPosition={client.cursorPosition}
-                    selectionRange={client.selectionRange}
-                    voiceEnabled={client.voiceEnabled}
-                  />
-                ))}
-              </div>
-            </>
-          ) : (
-            <h3>Solo Practice Mode</h3>
-          )}
-          {isRoomMode && isRoomCreator && (
-            <div className="hostRequestsCard">
-              <h4>Switch Requests ({switchRequests.length})</h4>
-              {switchRequests.length === 0 ? (
-                <p className="hostRequestsEmpty">No pending requests.</p>
-              ) : (
-                <div className="hostRequestsList">
-                  {switchRequests.map((request) => (
-                    <div key={request.requestId} className="hostRequestItem">
-                      <div className="hostRequestText">
-                        <strong>{request.requesterName}</strong>
-                        <span>{request.title || request.problemId}</span>
-                      </div>
-                      <div className="hostRequestActions">
-                        <button className="miniBtn" onClick={() => handleApproveSwitchRequest(request)}>Approve</button>
-                        <button className="miniBtn secondaryMiniBtn" onClick={() => handleRejectSwitchRequest(request.requestId)}>Reject</button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-          <div className="sidebarActionStack">
-            <input
-              type="file"
-              accept=".json"
-              style={{ display: "none" }}
-              id="problemUpload"
-              onChange={handleProblemUpload}
-              ref={problemInputRef}
-            />
-            <button className="btn secondarySidebarBtn" onClick={() => document.getElementById("problemUpload").click()}>
-              Upload Problem JSON
-            </button>
-            <div className="uploadProblemHint">
-              {isSoloMode
-                ? "Upload applies to your local solo workspace only."
-                : isRoomCreator
-                ? "Host upload sets the shared room problem for everyone."
-                : "Member upload opens the problem only in your private preview."}
-            </div>
+    <div className="leetcodeWorkspace flex flex-col h-screen w-screen overflow-hidden bg-[#181818] text-white">
+      {/* 1. LEETCODE TOP NAVIGATION BAR */}
+      <header className="leetcodeTopBar flex items-center justify-between px-4 py-2 border-b border-[#2d2d2d] bg-[#1c1c1c] z-50 select-none">
+        <div className="flex items-center gap-3">
+          <a href="/" className="flex items-center gap-2 font-bold text-emerald-400 hover:opacity-90">
+            <span className="text-xl">⚡</span>
+            <span className="hidden sm:inline text-sm font-extrabold text-white">Sync Code</span>
+          </a>
 
-            <div className="sidebarActionGap sidebarEditorEntryGap" />
+          <div className="h-4 w-[1px] bg-[#333333] mx-1" />
 
+          <button
+            type="button"
+            onClick={() => setActiveToolModal("problemList")}
+            className="flex items-center gap-2 rounded-lg bg-[#282828] hover:bg-[#333333] px-3 py-1.5 text-xs font-semibold transition text-gray-200 border border-[#3e3e3e]"
+          >
+            <span className="text-emerald-400">📋</span>
+            <span className="max-w-[140px] sm:max-w-[200px] truncate">{roomState.problem.title || "Problem List"}</span>
+            <span className="text-[10px] text-gray-400 bg-[#1a1a1a] px-1.5 py-0.5 rounded">500</span>
+          </button>
+
+          <div className="flex items-center gap-1">
             <button
-              className="btn secondarySidebarBtn pbBrowseBtn"
+              type="button"
+              onClick={handlePrevProblemInLibrary}
+              className="p-1.5 rounded-lg bg-[#282828] hover:bg-[#333333] text-gray-300 text-xs transition border border-[#3e3e3e]"
+              title="Previous Problem"
             >
-              📚 Browse Library
-              {selectedLibraryProblemId && <span className="pbSelectedDot" />}
+              ◀
             </button>
-            {selectedLibraryProblemId && (
-              <div className="pbSelectedRow">
-                <span className="pbSelectedLabel" title={selectedLibraryProblemId}>
-                  {problemLibrary.find((p) => p.id === selectedLibraryProblemId)?.title || selectedLibraryProblemId}
-                </span>
-                {isSoloMode || (isRoomMode && isRoomCreator) ? (
-                  <button
-                    className="btn secondarySidebarBtn"
-                    style={{ padding: "4px 10px", fontSize: "11px" }}
-                    onClick={handleLoadProblemFromLibrary}
-                    disabled={isLoadingLibraryProblem}
-                    title={isSoloMode ? "Load this problem into your editor" : "Load this problem into room"}
-                  >
-                    {isLoadingLibraryProblem ? "Loading..." : isSoloMode ? "Load Problem" : "Set Shared →"}
-                  </button>
-                ) : isRoomMode ? (
-                  <span className="pbSelectedMemberHint">Ask creator to set shared</span>
-                ) : (
-                  <span className="pbSelectedMemberHint">Loaded for solo practice</span>
-                )}
-              </div>
-            )}
-
-            <div className="sidebarActionGap" />
-
-            <div className="sidebarEditorActions">
-              <button
-                className="btn sidebarRunBtn"
-                onClick={handleRunCode}
-                disabled={isExecuting || isReadOnlyView}
-                title="Cmd/Ctrl + Enter · Run visible sample tests"
-              >
-                {isRunning ? "Running..." : "▶ Run Samples"}
-              </button>
-              <button
-                className="btn sidebarSubmitBtn"
-                onClick={handleSubmitCode}
-                disabled={isExecuting || isReadOnlyView}
-                title="Cmd/Ctrl + Shift + Enter · Submit to full judge"
-              >
-                {isSubmitting ? "Submitting..." : "⚡ Submit Judge"}
-              </button>
-              <div className="sidebarEditorActionsRow">
-                <button className="btn sidebarMiniBtn" onClick={() => handleSaveDraft(true)} title="Cmd/Ctrl + S" disabled={isReadOnlyView}>
-                  💾 Save Draft
-                </button>
-                <button className="btn sidebarMiniBtn" onClick={handleRestoreDraft} title="Cmd/Ctrl + Shift + R" disabled={isReadOnlyView}>
-                  ↩ Restore
-                </button>
-              </div>
-              {lastDraftSavedAt ? (
-                <div className="draftSavedHint">{new Date(lastDraftSavedAt).toLocaleTimeString()}</div>
-              ) : null}
-            </div>
-
-            <div className="sidebarFillerCard" aria-label="Session snapshot">
-              <strong className="sidebarFillerTitle">Session Snapshot</strong>
-              <div className="sidebarSnapshotGrid">
-                <div className="sidebarSnapshotRow">
-                  <span>Status</span>
-                  <strong>{isReadOnlyView ? "Viewer" : isRoomMode ? "Live Room" : "Solo"}</strong>
-                </div>
-                <div className="sidebarSnapshotRow">
-                  <span>Language</span>
-                  <strong>{String(lang || "cpp").toUpperCase()}</strong>
-                </div>
-                <div className="sidebarSnapshotRow">
-                  <span>Theme</span>
-                  <strong>{`${editorTheme.charAt(0).toUpperCase()}${editorTheme.slice(1)}`}</strong>
-                </div>
-                <div className="sidebarSnapshotRow">
-                  <span>Timer</span>
-                  <strong>{formattedRemainingTime}</strong>
-                </div>
-                <div className="sidebarSnapshotRow">
-                  <span>Online</span>
-                  <strong>{isRoomMode ? `${Math.max(clients.length, 1)} users` : "1 user"}</strong>
-                </div>
-                <div className="sidebarSnapshotRow">
-                  <span>Runtime</span>
-                  <strong>{runtimeBadgeInfo.label}</strong>
-                </div>
-              </div>
-            </div>
-
-            <div className="sidebarUtilityActions">
-              {isReadOnlyView ? <div className="viewerBadge">👀 Read-only Spectator Mode</div> : null}
-              {nextRecommendedProblem ? (
-                <div className="sidebarNextProblem">
-                  <span className="sidebarNextLabel">Next up</span>
-                  <span className="sidebarNextTitle">{nextRecommendedProblem.title}</span>
-                  <div className="sidebarNextMeta">
-                    <span>{nextRecommendedProblem.topic || nextRecommendedProblem.category}</span>
-                    <span>{nextRecommendedProblem.difficulty || "medium"}</span>
-                  </div>
-                  <button className="btn sidebarMiniBtn" onClick={handleOpenRecommendedProblem} type="button">
-                    {isRoomCreator ? "Load Next" : "Open Preview"}
-                  </button>
-                </div>
-              ) : (
-                <button
-                  className="btn sidebarMiniBtn sidebarRecommendBtn"
-                  onClick={loadNextRecommendation}
-                  type="button"
-                  disabled={isLoadingNextRecommendation || isReadOnlyView}
-                >
-                  {isLoadingNextRecommendation ? "Finding..." : "🎯 Recommend Next"}
-                </button>
-              )}
-              <button className="btn sidebarMiniBtn" onClick={handleDownloadTemplate} disabled={isReadOnlyView}>
-                📥 Download Template
-              </button>
-              <button className="btn sidebarMiniBtn" onClick={handleDownloadCode} style={{ marginTop: "4px" }}>
-                💾 Download Code
-              </button>
-              <CopyCodeButton codeRef={codeRef} />
-              <div className={`runtimeStatusBadge ${runtimeBadgeInfo.tone}`}>
-                {runtimeBadgeInfo.label}
-              </div>
-              {runtimeInstallCommands.length > 0 ? (
-                <div className="runtimeInstallPanel">
-                  <div className="runtimeInstallHeaderRow">
-                    <div className="runtimeInstallTitle">Missing runtime ({runtimeInstallOsLabel})</div>
-                    <select
-                      className="runtimeInstallOsSelect"
-                      value={runtimeInstallOs}
-                      onChange={(event) => setRuntimeInstallOs(event.target.value)}
-                    >
-                      <option value="auto">{runtimeInstallAutoLabel}</option>
-                      <option value="macos">macOS</option>
-                      <option value="linux">Linux</option>
-                      <option value="windows">Windows</option>
-                    </select>
-                  </div>
-                  {runtimeInstallCommands.map((command) => (
-                    <div key={command} className="runtimeInstallRow">
-                      <span className="runtimeInstallCommand">{command}</span>
-                      <button
-                        className="miniBtn runtimeCopyBtn"
-                        onClick={() => handleCopyInstallCommand(command)}
-                        type="button"
-                      >
-                        Copy
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              ) : null}
-              {isRoomMode ? (
-                <div className="sidebarEditorActionsRow">
-                  <button className="btn sidebarMiniBtn" onClick={copyRoomId}>📋 Copy ID</button>
-                  <button className="btn sidebarMiniBtn sidebarLeaveBtn" onClick={leaveRoom}>Leave</button>
-                </div>
-              ) : (
-                <button className="btn sidebarSubmitBtn" onClick={handleCreateRoomFromSolo} disabled={isReadOnlyView}>
-                  🚀 Create Room
-                </button>
-              )}
-              {isRoomMode ? (
-                <button
-                  className="btn sidebarMiniBtn"
-                  onClick={async () => {
-                    await navigator.clipboard.writeText(readOnlyShareUrl);
-                    toast.success("Read-only room link copied.");
-                  }}
-                  title="Share this read-only spectator URL"
-                >
-                  🔗 Copy Read-only Link
-                </button>
-              ) : null}
-            </div>
-
+            <button
+              type="button"
+              onClick={handleNextProblemInLibrary}
+              className="p-1.5 rounded-lg bg-[#282828] hover:bg-[#333333] text-gray-300 text-xs transition border border-[#3e3e3e]"
+              title="Next Problem"
+            >
+              ▶
+            </button>
+            <button
+              type="button"
+              onClick={handleRandomProblemInLibrary}
+              className="p-1.5 rounded-lg bg-[#282828] hover:bg-[#333333] text-gray-300 text-xs transition border border-[#3e3e3e]"
+              title="Random Problem"
+            >
+              🔀
+            </button>
           </div>
         </div>
-      </div>
 
-      <div className={`editorWorkspace ${isZenMode ? "zenMode" : ""}`}>
-        {!isZenMode && <div className="challengePanel">
-          <div className="challengeHeader">
-            <div className="challengeMain">
-              <input
-                className="challengeTitleInput"
-                value={roomState.problem.title}
-                onChange={(event) => updateProblemField("title", event.target.value)}
-                placeholder="Problem title"
-                disabled={!canEditProblem}
-              />
-              <textarea
-                className="challengeStatement"
-                value={roomState.problem.statement}
-                onChange={(event) => updateProblemField("statement", event.target.value)}
-                placeholder="Paste or write the full problem statement here"
-                disabled={!canEditProblem}
-              />
-            </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleRunCode}
+            disabled={isExecuting || isReadOnlyView}
+            className="flex items-center gap-2 rounded-lg bg-[#282828] hover:bg-[#383838] px-4 py-1.5 text-xs font-semibold transition text-white border border-[#444444] shadow-sm disabled:opacity-50"
+            title="Run visible sample testcases"
+          >
+            <span>{isRunning ? "⏳" : "▶"}</span>
+            <span>{isRunning ? "Running..." : "Run"}</span>
+          </button>
 
-            <div className="challengeMetaGrid">
-              <label className="metaField">
-                Target Time Complexity
-                <input
-                  value={roomState.problem.targetTimeComplexity}
-                  onChange={(event) => updateProblemField("targetTimeComplexity", event.target.value)}
-                  placeholder="O(n log n)"
-                  disabled={!canEditProblem}
-                />
-              </label>
-              <label className="metaField">
-                Target Space Complexity
-                <input
-                  value={roomState.problem.targetSpaceComplexity}
-                  onChange={(event) => updateProblemField("targetSpaceComplexity", event.target.value)}
-                  placeholder="O(1)"
-                  disabled={!canEditProblem}
-                />
-              </label>
-              <label className="metaField">
-                Time Limit (ms)
-                <input
-                  type="number"
-                  min="100"
-                  value={roomState.problem.timeLimitMs}
-                  onChange={(event) => updateProblemField("timeLimitMs", Number(event.target.value) || 0)}
-                  disabled={!canEditProblem}
-                />
-              </label>
-              <label className="metaField">
-                Memory Limit (KB)
-                <input
-                  type="number"
-                  min="1024"
-                  value={roomState.problem.memoryLimitKb}
-                  onChange={(event) => updateProblemField("memoryLimitKb", Number(event.target.value) || 0)}
-                  disabled={!canEditProblem}
-                />
-              </label>
-              {isRoomMode ? (
-                <>
-                  <label className="metaField">
-                    Timer Duration (sec)
-                    <input
-                      type="number"
-                      min="30"
-                      value={roomState.timer.durationSeconds}
-                      onChange={(event) =>
-                        updateRoomState({
-                          timer: {
-                            durationSeconds: Number(event.target.value) || 0,
-                          },
-                        })
-                      }
-                      disabled={!canEditProblem}
-                    />
-                  </label>
-                  <div className="timerCard">
-                    <div className="timerCardHeader">
-                      <span>Room Timer</span>
-                      <span className={`timerStatusDot ${isTimerRunning ? "running" : "stopped"}`}>
-                        {isTimerRunning ? "● Running" : remainingSeconds === 0 ? "⏰ Time's up" : "○ Stopped"}
-                      </span>
-                    </div>
-                    <strong>{formattedRemainingTime}</strong>
-                    <div className="timerActions">
-                      <button
-                        className="miniBtn"
-                        onClick={handleTimerStart}
-                        disabled={!isRoomCreator || isTimerRunning}
-                        title={isTimerRunning ? "Timer is already running" : "Start the countdown"}
-                      >
-                        Start
-                      </button>
-                      <button
-                        className="miniBtn secondaryMiniBtn"
-                        onClick={handleTimerReset}
-                        disabled={!isRoomCreator || !roomState.timer.startedAt}
-                        title={!roomState.timer.startedAt ? "Timer hasn't been started yet" : "Stop and reset the timer"}
-                      >
-                        Reset
-                      </button>
-                    </div>
-                  </div>
-                </>
-              ) : null}
-            </div>
-          </div>
+          <button
+            type="button"
+            onClick={handleSubmitCode}
+            disabled={isExecuting || isReadOnlyView}
+            className="flex items-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 px-4 py-1.5 text-xs font-semibold transition text-white shadow-md disabled:opacity-50"
+            title="Submit to full judge"
+          >
+            <span>{isSubmitting ? "⏳" : "☁"}</span>
+            <span>{isSubmitting ? "Submitting..." : "Submit"}</span>
+          </button>
+        </div>
 
-          <div className="challengeDetailsGrid">
-            <div className="challengeBox">
-              <div className="testCaseBuilderHeader">
-                <h4>Visible Test Cases (Builder)</h4>
-                <button className="miniBtn" onClick={handleAddVisibleTestCase} disabled={!canEditProblem}>+ Add Case</button>
-              </div>
-              <div className="testCaseBuilderList">
-                {visibleTestCaseItems.length === 0 ? (
-                  <p className="emptyStateText">No visible test cases yet. Add one to start.</p>
-                ) : (
-                  visibleTestCaseItems.map((item, index) => (
-                    <div className="testCaseBuilderItem" key={`visible-builder-${index}`}>
-                      <div className="testCaseBuilderItemHeader">
-                        <strong>Case {index + 1}</strong>
-                        <div className="testCaseBuilderActions">
-                          <button
-                            className="miniBtn"
-                            onClick={() => handleJudgeCode("run", { visibleTestCases: [item] })}
-                            disabled={isExecuting || isReadOnlyView}
-                          >
-                            Run this case
-                          </button>
-                          <button
-                            className="miniBtn secondaryMiniBtn"
-                            onClick={() => handleRemoveVisibleTestCase(index)}
-                            disabled={!canEditProblem}
-                          >
-                            Remove
-                          </button>
-                        </div>
-                      </div>
-                      <div className="testCaseBuilderGrid">
-                        <label>
-                          Input
-                          <textarea
-                            value={item.input}
-                            onChange={(event) => handleUpdateVisibleTestCase(index, "input", event.target.value)}
-                            placeholder={"6\\n3 4 5 6 7 8"}
-                            disabled={!canEditProblem}
-                          />
-                        </label>
-                        <label>
-                          Expected Output
-                          <textarea
-                            value={item.output}
-                            onChange={(event) => handleUpdateVisibleTestCase(index, "output", event.target.value)}
-                            placeholder={"5"}
-                            disabled={!canEditProblem}
-                          />
-                        </label>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-            <div className="challengeBox">
-              <h4>Hidden Judge Cases (JSON)</h4>
-              <textarea
-                value={roomState.problem.hiddenTestCasesText}
-                onChange={(event) => updateProblemField("hiddenTestCasesText", event.target.value)}
-                placeholder={'[{"input":"100\\n200","output":"300"}]'}
-                disabled={!canEditProblem}
-              />
-            </div>
-            <div className="challengeBox stdinBox">
-              <h4>Custom Stdin Runner</h4>
-              <textarea
-                value={customStdinInput}
-                onChange={(event) => setCustomStdinInput(event.target.value)}
-                placeholder={"Enter custom stdin...\nExample:\n6\n3 4 5 6 7 8"}
-                disabled={isReadOnlyView}
-              />
-              <textarea
-                value={customStdinExpected}
-                onChange={(event) => setCustomStdinExpected(event.target.value)}
-                placeholder={"Optional expected output for validation"}
-                disabled={isReadOnlyView}
-              />
-              <div className="timerActions" style={{ marginTop: "8px" }}>
-                <button className="miniBtn" onClick={handleRunWithCustomStdin} disabled={isExecuting || isReadOnlyView}>Run custom input</button>
-                <button className="miniBtn secondaryMiniBtn" onClick={() => { setCustomStdinInput(""); setCustomStdinExpected(""); }} disabled={isReadOnlyView}>
-                  Clear
-                </button>
-              </div>
-            </div>
-            <div className="challengeBox submissionBox">
-              <h4>Submission History (Submit only)</h4>
-              <div className="submissionList">
-                {submitAttempts.length === 0 ? (
-                  <p className="emptyStateText">No submissions yet.</p>
-                ) : (
-                  submitAttempts.map((submission) => (
-                    <div className={`submissionItem ${submission.passed ? "submissionPass" : "submissionFail"}`} key={submission.id}>
-                      <strong>{submission.username}</strong>
-                      <span>{submission.language}</span>
-                      <span>{submission.passed ? "PASS" : "FAIL"}</span>
-                      <span>{submission.passedCount}/{submission.totalCount} tests</span>
-                      <span>{formatTimestamp(submission.createdAt)}</span>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-            {isRoomMode ? <div className="challengeBox">
-              <h4>Hint Ladder (Penalty: {hintPenalty})</h4>
-              <button className="miniBtn" onClick={handleRevealNextHint} disabled={isLoadingHint}>
-                {isLoadingHint ? "Loading..." : "Reveal Next Hint"}
-              </button>
-              <div className="submissionList" style={{ marginTop: "10px" }}>
-                {hintHistory.length === 0 ? (
-                  <p className="emptyStateText">No hints revealed yet.</p>
-                ) : (
-                  hintHistory.map((hint) => (
-                    <div className="submissionItem" key={`${hint.level}-${hint.title}`}>
-                      <strong>Step {hint.level}: {hint.title}</strong>
-                      <span>{hint.message}</span>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div> : null}
-          </div>
-        </div>}
+        <div className="relative flex items-center gap-2">
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setIsToolsDropdownOpen((prev) => !prev)}
+              className="flex items-center gap-2 rounded-lg bg-[#282828] hover:bg-[#333333] px-3 py-1.5 text-xs font-semibold transition text-gray-200 border border-[#3e3e3e]"
+            >
+              <span>🛠️ Tools</span>
+              <span className="text-[10px]">▼</span>
+            </button>
 
-        <div className="editorWrap">
-          <div className="editorSplit" ref={editorSplitRef}>
-            <div className="editorTopBar">
-              <div className="editorTopLeft">
-                <span className="editorTopTitle">EDITOR</span>
-                {typingLabel ? <span className="typingIndicatorBadge">{typingLabel}</span> : null}
-                <select
-                  value={lang}
-                  onChange={(event) => {
-                    setLang(event.target.value);
-                    window.location.reload();
-                  }}
-                  className="editorTopLangSelect"
-                  title="Choose editor language"
-                >
-                  <option value="clike">C / C++ / C# / Java</option>
-                  <option value="css">CSS</option>
-                  <option value="dart">Dart</option>
-                  <option value="django">Django</option>
-                  <option value="dockerfile">Dockerfile</option>
-                  <option value="go">Go</option>
-                  <option value="htmlmixed">HTML-mixed</option>
-                  <option value="javascript">JavaScript</option>
-                  <option value="jsx">JSX</option>
-                  <option value="markdown">Markdown</option>
-                  <option value="php">PHP</option>
-                  <option value="python">Python</option>
-                  <option value="r">R</option>
-                  <option value="rust">Rust</option>
-                  <option value="ruby">Ruby</option>
-                  <option value="sass">Sass</option>
-                  <option value="shell">Shell</option>
-                  <option value="sql">SQL</option>
-                  <option value="swift">Swift</option>
-                  <option value="xml">XML</option>
-                  <option value="yaml">yaml</option>
-                </select>
-                <select
-                  value={editorTheme}
-                  onChange={(event) => setEditorTheme(event.target.value)}
-                  className="editorTopLangSelect"
-                  title="Choose editor visual theme"
-                >
-                  <option value="midnight">Midnight</option>
-                  <option value="neon">Neon</option>
-                  <option value="light">Light</option>
-                  <option value="sepia">Sepia</option>
-                </select>
-                <button className="editorTopBtn" onClick={handleFocusEditor} title="Cmd/Ctrl + E">Focus</button>
-                <button className="editorTopBtn" onClick={() => setIsZenMode((prev) => !prev)} title="Toggle focus mode">
-                  {isZenMode ? "Standard" : "Zen"}
-                </button>
-
-              </div>
-              <div className="editorTopActions">
-                
+            {isToolsDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-56 rounded-xl border border-[#3e3e3e] bg-[#282828] p-1.5 shadow-2xl z-[100] text-xs">
                 <button
-                  className={`editorTopBtn${voiceEnabled ? " active" : ""}`}
-                  onClick={toggleVoiceSession}
-                  disabled={!isRoomMode || isReadOnlyView}
-                  title={
-                    isReadOnlyView
-                      ? "Read-only spectators cannot join voice"
-                      : isRoomMode
-                      ? "Toggle in-room voice chat"
-                      : "Voice chat is available in room mode"
-                  }
+                  type="button"
+                  onClick={() => { setActiveToolModal("timer"); setIsToolsDropdownOpen(false); }}
+                  className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 text-left hover:bg-[#383838] transition text-gray-200"
                 >
-                  {voiceEnabled ? "🔇 Leave Voice" : "🎙 Join Voice"}
+                  <span>⏱️ Room Timer</span>
+                  <span className="ml-auto text-[10px] text-gray-400">{formattedRemainingTime}</span>
                 </button>
-                <span className="voiceStatusBadge" title="Live in-room voice presence">
-                  {voiceEnabled ? voiceParticipantLabel : voiceStatusLabel}
-                </span>
-                <button className="editorTopBtn" onClick={handleCopyOutput} title="Copy current output to clipboard">Copy Out</button>
-                <button className="editorTopBtn" onClick={handleClearOutput} title="Clear output panel">Clear Out</button>
-                <button className={`editorTopBtn${showWhiteboard ? " active" : ""}`} onClick={() => setShowWhiteboard((prev) => !prev)} title="Toggle collaborative whiteboard">
-                  📝 Whiteboard
+                <button
+                  type="button"
+                  onClick={() => { setActiveToolModal("collaborators"); setIsToolsDropdownOpen(false); }}
+                  className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 text-left hover:bg-[#383838] transition text-gray-200"
+                >
+                  <span>👥 Room Collaborators</span>
+                  <span className="ml-auto text-[10px] text-emerald-400">{clients.length} online</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setActiveToolModal("testcases"); setIsToolsDropdownOpen(false); }}
+                  className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 text-left hover:bg-[#383838] transition text-gray-200"
+                >
+                  <span>🧪 Testcases & Stdin</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setActiveToolModal("whiteboard"); setIsToolsDropdownOpen(false); }}
+                  className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 text-left hover:bg-[#383838] transition text-gray-200"
+                >
+                  <span>🎨 Collaborative Whiteboard</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setActiveToolModal("runtime"); setIsToolsDropdownOpen(false); }}
+                  className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 text-left hover:bg-[#383838] transition text-gray-200"
+                >
+                  <span>📊 Runtime & System Status</span>
+                </button>
+                <div className="my-1 border-t border-[#383838]" />
+                <button
+                  type="button"
+                  onClick={() => { handleDownloadCode(); setIsToolsDropdownOpen(false); }}
+                  className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 text-left hover:bg-[#383838] transition text-gray-200"
+                >
+                  <span>💾 Download Code</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setActiveToolModal("profile"); setIsToolsDropdownOpen(false); }}
+                  className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 text-left hover:bg-[#383838] transition text-gray-200"
+                >
+                  <span>👤 Profile & Security</span>
                 </button>
               </div>
-            </div>
-            <div className="editorCodeShell">
-              <div className="editorPane">
-                <Editor
-                  ref={editorInstanceRef}
-                  socketRef={socketRef}
-                  roomId={roomId}
-                  isRealtime={isRoomMode}
-                  readOnly={isReadOnlyView}
-                  onCodeChange={(code) => {
-                    codeRef.current = code;
-                    setEditorSnapshot(code);
-                  }}
-                />
-              </div>
-              {showWhiteboard ? (
-                <div className="whiteboardPane">
-                  <div className="whiteboardToolbar">
-                    <span>Collaborative Whiteboard</span>
-                    <div>
-                      <input type="color" value={whiteboardColor} onChange={(event) => setWhiteboardColor(event.target.value)} disabled={isReadOnlyView} />
-                      <input
-                        type="range"
-                        min="1"
-                        max="8"
-                        value={whiteboardBrushSize}
-                        onChange={(event) => setWhiteboardBrushSize(Number(event.target.value) || 2)}
-                        disabled={isReadOnlyView}
-                      />
-                      <button className="miniBtn secondaryMiniBtn" onClick={handleWhiteboardClear} disabled={isReadOnlyView}>Clear</button>
-                    </div>
-                  </div>
-                  <canvas
-                    ref={whiteboardCanvasRef}
-                    className="whiteboardCanvas"
-                    onPointerDown={handleWhiteboardPointerDown}
-                    onPointerMove={handleWhiteboardPointerMove}
-                    onPointerUp={handleWhiteboardPointerUp}
-                    onPointerLeave={handleWhiteboardPointerUp}
-                  />
-                </div>
-              ) : null}
-            </div>
+            )}
+          </div>
 
-            <div className="outputResizer" onMouseDown={() => setIsResizingOutput(true)} />
+          {auth.currentUser ? (
+            <button
+              type="button"
+              onClick={() => setActiveToolModal("profile")}
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-700 text-white font-bold text-xs hover:opacity-90"
+              title={auth.currentUser.email}
+            >
+              {auth.currentUser.email?.charAt(0).toUpperCase() || "U"}
+            </button>
+          ) : null}
+        </div>
+      </header>
 
-            <div className={`executionOutputPanel ${runState}`} style={{ height: `${outputPanelHeight}px` }}>
-              <div className="executionOutputHeader">
-                <div className="outputHeaderLeft">
-                  <div className="outputTabs" role="tablist" aria-label="Output tabs">
-                    <button
-                      className={`outputTabBtn ${outputPanelTab === "output" ? "active" : ""}`}
-                      onClick={() => setOutputPanelTab("output")}
-                      role="tab"
-                      aria-selected={outputPanelTab === "output"}
-                    >
-                      Output
-                    </button>
-                    <button
-                      className={`outputTabBtn ${outputPanelTab === "testcases" ? "active" : ""}`}
-                      onClick={() => setOutputPanelTab("testcases")}
-                      role="tab"
-                      aria-selected={outputPanelTab === "testcases"}
-                    >
-                      Test Cases
-                    </button>
-                    <button
-                      className={`outputTabBtn ${outputPanelTab === "submissions" ? "active" : ""}`}
-                      onClick={() => setOutputPanelTab("submissions")}
-                      role="tab"
-                      aria-selected={outputPanelTab === "submissions"}
-                    >
-                      Submissions
-                    </button>
-                  </div>
-                  <div className="verdictBadgeRow" aria-label="Judge verdict badges">
-                    <span className={`verdictBadge ${currentVerdict === "ACCEPTED" ? "isActive accepted" : ""}`}>✅ Accepted</span>
-                    <span className={`verdictBadge ${currentVerdict === "WRONG_ANSWER" ? "isActive wrong" : ""}`}>❌ Wrong Answer</span>
-                    <span className={`verdictBadge ${currentVerdict === "TLE" ? "isActive tle" : ""}`}>⏱️ TLE</span>
-                    <span className={`verdictBadge ${currentVerdict === "RUNTIME_ERROR" ? "isActive runtime" : ""}`}>💥 Runtime Error</span>
+      {/* 2. MAIN 2-COLUMN SPLIT WORKSPACE */}
+      <div className="flex-1 flex overflow-hidden p-2 gap-2 bg-[#181818]">
+        {/* Left Column: Problem Description & Submissions Panel */}
+        <div className="w-1/2 flex flex-col rounded-xl border border-[#2d2d2d] bg-[#222222] overflow-hidden shadow-lg">
+          <div className="flex items-center gap-2 px-3 py-2 border-b border-[#2d2d2d] bg-[#222222] text-xs font-semibold">
+            <button
+              type="button"
+              onClick={() => setActiveLeftTab("description")}
+              className={`px-3 py-1.5 rounded-lg transition ${activeLeftTab === "description" ? "bg-[#333333] text-emerald-400 font-bold" : "text-gray-400 hover:text-gray-200"}`}
+            >
+              📄 Description
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveLeftTab("editorial")}
+              className={`px-3 py-1.5 rounded-lg transition ${activeLeftTab === "editorial" ? "bg-[#333333] text-emerald-400 font-bold" : "text-gray-400 hover:text-gray-200"}`}
+            >
+              💡 Editorial
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveLeftTab("submissions")}
+              className={`px-3 py-1.5 rounded-lg transition ${activeLeftTab === "submissions" ? "bg-[#333333] text-emerald-400 font-bold" : "text-gray-400 hover:text-gray-200"}`}
+            >
+              📜 Submissions
+            </button>
+          </div>
+
+          <div className="flex-1 overflow-y-auto p-5 space-y-4 text-sm text-gray-200">
+            {activeLeftTab === "description" && (
+              <>
+                <div>
+                  <h1 className="text-2xl font-bold text-white tracking-tight">
+                    {roomState.problem.title || "Sample Algorithmic Challenge"}
+                  </h1>
+                  <div className="flex items-center gap-2 mt-2">
+                    <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold uppercase ${
+                      (roomState.problem.difficulty || "medium") === "easy"
+                        ? "bg-emerald-950 text-emerald-400 border border-emerald-700"
+                        : (roomState.problem.difficulty || "medium") === "hard"
+                        ? "bg-red-950 text-red-400 border border-red-700"
+                        : "bg-amber-950 text-amber-400 border border-amber-700"
+                    }`}>
+                      {roomState.problem.difficulty || "medium"}
+                    </span>
+
+                    <span className="px-2.5 py-0.5 rounded-full text-xs bg-[#333333] text-gray-300 border border-[#444444]">
+                      {(roomState.problem.category || "General").replace(/-/g, " ")}
+                    </span>
                   </div>
                 </div>
-                <div className="executionMetaWrap">
-                  <span>Execution Time: {executionMeta.time}</span>
-                  <span>Memory Used: {executionMeta.memory}</span>
+
+                <div className="prose prose-invert max-w-none text-gray-300 leading-relaxed space-y-3">
+                  <p className="whitespace-pre-wrap">{roomState.problem.statement || "No problem statement provided."}</p>
                 </div>
-              </div>
-              {outputPanelTab === "submissions" ? (
-                <div className="outputSubmissionList">
-                  {performanceTrend ? (
-                    <div className="performanceTrendCard">
-                      <div>
-                        <strong>Last {performanceTrend.attempts} submits</strong>
-                        <span>Pass Rate: {performanceTrend.passRate}%</span>
-                      </div>
-                      <div>
-                        <span>
-                          Avg Time: {performanceTrend.avgTimeMs ? `${performanceTrend.avgTimeMs}ms` : "N/A"}
-                        </span>
-                        <span>
-                          Avg Memory: {performanceTrend.avgMemoryKb ? `${performanceTrend.avgMemoryKb}KB` : "N/A"}
-                        </span>
-                      </div>
-                      <div className="performanceGraphWrap">
-                        <span className={`performanceMomentum ${performanceTrend.momentum}`}>
-                          {performanceTrend.momentum === "up" ? "↗ Improving" : performanceTrend.momentum === "down" ? "↘ Regressed" : "→ Stable"}
-                        </span>
-                        {latestPerformancePoints.time.length > 1 ? (
-                          <svg viewBox="0 0 120 30" className="sparklineSvg" aria-label="Execution time trend">
-                            <polyline points={buildSparklinePoints(latestPerformancePoints.time, 120, 30)} className="sparklineTime" />
-                          </svg>
-                        ) : null}
-                        {latestPerformancePoints.memory.length > 1 ? (
-                          <svg viewBox="0 0 120 30" className="sparklineSvg" aria-label="Memory trend">
-                            <polyline points={buildSparklinePoints(latestPerformancePoints.memory, 120, 30)} className="sparklineMemory" />
-                          </svg>
-                        ) : null}
-                      </div>
-                    </div>
-                  ) : null}
-                  <div className="submissionFilterRow">
-                    <div className="submissionFilterPills">
-                      <button
-                        className={`submissionFilterBtn ${submissionFilterStatus === "all" ? "active" : ""}`}
-                        onClick={() => setSubmissionFilterStatus("all")}
-                        type="button"
-                      >
-                        All
-                      </button>
-                      <button
-                        className={`submissionFilterBtn ${submissionFilterStatus === "accepted" ? "active" : ""}`}
-                        onClick={() => setSubmissionFilterStatus("accepted")}
-                        type="button"
-                      >
-                        Accepted
-                      </button>
-                      <button
-                        className={`submissionFilterBtn ${submissionFilterStatus === "failed" ? "active" : ""}`}
-                        onClick={() => setSubmissionFilterStatus("failed")}
-                        type="button"
-                      >
-                        Failed
-                      </button>
-                    </div>
-                    <select
-                      className="submissionLanguageSelect"
-                      value={submissionFilterLanguage}
-                      onChange={(event) => setSubmissionFilterLanguage(event.target.value)}
-                    >
-                      {submissionLanguages.map((languageOption) => (
-                        <option key={languageOption} value={languageOption}>
-                          {languageOption === "all" ? "All Languages" : languageOption}
-                        </option>
-                      ))}
-                    </select>
+
+                <div className="grid grid-cols-2 gap-3 pt-2">
+                  <div className="rounded-lg border border-[#383838] bg-[#1a1a1a] p-3 text-xs">
+                    <span className="text-gray-400 block font-medium">Target Time Complexity</span>
+                    <span className="text-emerald-400 font-mono font-bold text-sm mt-0.5 block">
+                      {roomState.problem.targetTimeComplexity || "O(n)"}
+                    </span>
                   </div>
-                  {filteredSubmitAttempts.length === 0 ? (
-                    <p className="emptyStateText">No submit attempts for selected filters.</p>
+                  <div className="rounded-lg border border-[#383838] bg-[#1a1a1a] p-3 text-xs">
+                    <span className="text-gray-400 block font-medium">Target Space Complexity</span>
+                    <span className="text-emerald-400 font-mono font-bold text-sm mt-0.5 block">
+                      {roomState.problem.targetSpaceComplexity || "O(1)"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="space-y-3 pt-2">
+                  <h3 className="font-bold text-white text-sm">Example Test Cases</h3>
+                  {visibleTestCaseItems.length === 0 ? (
+                    <p className="text-xs text-gray-500 italic">No visible sample cases provided.</p>
                   ) : (
-                    filteredSubmitAttempts.map((submission) => (
-                      <div className={`submissionItem ${submission.passed ? "submissionPass" : "submissionFail"}`} key={`output-${submission.id}`}>
-                        <strong>{submission.passed ? "Accepted" : "Failed"}</strong>
-                        <span>{submission.language}</span>
-                        <span>{submission.passedCount}/{submission.totalCount} tests</span>
-                        <span>{new Date(submission.createdAt).toLocaleString()}</span>
+                    visibleTestCaseItems.map((tc, idx) => (
+                      <div key={`sample-case-${idx}`} className="rounded-lg border border-[#383838] bg-[#1a1a1a] p-3 space-y-2 text-xs font-mono">
+                        <span className="text-gray-400 font-sans font-semibold block">Example {idx + 1}:</span>
+                        <div>
+                          <span className="text-gray-500 block">Input:</span>
+                          <pre className="text-emerald-300 bg-[#121212] p-2 rounded mt-1 overflow-x-auto">{tc.input || "None"}</pre>
+                        </div>
+                        <div>
+                          <span className="text-gray-500 block">Output:</span>
+                          <pre className="text-emerald-300 bg-[#121212] p-2 rounded mt-1 overflow-x-auto">{tc.output || "None"}</pre>
+                        </div>
                       </div>
                     ))
                   )}
                 </div>
-              ) : outputPanelTab === "testcases" ? (
-                <div className="testCasesTabPanel">
-                  {lastRunResults.length === 0 ? (
-                    <p className="emptyStateText">Run your code to see test case results.</p>
-                  ) : (
-                    <>
-                      <div className="testcaseChipRow" aria-label="Test case results">
-                        {lastRunResults.map((item, index) => (
-                          <button
-                            type="button"
-                            key={`tc-${item.index}-${item.visibility}`}
-                            className={`testcaseChip ${item.passed ? "pass" : "fail"} ${activeResultIndex === index ? "active" : ""}`}
-                            onClick={() => setActiveResultIndex(index)}
-                            title={item.visibility === "hidden" ? "Hidden judge testcase" : "Visible testcase"}
-                          >
-                            {item.visibility === "hidden" ? `H${item.index}` : `V${item.index}`}
-                          </button>
-                        ))}
-                      </div>
-                      <div className="chipKeyboardHint">Use ← / → to move between testcase chips.</div>
-                      {activeResult ? (
-                        <div className="testcaseDetailCard">
-                          <div className="testcaseDetailHeader">
-                            <strong>
-                              {activeResult.visibility === "hidden" ? "Hidden" : "Visible"} testcase #{activeResult.index}
-                            </strong>
-                            <span className={`testcaseDetailStatus ${activeResult.passed ? "pass" : "fail"}`}>
-                              {activeResult.passed ? "PASS" : "FAIL"}
-                            </span>
-                          </div>
-                          {activeResult.visibility === "visible" ? (
-                            <div className="testcaseDetailGrid">
-                              <div>
-                                <span>Expected</span>
-                                <pre>
-                                  {(activeResultDiff?.expectedRows || []).map((row) => (
-                                    <span key={`exp-tc-${row.key}`} className={`diffLine ${row.changed ? "diffLineChanged" : ""}`}>
-                                      {row.text || " "}
-                                    </span>
-                                  ))}
-                                </pre>
-                              </div>
-                              <div>
-                                <span>Actual</span>
-                                <pre>
-                                  {(activeResultDiff?.actualRows || []).map((row) => (
-                                    <span key={`act-tc-${row.key}`} className={`diffLine ${row.changed ? "diffLineChanged" : ""}`}>
-                                      {row.text || " "}
-                                    </span>
-                                  ))}
-                                </pre>
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="testcaseHiddenHint">Hidden judge case details are masked, just like LeetCode.</div>
-                          )}
-                        </div>
-                      ) : null}
-                    </>
-                  )}
+              </>
+            )}
+
+            {activeLeftTab === "editorial" && (
+              <div className="space-y-4">
+                <h2 className="text-lg font-bold text-white">Algorithm & Solution Strategy</h2>
+                <p className="text-xs text-gray-300 leading-relaxed">
+                  Break down the problem using optimal data structures. Focus on reducing time complexity from naive brute force to optimal target complexity.
+                </p>
+                <div className="rounded-lg border border-[#383838] bg-[#1a1a1a] p-4 text-xs space-y-2">
+                  <h4 className="font-bold text-emerald-400">Key Takeaways</h4>
+                  <ul className="list-disc list-inside space-y-1 text-gray-300">
+                    <li>Use hash maps or two pointers for array lookup optimization.</li>
+                    <li>Maintain fast execution within the {roomState.problem.timeLimitMs || 2000}ms time limit.</li>
+                  </ul>
                 </div>
-              ) : (
-                <>
-                  {lastRunResults.length > 0 ? (
-                    <>
-                      <div className="testcaseChipRow" aria-label="Test case results">
-                        {lastRunResults.map((item, index) => (
-                          <button
-                            type="button"
-                            key={`result-${item.index}-${item.visibility}`}
-                            className={`testcaseChip ${item.passed ? "pass" : "fail"} ${activeResultIndex === index ? "active" : ""}`}
-                            onClick={() => setActiveResultIndex(index)}
-                            title={item.visibility === "hidden" ? "Hidden judge testcase" : "Visible testcase"}
-                          >
-                            {item.visibility === "hidden" ? `H${item.index}` : `V${item.index}`}
-                          </button>
-                        ))}
-                      </div>
-                      <div className="chipKeyboardHint">Use ← / → to move between testcase chips.</div>
-                      {activeResult ? (
-                        <div className="testcaseDetailCard">
-                          <div className="testcaseDetailHeader">
-                            <strong>
-                              {activeResult.visibility === "hidden" ? "Hidden" : "Visible"} testcase #{activeResult.index}
-                            </strong>
-                            <span className={`testcaseDetailStatus ${activeResult.passed ? "pass" : "fail"}`}>
-                              {activeResult.passed ? "PASS" : "FAIL"}
-                            </span>
-                          </div>
-                          {activeResult.visibility === "visible" ? (
-                            <div className="testcaseDetailGrid">
-                              <div>
-                                <span>Expected</span>
-                                <pre>
-                                  {(activeResultDiff?.expectedRows || []).map((row) => (
-                                    <span key={`expected-${row.key}`} className={`diffLine ${row.changed ? "diffLineChanged" : ""}`}>
-                                      {row.text || " "}
-                                    </span>
-                                  ))}
-                                </pre>
-                              </div>
-                              <div>
-                                <span>Actual</span>
-                                <pre>
-                                  {(activeResultDiff?.actualRows || []).map((row) => (
-                                    <span key={`actual-${row.key}`} className={`diffLine ${row.changed ? "diffLineChanged" : ""}`}>
-                                      {row.text || " "}
-                                    </span>
-                                  ))}
-                                </pre>
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="testcaseHiddenHint">Hidden judge case details are masked, just like LeetCode.</div>
-                          )}
-                        </div>
-                      ) : null}
-                    </>
-                  ) : (
-                    <pre>{runOutput}</pre>
-                  )}
-                </>
-              )}
-              <div className="complexityHintInline">
-                {complexityHint ? (
-                  <span>
-                    Estimated {complexityHint.estimatedTime} / {complexityHint.estimatedSpace}
-                  </span>
+              </div>
+            )}
+
+            {activeLeftTab === "submissions" && (
+              <div className="space-y-3">
+                <h2 className="text-lg font-bold text-white">Submission History</h2>
+                {submitAttempts.length === 0 ? (
+                  <p className="text-xs text-gray-500 italic">No submissions made yet for this challenge.</p>
                 ) : (
-                  <span>No complexity hint yet.</span>
+                  submitAttempts.map((sub) => (
+                    <div key={sub.id} className="flex items-center justify-between rounded-lg border border-[#383838] bg-[#1a1a1a] p-3 text-xs">
+                      <div>
+                        <span className={`font-bold ${sub.passed ? "text-emerald-400" : "text-red-400"}`}>
+                          {sub.passed ? "Accepted" : "Wrong Answer"}
+                        </span>
+                        <span className="text-gray-400 block text-[11px] mt-0.5">{sub.username} · {sub.language}</span>
+                      </div>
+                      <span className="text-gray-400 text-[11px]">{new Date(sub.createdAt).toLocaleTimeString()}</span>
+                    </div>
+                  ))
                 )}
               </div>
+            )}
+          </div>
+        </div>
+
+        {/* Right Column: Code Mirror & Console Panel */}
+        <div className="w-1/2 flex flex-col rounded-xl border border-[#2d2d2d] bg-[#222222] overflow-hidden shadow-lg">
+          <div className="flex items-center justify-between px-3 py-2 border-b border-[#2d2d2d] bg-[#222222]">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-gray-300">Code</span>
+              <select
+                value={lang}
+                onChange={(e) => { setLang(e.target.value); window.location.reload(); }}
+                className="rounded-md bg-[#1a1a1a] text-emerald-400 text-xs px-2.5 py-1 font-semibold border border-[#383838] outline-none"
+              >
+                <option value="clike">C++ / Java</option>
+                <option value="python">Python</option>
+                <option value="javascript">JavaScript</option>
+                <option value="go">Go</option>
+                <option value="rust">Rust</option>
+              </select>
             </div>
 
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleDownloadCode}
+                className="px-2.5 py-1 rounded-md bg-[#1a1a1a] hover:bg-[#333333] text-gray-300 text-xs transition border border-[#383838]"
+                title="Download code"
+              >
+                💾 Save
+              </button>
+              <CopyCodeButton codeRef={codeRef} />
+            </div>
+          </div>
+
+          <div className="flex-1 overflow-hidden bg-[#1e1e1e]">
+            <Editor
+              ref={editorInstanceRef}
+              socketRef={socketRef}
+              roomId={roomId}
+              isRealtime={isRoomMode}
+              readOnly={isReadOnlyView}
+              onCodeChange={(code) => {
+                codeRef.current = code;
+                setEditorSnapshot(code);
+              }}
+            />
+          </div>
+
+          <div className="h-44 border-t border-[#2d2d2d] bg-[#1a1a1a] flex flex-col">
+            <div className="flex items-center justify-between px-3 py-1.5 border-b border-[#2d2d2d] bg-[#222222]">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-gray-300">Console Output</span>
+                <span className="text-[11px] text-emerald-400 font-mono">{executionMeta.time}</span>
+              </div>
+              <button
+                type="button"
+                onClick={handleClearOutput}
+                className="text-[11px] text-gray-400 hover:text-gray-200"
+              >
+                Clear
+              </button>
+            </div>
+            <div className="flex-1 p-3 font-mono text-xs text-gray-300 overflow-y-auto bg-[#121212]">
+              <pre className="whitespace-pre-wrap">{runOutput}</pre>
+            </div>
           </div>
         </div>
       </div>
-      <footer className="editorPageFooterInfo" aria-label="App Footer">
-        <div className="footerCard footerCardAbout" style={{ '--card-delay': '0s' }}>
-          <div className="footerCardIcon">⚡</div>
-          <div className="footerCardBody">
-            <strong className="footerCardTitle">About Sync Code</strong>
-            <p className="footerCardDesc">
-              A real-time collaborative coding environment built for developers — supporting live pair programming,
-              technical interview practice, multi-language execution, and performance analytics.
-            </p>
-            <div className="footerTags">
-              <span>React</span>
-              <span>Socket.IO</span>
-              <span>CodeMirror</span>
-              <span>Node.js</span>
-            </div>
-          </div>
-        </div>
 
-        <div className="footerCard footerCardFounder" style={{ '--card-delay': '0.1s' }}>
-          <div className="footerCardIcon">👨‍💻</div>
-          <div className="footerCardBody">
-            <strong className="footerCardTitle">Built by Anuj Kumar</strong>
-            <p className="footerCardDesc">
-              Full-stack developer passionate about real-time systems, developer tooling, and building
-              experiences that make coding collaboration effortless.
-            </p>
-            <div className="footerSocials">
-              <a href="https://github.com/AnujYadav-1915" target="_blank" rel="noopener noreferrer" className="footerSocialLink">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-                GitHub
-              </a>
-              <a href="https://linkedin.com/in/anuj-kumar" target="_blank" rel="noopener noreferrer" className="footerSocialLink">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                LinkedIn
-              </a>
+      {/* 3. CLEAN POPUP MODALS FOR EXTRA TOOLS */}
+      {activeToolModal === "problemList" && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/75 backdrop-blur-sm" onClick={() => setActiveToolModal(null)}>
+          <div className="relative w-full max-w-2xl rounded-2xl border border-[#3e3e3e] bg-[#222222] p-6 shadow-2xl text-white max-h-[85vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between pb-4 border-b border-[#333333]">
+              <h3 className="text-lg font-bold">📋 Problem Library (500 Questions)</h3>
+              <button type="button" onClick={() => setActiveToolModal(null)} className="text-gray-400 hover:text-white">✕</button>
+            </div>
+            <div className="py-4 space-y-3">
+              <input
+                type="text"
+                placeholder="Search problems by title, topic, or difficulty..."
+                value={problemSearchQuery}
+                onChange={(e) => setProblemSearchQuery(e.target.value)}
+                className="w-full rounded-xl border border-[#383838] bg-[#161616] px-4 py-2.5 text-xs text-white outline-none focus:border-emerald-500"
+              />
+            </div>
+            <div className="flex-1 overflow-y-auto space-y-2 pr-1">
+              {problemLibrary
+                .filter(p => !problemSearchQuery || p.title.toLowerCase().includes(problemSearchQuery.toLowerCase()))
+                .slice(0, 50)
+                .map((prob, idx) => (
+                  <div
+                    key={prob.id}
+                    onClick={() => {
+                      handleLoadProblemFromLibrary(prob.id);
+                      setActiveToolModal(null);
+                    }}
+                    className="flex items-center justify-between rounded-xl border border-[#333333] bg-[#1a1a1a] p-3 hover:border-emerald-500 cursor-pointer transition"
+                  >
+                    <div>
+                      <strong className="text-sm text-gray-100">{idx + 1}. {prob.title}</strong>
+                      <span className="text-xs text-gray-400 block mt-0.5">{(prob.category || "General").replace(/-/g, " ")}</span>
+                    </div>
+                    <span className={`px-2 py-0.5 rounded text-[11px] font-bold uppercase ${
+                      prob.difficulty === "easy" ? "text-emerald-400 bg-emerald-950" : prob.difficulty === "hard" ? "text-red-400 bg-red-950" : "text-amber-400 bg-amber-950"
+                    }`}>
+                      {prob.difficulty || "medium"}
+                    </span>
+                  </div>
+                ))}
             </div>
           </div>
-        </div>
-
-        <div className="footerCard footerCardContact" style={{ '--card-delay': '0.2s' }}>
-          <div className="footerCardIcon">✉️</div>
-          <div className="footerCardBody">
-            <strong className="footerCardTitle">Get in Touch</strong>
-            <p className="footerCardDesc">Have feedback, a feature request, or want to collaborate? Reach out directly.</p>
-            <div className="footerContactLinks">
-              <a href="mailto:anujyadav11112003@gmail.com" className="footerContactItem">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="14" height="14"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                anujyadav11112003@gmail.com
-              </a>
-              <a href="https://github.com/AnujYadav-1915/Realtime-Collaborative-Code-Editor-master" target="_blank" rel="noopener noreferrer" className="footerContactItem">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-                View Source on GitHub
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div className="footerBottomBar">
-          <span>© {new Date().getFullYear()} Sync Code · Built with ❤️ by Anuj Kumar</span>
-          <span className="footerVersion">v2.0 · Real-time · Open Source</span>
-        </div>
-      </footer>
-      {personalPreviewProblem && isRoomMode && !isRoomCreator && (
-        <div
-          className="personalPreviewDrawer"
-          role="dialog"
-          aria-label="Personal problem preview"
-          style={{
-            left: `${previewWindowState.x}px`,
-            top: `${previewWindowState.y}px`,
-            width: `${previewWindowState.width}px`,
-            height: `${previewWindowState.height}px`,
-          }}
-        >
-          <div className="personalPreviewHeader" onMouseDown={handlePreviewDragStart}>
-            <div>
-              <span className="personalPreviewLabel">Personal Preview</span>
-              <h4>{personalPreviewProblem.title}</h4>
-            </div>
-            <button className="pbCloseBtn" onClick={() => setPersonalPreviewProblem(null)}>✕</button>
-          </div>
-          <div className="personalPreviewMeta">
-            <span>{(personalPreviewProblem.difficulty || "medium").toUpperCase()}</span>
-            <span>{(personalPreviewProblem.category || "other").replace(/-/g, " ")}</span>
-            <span>{personalPreviewProblem.targetTimeComplexity || "-"}</span>
-          </div>
-          <div className="personalPreviewBody">
-            <p>{personalPreviewProblem.statement || "No statement available."}</p>
-            <h5>Visible Test Cases</h5>
-            <pre>{formatTestCases(personalPreviewProblem.visibleTestCases) || "[]"}</pre>
-            <button className="previewRequestBtn" onClick={handleRequestHostSwitch} disabled={Boolean(pendingSwitchRequest)}>
-              {pendingSwitchRequest ? "Request Pending..." : "Request Host to Switch Problem"}
-            </button>
-            {pendingSwitchRequest ? (
-              <div className="personalPreviewHint">
-                Pending: {pendingSwitchRequest.title || pendingSwitchRequest.problemId}
-              </div>
-            ) : null}
-            <div className="personalPreviewHint">
-              This preview is only visible to you. Ask the room creator to set this as the shared room problem.
-            </div>
-          </div>
-          <div className="personalPreviewResizeHandle" onMouseDown={handlePreviewResizeStart} />
         </div>
       )}
-      {isLoadingPersonalPreview && isRoomMode && !isRoomCreator ? <div className="personalPreviewLoading">Loading preview...</div> : null}
+
+      {activeToolModal === "timer" && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/75 backdrop-blur-sm" onClick={() => setActiveToolModal(null)}>
+          <div className="relative w-full max-w-md rounded-2xl border border-[#3e3e3e] bg-[#222222] p-6 shadow-2xl text-white space-y-4" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between pb-3 border-b border-[#333333]">
+              <h3 className="text-lg font-bold">⏱️ Room Timer</h3>
+              <button type="button" onClick={() => setActiveToolModal(null)} className="text-gray-400 hover:text-white">✕</button>
+            </div>
+            <div className="text-center py-4 space-y-2">
+              <span className="text-4xl font-mono font-extrabold text-emerald-400">{formattedRemainingTime}</span>
+              <p className="text-xs text-gray-400">Countdown timer for room coding sprint</p>
+            </div>
+            <div className="flex gap-3">
+              <button type="button" onClick={handleTimerStart} disabled={isTimerRunning} className="flex-1 rounded-xl bg-emerald-600 hover:bg-emerald-500 py-2.5 font-bold text-xs">Start</button>
+              <button type="button" onClick={handleTimerReset} className="flex-1 rounded-xl bg-[#333333] hover:bg-[#444444] py-2.5 font-bold text-xs">Reset</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {activeToolModal === "collaborators" && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/75 backdrop-blur-sm" onClick={() => setActiveToolModal(null)}>
+          <div className="relative w-full max-w-md rounded-2xl border border-[#3e3e3e] bg-[#222222] p-6 shadow-2xl text-white space-y-4" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between pb-3 border-b border-[#333333]">
+              <h3 className="text-lg font-bold">👥 Room Collaborators ({clients.length})</h3>
+              <button type="button" onClick={() => setActiveToolModal(null)} className="text-gray-400 hover:text-white">✕</button>
+            </div>
+            <div className="space-y-2 max-h-60 overflow-y-auto">
+              {clients.map((c) => (
+                <div key={c.socketId} className="flex items-center justify-between p-2.5 rounded-lg bg-[#1a1a1a] border border-[#333333] text-xs">
+                  <span className="font-semibold text-gray-200">{c.username}</span>
+                  <span className="text-[10px] text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded">Online</span>
+                </div>
+              ))}
+            </div>
+            {isRoomMode && (
+              <button type="button" onClick={copyRoomId} className="w-full rounded-xl bg-emerald-600 hover:bg-emerald-500 py-2.5 font-bold text-xs">
+                📋 Copy Room Link / ID
+              </button>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
+
 };
 
 export default EditorPage;
