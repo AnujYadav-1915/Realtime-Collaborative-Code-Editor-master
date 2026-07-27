@@ -25,5 +25,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# exclude data directory
-data/*.json
+# exclude dynamic session data
+data/room-state.json
+data/users.json
+data/user-progress.json
+!data/problem-library.json

@@ -1,0 +1,83 @@
+{
+  "templates": {
+    "blind75": {
+      "id": "blind75",
+      "title": "Blind 75",
+      "description": "Classic high-impact interview question set.",
+      "items": []
+    },
+    "neetcode150": {
+      "id": "neetcode150",
+      "title": "NeetCode 150",
+      "description": "Expanded interview sheet covering broad DSA coverage.",
+      "items": []
+    }
+  },
+  "userSheets": {},
+  "checkIns": {
+    "demo": {
+      "blind75": {
+        "solvedCount": 2,
+        "updatedAt": "2026-03-16T06:05:56.461Z"
+      }
+    },
+    "Guest": {
+      "blind75": {
+        "solvedCount": 1,
+        "updatedAt": "2026-03-16T06:59:18.940Z"
+      },
+      "neetcode150": {
+        "solvedCount": 1,
+        "updatedAt": "2026-03-16T06:32:11.062Z"
+      }
+    }
+  },
+  "reminders": {
+    "demo": [
+      {
+        "id": "rem-1773641156461-04825a",
+        "sheetId": "blind75",
+        "remindAt": "2030-01-01T10:00:00.000Z",
+        "createdAt": "2026-03-16T06:05:56.461Z"
+      }
+    ],
+    "Guest": [
+      {
+        "id": "rem-1773644358940-d9b608",
+        "sheetId": "blind75",
+        "remindAt": "2026-03-17T06:59:18.938Z",
+        "createdAt": "2026-03-16T06:59:18.940Z"
+      },
+      {
+        "id": "rem-1773644358164-4c8c46",
+        "sheetId": "blind75",
+        "remindAt": "2026-03-17T06:59:18.156Z",
+        "createdAt": "2026-03-16T06:59:18.164Z"
+      },
+      {
+        "id": "rem-1773643425968-85676d",
+        "sheetId": "blind75",
+        "remindAt": "2026-03-17T06:43:45.963Z",
+        "createdAt": "2026-03-16T06:43:45.968Z"
+      },
+      {
+        "id": "rem-1773642731062-b1e3b7",
+        "sheetId": "neetcode150",
+        "remindAt": "2026-03-17T06:32:11.059Z",
+        "createdAt": "2026-03-16T06:32:11.062Z"
+      },
+      {
+        "id": "rem-1773642727216-c08ef4",
+        "sheetId": "blind75",
+        "remindAt": "2026-03-17T06:32:07.209Z",
+        "createdAt": "2026-03-16T06:32:07.216Z"
+      },
+      {
+        "id": "rem-1773642686517-b2f931",
+        "sheetId": "blind75",
+        "remindAt": "2026-03-17T06:31:26.509Z",
+        "createdAt": "2026-03-16T06:31:26.517Z"
+      }
+    ]
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "google": {
+    "company": "Google",
+    "description": "Focus on graphs, trees, strings, and DP with medium-hard progression.",
+    "categories": [
+      "graphs",
+      "binary-trees",
+      "strings",
+      "dynamic-programming"
+    ],
+    "targetDifficulties": [
+      "medium",
+      "hard"
+    ]
+  },
+  "amazon": {
+    "company": "Amazon",
+    "description": "Arrays, heaps, sliding window, and design-style implementation patterns.",
+    "categories": [
+      "arrays",
+      "heap",
+      "sliding-window",
+      "hashing"
+    ],
+    "targetDifficulties": [
+      "easy",
+      "medium"
+    ]
+  },
+  "meta": {
+    "company": "Meta",
+    "description": "Graph traversal, trees, and practical string/hashmap optimization.",
+    "categories": [
+      "graphs",
+      "binary-trees",
+      "strings",
+      "hashing"
+    ],
+    "targetDifficulties": [
+      "medium",
+      "hard"
+    ]
+  },
+  "microsoft": {
+    "company": "Microsoft",
+    "description": "DP, recursion/backtracking, and clean implementation under constraints.",
+    "categories": [
+      "dynamic-programming",
+      "backtracking",
+      "arrays",
+      "matrix"
+    ],
+    "targetDifficulties": [
+      "medium"
+    ]
+  },
+  "netflix": {
+    "company": "Netflix",
+    "description": "High-signal optimization focused on graphs, greedy, and systems-minded problems.",
+    "categories": [
+      "graphs",
+      "greedy",
+      "searching",
+      "heap"
+    ],
+    "targetDifficulties": [
+      "medium",
+      "hard"
+    ]
+  }
+}
