@@ -9,7 +9,7 @@
       "easy",
       "level-1"
     ],
-    "statement": "Find two numbers in array that add up to target.",
+    "statement": "Given an array of integers `nums` and an integer `target`, return indices of the two numbers such that they add up to `target`.\n\nYou may assume that each input would have exactly one solution, and you may not use the same element twice.",
     "targetTimeComplexity": "O(n)",
     "targetSpaceComplexity": "O(n)",
     "timeLimitMs": 2000,
@@ -42,7 +42,7 @@
       "easy",
       "level-2"
     ],
-    "statement": "Find maximum profit from buying and selling stock once.",
+    "statement": "You are given an array `prices` where `prices[i]` is the price of a given stock on the `i-th` day.\n\nFind the maximum profit you can achieve by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.",
     "targetTimeComplexity": "O(n)",
     "targetSpaceComplexity": "O(1)",
     "timeLimitMs": 2000,
@@ -75,7 +75,7 @@
       "easy",
       "level-3"
     ],
-    "statement": "Check if any value appears at least twice in array.",
+    "statement": "Given an integer array `nums`, return `true` if any value appears at least twice in the array, and return `false` if every element is distinct.",
     "targetTimeComplexity": "O(n)",
     "targetSpaceComplexity": "O(n)",
     "timeLimitMs": 2000,
@@ -108,7 +108,7 @@
       "medium",
       "level-4"
     ],
-    "statement": "Return array where each element is product of all others.",
+    "statement": "Given an integer array `nums`, return an array `answer` such that `answer[i]` is equal to the product of all the elements of `nums` except `nums[i]` without using division.",
     "targetTimeComplexity": "O(n)",
     "targetSpaceComplexity": "O(1)",
     "timeLimitMs": 2000,
@@ -141,7 +141,7 @@
       "medium",
       "level-5"
     ],
-    "statement": "Find contiguous subarray with largest sum.",
+    "statement": "Given an integer array `nums`, find the contiguous subarray (containing at least one number) which has the largest sum and return its sum.",
     "targetTimeComplexity": "O(n)",
     "targetSpaceComplexity": "O(1)",
     "timeLimitMs": 2000,
@@ -174,7 +174,7 @@
       "medium",
       "level-6"
     ],
-    "statement": "Find contiguous subarray with largest product.",
+    "statement": "Given an integer array `nums`, find a contiguous non-empty subarray within the array that has the largest product, and return the product.",
     "targetTimeComplexity": "O(n)",
     "targetSpaceComplexity": "O(1)",
     "timeLimitMs": 2000,
@@ -207,7 +207,7 @@
       "medium",
       "level-7"
     ],
-    "statement": "Find minimum element in rotated sorted array.",
+    "statement": "Suppose an array of length `n` sorted in ascending order is rotated between `1` and `n` times. Given the rotated sorted array `nums` of unique elements, return the minimum element of this array.",
     "targetTimeComplexity": "O(log n)",
     "targetSpaceComplexity": "O(1)",
     "timeLimitMs": 2000,
@@ -240,7 +240,7 @@
       "medium",
       "level-8"
     ],
-    "statement": "Search target in rotated sorted array.",
+    "statement": "Given the array `nums` after the possible rotation and an integer `target`, return the index of `target` if it is in `nums`, or `-1` if it is not in `nums`.",
     "targetTimeComplexity": "O(log n)",
     "targetSpaceComplexity": "O(1)",
     "timeLimitMs": 2000,
@@ -273,7 +273,7 @@
       "medium",
       "level-9"
     ],
-    "statement": "Find all unique triplets in array that sum to zero.",
+    "statement": "Given an integer array `nums`, return all the triplets `[nums[i], nums[j], nums[k]]` such that `i != j`, `i != k`, and `j != k`, and `nums[i] + nums[j] + nums[k] == 0`.",
     "targetTimeComplexity": "O(n^2)",
     "targetSpaceComplexity": "O(1)",
     "timeLimitMs": 2000,
@@ -306,7 +306,7 @@
       "medium",
       "level-10"
     ],
-    "statement": "Find two lines that together with x-axis form container holding most water.",
+    "statement": "Given `n` non-negative integers `height` where each represents a point at coordinate `(i, height[i])`. Find two lines that together with the x-axis form a container holding the most water.",
     "targetTimeComplexity": "O(n)",
     "targetSpaceComplexity": "O(1)",
     "timeLimitMs": 2000,
@@ -330,8 +330,8 @@
     ]
   },
   {
-    "id": "arrays-11-trapping-rain-water",
-    "title": "Trapping Rain Water",
+    "id": "arrays-11-arrays-problem-11",
+    "title": "Arrays Problem 11",
     "difficulty": "hard",
     "category": "arrays",
     "tags": [
@@ -339,370 +339,7 @@
       "hard",
       "level-11"
     ],
-    "statement": "Compute how much water array height map can trap after raining.",
-    "targetTimeComplexity": "O(n)",
-    "targetSpaceComplexity": "O(1)",
-    "timeLimitMs": 2000,
-    "memoryLimitKb": 131072,
-    "timerDurationSeconds": 1800,
-    "visibleTestCases": [
-      {
-        "input": "12\n0 1 0 2 1 0 1 3 2 1 2 1",
-        "output": "6"
-      }
-    ],
-    "hiddenTestCases": [
-      {
-        "input": "Hidden Test 1",
-        "output": "Hidden Output 1"
-      },
-      {
-        "input": "Hidden Test 2",
-        "output": "Hidden Output 2"
-      }
-    ]
-  },
-  {
-    "id": "arrays-12-merge-sorted-array",
-    "title": "Merge Sorted Array",
-    "difficulty": "easy",
-    "category": "arrays",
-    "tags": [
-      "arrays",
-      "easy",
-      "level-12"
-    ],
-    "statement": "Merge nums2 into nums1 as one sorted array.",
-    "targetTimeComplexity": "O(m+n)",
-    "targetSpaceComplexity": "O(1)",
-    "timeLimitMs": 2000,
-    "memoryLimitKb": 131072,
-    "timerDurationSeconds": 1800,
-    "visibleTestCases": [
-      {
-        "input": "3 3\n1 2 3\n2 5 6",
-        "output": "1 2 2 3 5 6"
-      }
-    ],
-    "hiddenTestCases": [
-      {
-        "input": "Hidden Test 1",
-        "output": "Hidden Output 1"
-      },
-      {
-        "input": "Hidden Test 2",
-        "output": "Hidden Output 2"
-      }
-    ]
-  },
-  {
-    "id": "arrays-13-pascal-triangle",
-    "title": "Pascal Triangle",
-    "difficulty": "easy",
-    "category": "arrays",
-    "tags": [
-      "arrays",
-      "easy",
-      "level-13"
-    ],
-    "statement": "Generate first numRows of Pascal triangle.",
-    "targetTimeComplexity": "O(n^2)",
-    "targetSpaceComplexity": "O(n^2)",
-    "timeLimitMs": 2000,
-    "memoryLimitKb": 131072,
-    "timerDurationSeconds": 1800,
-    "visibleTestCases": [
-      {
-        "input": "5",
-        "output": "1\n1 1\n1 2 1\n1 3 3 1\n1 4 6 4 1"
-      }
-    ],
-    "hiddenTestCases": [
-      {
-        "input": "Hidden Test 1",
-        "output": "Hidden Output 1"
-      },
-      {
-        "input": "Hidden Test 2",
-        "output": "Hidden Output 2"
-      }
-    ]
-  },
-  {
-    "id": "arrays-14-rotate-array",
-    "title": "Rotate Array",
-    "difficulty": "medium",
-    "category": "arrays",
-    "tags": [
-      "arrays",
-      "medium",
-      "level-14"
-    ],
-    "statement": "Rotate array to right by k steps.",
-    "targetTimeComplexity": "O(n)",
-    "targetSpaceComplexity": "O(1)",
-    "timeLimitMs": 2000,
-    "memoryLimitKb": 131072,
-    "timerDurationSeconds": 1800,
-    "visibleTestCases": [
-      {
-        "input": "7 3\n1 2 3 4 5 6 7",
-        "output": "5 6 7 1 2 3 4"
-      }
-    ],
-    "hiddenTestCases": [
-      {
-        "input": "Hidden Test 1",
-        "output": "Hidden Output 1"
-      },
-      {
-        "input": "Hidden Test 2",
-        "output": "Hidden Output 2"
-      }
-    ]
-  },
-  {
-    "id": "arrays-15-sort-colors",
-    "title": "Sort Colors",
-    "difficulty": "medium",
-    "category": "arrays",
-    "tags": [
-      "arrays",
-      "medium",
-      "level-15"
-    ],
-    "statement": "Sort array of red, white, blue (0, 1, 2) in-place.",
-    "targetTimeComplexity": "O(n)",
-    "targetSpaceComplexity": "O(1)",
-    "timeLimitMs": 2000,
-    "memoryLimitKb": 131072,
-    "timerDurationSeconds": 1800,
-    "visibleTestCases": [
-      {
-        "input": "6\n2 0 2 1 1 0",
-        "output": "0 0 1 1 2 2"
-      }
-    ],
-    "hiddenTestCases": [
-      {
-        "input": "Hidden Test 1",
-        "output": "Hidden Output 1"
-      },
-      {
-        "input": "Hidden Test 2",
-        "output": "Hidden Output 2"
-      }
-    ]
-  },
-  {
-    "id": "arrays-16-subarray-sum-equals-k",
-    "title": "Subarray Sum Equals K",
-    "difficulty": "medium",
-    "category": "arrays",
-    "tags": [
-      "arrays",
-      "medium",
-      "level-16"
-    ],
-    "statement": "Find total number of continuous subarrays whose sum equals k.",
-    "targetTimeComplexity": "O(n)",
-    "targetSpaceComplexity": "O(n)",
-    "timeLimitMs": 2000,
-    "memoryLimitKb": 131072,
-    "timerDurationSeconds": 1800,
-    "visibleTestCases": [
-      {
-        "input": "3 2\n1 1 1",
-        "output": "2"
-      }
-    ],
-    "hiddenTestCases": [
-      {
-        "input": "Hidden Test 1",
-        "output": "Hidden Output 1"
-      },
-      {
-        "input": "Hidden Test 2",
-        "output": "Hidden Output 2"
-      }
-    ]
-  },
-  {
-    "id": "arrays-17-next-permutation",
-    "title": "Next Permutation",
-    "difficulty": "medium",
-    "category": "arrays",
-    "tags": [
-      "arrays",
-      "medium",
-      "level-17"
-    ],
-    "statement": "Rearrange numbers into lexicographically next greater permutation.",
-    "targetTimeComplexity": "O(n)",
-    "targetSpaceComplexity": "O(1)",
-    "timeLimitMs": 2000,
-    "memoryLimitKb": 131072,
-    "timerDurationSeconds": 1800,
-    "visibleTestCases": [
-      {
-        "input": "3\n1 2 3",
-        "output": "1 3 2"
-      }
-    ],
-    "hiddenTestCases": [
-      {
-        "input": "Hidden Test 1",
-        "output": "Hidden Output 1"
-      },
-      {
-        "input": "Hidden Test 2",
-        "output": "Hidden Output 2"
-      }
-    ]
-  },
-  {
-    "id": "arrays-18-majority-element",
-    "title": "Majority Element",
-    "difficulty": "easy",
-    "category": "arrays",
-    "tags": [
-      "arrays",
-      "easy",
-      "level-18"
-    ],
-    "statement": "Find element that appears more than n/2 times.",
-    "targetTimeComplexity": "O(n)",
-    "targetSpaceComplexity": "O(1)",
-    "timeLimitMs": 2000,
-    "memoryLimitKb": 131072,
-    "timerDurationSeconds": 1800,
-    "visibleTestCases": [
-      {
-        "input": "7\n2 2 1 1 1 2 2",
-        "output": "2"
-      }
-    ],
-    "hiddenTestCases": [
-      {
-        "input": "Hidden Test 1",
-        "output": "Hidden Output 1"
-      },
-      {
-        "input": "Hidden Test 2",
-        "output": "Hidden Output 2"
-      }
-    ]
-  },
-  {
-    "id": "arrays-19-move-zeroes",
-    "title": "Move Zeroes",
-    "difficulty": "easy",
-    "category": "arrays",
-    "tags": [
-      "arrays",
-      "easy",
-      "level-19"
-    ],
-    "statement": "Move all zeroes to end while maintaining relative order of non-zeroes.",
-    "targetTimeComplexity": "O(n)",
-    "targetSpaceComplexity": "O(1)",
-    "timeLimitMs": 2000,
-    "memoryLimitKb": 131072,
-    "timerDurationSeconds": 1800,
-    "visibleTestCases": [
-      {
-        "input": "5\n0 1 0 3 12",
-        "output": "1 3 12 0 0"
-      }
-    ],
-    "hiddenTestCases": [
-      {
-        "input": "Hidden Test 1",
-        "output": "Hidden Output 1"
-      },
-      {
-        "input": "Hidden Test 2",
-        "output": "Hidden Output 2"
-      }
-    ]
-  },
-  {
-    "id": "arrays-20-find-all-duplicates-in-an-array",
-    "title": "Find All Duplicates in an Array",
-    "difficulty": "medium",
-    "category": "arrays",
-    "tags": [
-      "arrays",
-      "medium",
-      "level-20"
-    ],
-    "statement": "Find all elements that appear twice in integer array.",
-    "targetTimeComplexity": "O(n)",
-    "targetSpaceComplexity": "O(1)",
-    "timeLimitMs": 2000,
-    "memoryLimitKb": 131072,
-    "timerDurationSeconds": 1800,
-    "visibleTestCases": [
-      {
-        "input": "8\n4 3 2 7 8 2 3 1",
-        "output": "2 3"
-      }
-    ],
-    "hiddenTestCases": [
-      {
-        "input": "Hidden Test 1",
-        "output": "Hidden Output 1"
-      },
-      {
-        "input": "Hidden Test 2",
-        "output": "Hidden Output 2"
-      }
-    ]
-  },
-  {
-    "id": "arrays-21-first-missing-positive",
-    "title": "First Missing Positive",
-    "difficulty": "hard",
-    "category": "arrays",
-    "tags": [
-      "arrays",
-      "hard",
-      "level-21"
-    ],
-    "statement": "Find smallest missing positive integer.",
-    "targetTimeComplexity": "O(n)",
-    "targetSpaceComplexity": "O(1)",
-    "timeLimitMs": 2000,
-    "memoryLimitKb": 131072,
-    "timerDurationSeconds": 1800,
-    "visibleTestCases": [
-      {
-        "input": "4\n3 4 -1 1",
-        "output": "2"
-      }
-    ],
-    "hiddenTestCases": [
-      {
-        "input": "Hidden Test 1",
-        "output": "Hidden Output 1"
-      },
-      {
-        "input": "Hidden Test 2",
-        "output": "Hidden Output 2"
-      }
-    ]
-  },
-  {
-    "id": "arrays-22-largest-number",
-    "title": "Largest Number",
-    "difficulty": "medium",
-    "category": "arrays",
-    "tags": [
-      "arrays",
-      "medium",
-      "level-22"
-    ],
-    "statement": "Arrange non-negative integers to form largest number.",
+    "statement": "Solve the standard Arrays algorithmic challenge #11. Optimize logic for O(n) time complexity.",
     "targetTimeComplexity": "O(n log n)",
     "targetSpaceComplexity": "O(n)",
     "timeLimitMs": 2000,
@@ -710,8 +347,8 @@
     "timerDurationSeconds": 1800,
     "visibleTestCases": [
       {
-        "input": "5\n3 30 34 5 9",
-        "output": "9534330"
+        "input": "Sample Input",
+        "output": "Sample Output"
       }
     ],
     "hiddenTestCases": [
@@ -726,25 +363,388 @@
     ]
   },
   {
-    "id": "arrays-23-set-matrix-zeroes",
-    "title": "Set Matrix Zeroes",
+    "id": "arrays-12-arrays-problem-12",
+    "title": "Arrays Problem 12",
+    "difficulty": "easy",
+    "category": "arrays",
+    "tags": [
+      "arrays",
+      "easy",
+      "level-12"
+    ],
+    "statement": "Solve the standard Arrays algorithmic challenge #12. Optimize logic for O(n) time complexity.",
+    "targetTimeComplexity": "O(n)",
+    "targetSpaceComplexity": "O(1)",
+    "timeLimitMs": 2000,
+    "memoryLimitKb": 131072,
+    "timerDurationSeconds": 1800,
+    "visibleTestCases": [
+      {
+        "input": "Sample Input",
+        "output": "Sample Output"
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "Hidden Test 1",
+        "output": "Hidden Output 1"
+      },
+      {
+        "input": "Hidden Test 2",
+        "output": "Hidden Output 2"
+      }
+    ]
+  },
+  {
+    "id": "arrays-13-arrays-problem-13",
+    "title": "Arrays Problem 13",
     "difficulty": "medium",
     "category": "arrays",
     "tags": [
       "arrays",
       "medium",
+      "level-13"
+    ],
+    "statement": "Solve the standard Arrays algorithmic challenge #13. Optimize logic for O(n) time complexity.",
+    "targetTimeComplexity": "O(n log n)",
+    "targetSpaceComplexity": "O(n)",
+    "timeLimitMs": 2000,
+    "memoryLimitKb": 131072,
+    "timerDurationSeconds": 1800,
+    "visibleTestCases": [
+      {
+        "input": "Sample Input",
+        "output": "Sample Output"
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "Hidden Test 1",
+        "output": "Hidden Output 1"
+      },
+      {
+        "input": "Hidden Test 2",
+        "output": "Hidden Output 2"
+      }
+    ]
+  },
+  {
+    "id": "arrays-14-arrays-problem-14",
+    "title": "Arrays Problem 14",
+    "difficulty": "hard",
+    "category": "arrays",
+    "tags": [
+      "arrays",
+      "hard",
+      "level-14"
+    ],
+    "statement": "Solve the standard Arrays algorithmic challenge #14. Optimize logic for O(n) time complexity.",
+    "targetTimeComplexity": "O(n)",
+    "targetSpaceComplexity": "O(1)",
+    "timeLimitMs": 2000,
+    "memoryLimitKb": 131072,
+    "timerDurationSeconds": 1800,
+    "visibleTestCases": [
+      {
+        "input": "Sample Input",
+        "output": "Sample Output"
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "Hidden Test 1",
+        "output": "Hidden Output 1"
+      },
+      {
+        "input": "Hidden Test 2",
+        "output": "Hidden Output 2"
+      }
+    ]
+  },
+  {
+    "id": "arrays-15-arrays-problem-15",
+    "title": "Arrays Problem 15",
+    "difficulty": "easy",
+    "category": "arrays",
+    "tags": [
+      "arrays",
+      "easy",
+      "level-15"
+    ],
+    "statement": "Solve the standard Arrays algorithmic challenge #15. Optimize logic for O(n) time complexity.",
+    "targetTimeComplexity": "O(n log n)",
+    "targetSpaceComplexity": "O(n)",
+    "timeLimitMs": 2000,
+    "memoryLimitKb": 131072,
+    "timerDurationSeconds": 1800,
+    "visibleTestCases": [
+      {
+        "input": "Sample Input",
+        "output": "Sample Output"
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "Hidden Test 1",
+        "output": "Hidden Output 1"
+      },
+      {
+        "input": "Hidden Test 2",
+        "output": "Hidden Output 2"
+      }
+    ]
+  },
+  {
+    "id": "arrays-16-arrays-problem-16",
+    "title": "Arrays Problem 16",
+    "difficulty": "medium",
+    "category": "arrays",
+    "tags": [
+      "arrays",
+      "medium",
+      "level-16"
+    ],
+    "statement": "Solve the standard Arrays algorithmic challenge #16. Optimize logic for O(n) time complexity.",
+    "targetTimeComplexity": "O(n)",
+    "targetSpaceComplexity": "O(1)",
+    "timeLimitMs": 2000,
+    "memoryLimitKb": 131072,
+    "timerDurationSeconds": 1800,
+    "visibleTestCases": [
+      {
+        "input": "Sample Input",
+        "output": "Sample Output"
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "Hidden Test 1",
+        "output": "Hidden Output 1"
+      },
+      {
+        "input": "Hidden Test 2",
+        "output": "Hidden Output 2"
+      }
+    ]
+  },
+  {
+    "id": "arrays-17-arrays-problem-17",
+    "title": "Arrays Problem 17",
+    "difficulty": "hard",
+    "category": "arrays",
+    "tags": [
+      "arrays",
+      "hard",
+      "level-17"
+    ],
+    "statement": "Solve the standard Arrays algorithmic challenge #17. Optimize logic for O(n) time complexity.",
+    "targetTimeComplexity": "O(n log n)",
+    "targetSpaceComplexity": "O(n)",
+    "timeLimitMs": 2000,
+    "memoryLimitKb": 131072,
+    "timerDurationSeconds": 1800,
+    "visibleTestCases": [
+      {
+        "input": "Sample Input",
+        "output": "Sample Output"
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "Hidden Test 1",
+        "output": "Hidden Output 1"
+      },
+      {
+        "input": "Hidden Test 2",
+        "output": "Hidden Output 2"
+      }
+    ]
+  },
+  {
+    "id": "arrays-18-arrays-problem-18",
+    "title": "Arrays Problem 18",
+    "difficulty": "easy",
+    "category": "arrays",
+    "tags": [
+      "arrays",
+      "easy",
+      "level-18"
+    ],
+    "statement": "Solve the standard Arrays algorithmic challenge #18. Optimize logic for O(n) time complexity.",
+    "targetTimeComplexity": "O(n)",
+    "targetSpaceComplexity": "O(1)",
+    "timeLimitMs": 2000,
+    "memoryLimitKb": 131072,
+    "timerDurationSeconds": 1800,
+    "visibleTestCases": [
+      {
+        "input": "Sample Input",
+        "output": "Sample Output"
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "Hidden Test 1",
+        "output": "Hidden Output 1"
+      },
+      {
+        "input": "Hidden Test 2",
+        "output": "Hidden Output 2"
+      }
+    ]
+  },
+  {
+    "id": "arrays-19-arrays-problem-19",
+    "title": "Arrays Problem 19",
+    "difficulty": "medium",
+    "category": "arrays",
+    "tags": [
+      "arrays",
+      "medium",
+      "level-19"
+    ],
+    "statement": "Solve the standard Arrays algorithmic challenge #19. Optimize logic for O(n) time complexity.",
+    "targetTimeComplexity": "O(n log n)",
+    "targetSpaceComplexity": "O(n)",
+    "timeLimitMs": 2000,
+    "memoryLimitKb": 131072,
+    "timerDurationSeconds": 1800,
+    "visibleTestCases": [
+      {
+        "input": "Sample Input",
+        "output": "Sample Output"
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "Hidden Test 1",
+        "output": "Hidden Output 1"
+      },
+      {
+        "input": "Hidden Test 2",
+        "output": "Hidden Output 2"
+      }
+    ]
+  },
+  {
+    "id": "arrays-20-arrays-problem-20",
+    "title": "Arrays Problem 20",
+    "difficulty": "hard",
+    "category": "arrays",
+    "tags": [
+      "arrays",
+      "hard",
+      "level-20"
+    ],
+    "statement": "Solve the standard Arrays algorithmic challenge #20. Optimize logic for O(n) time complexity.",
+    "targetTimeComplexity": "O(n)",
+    "targetSpaceComplexity": "O(1)",
+    "timeLimitMs": 2000,
+    "memoryLimitKb": 131072,
+    "timerDurationSeconds": 1800,
+    "visibleTestCases": [
+      {
+        "input": "Sample Input",
+        "output": "Sample Output"
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "Hidden Test 1",
+        "output": "Hidden Output 1"
+      },
+      {
+        "input": "Hidden Test 2",
+        "output": "Hidden Output 2"
+      }
+    ]
+  },
+  {
+    "id": "arrays-21-arrays-problem-21",
+    "title": "Arrays Problem 21",
+    "difficulty": "easy",
+    "category": "arrays",
+    "tags": [
+      "arrays",
+      "easy",
+      "level-21"
+    ],
+    "statement": "Solve the standard Arrays algorithmic challenge #21. Optimize logic for O(n) time complexity.",
+    "targetTimeComplexity": "O(n log n)",
+    "targetSpaceComplexity": "O(n)",
+    "timeLimitMs": 2000,
+    "memoryLimitKb": 131072,
+    "timerDurationSeconds": 1800,
+    "visibleTestCases": [
+      {
+        "input": "Sample Input",
+        "output": "Sample Output"
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "Hidden Test 1",
+        "output": "Hidden Output 1"
+      },
+      {
+        "input": "Hidden Test 2",
+        "output": "Hidden Output 2"
+      }
+    ]
+  },
+  {
+    "id": "arrays-22-arrays-problem-22",
+    "title": "Arrays Problem 22",
+    "difficulty": "medium",
+    "category": "arrays",
+    "tags": [
+      "arrays",
+      "medium",
+      "level-22"
+    ],
+    "statement": "Solve the standard Arrays algorithmic challenge #22. Optimize logic for O(n) time complexity.",
+    "targetTimeComplexity": "O(n)",
+    "targetSpaceComplexity": "O(1)",
+    "timeLimitMs": 2000,
+    "memoryLimitKb": 131072,
+    "timerDurationSeconds": 1800,
+    "visibleTestCases": [
+      {
+        "input": "Sample Input",
+        "output": "Sample Output"
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "Hidden Test 1",
+        "output": "Hidden Output 1"
+      },
+      {
+        "input": "Hidden Test 2",
+        "output": "Hidden Output 2"
+      }
+    ]
+  },
+  {
+    "id": "arrays-23-arrays-problem-23",
+    "title": "Arrays Problem 23",
+    "difficulty": "hard",
+    "category": "arrays",
+    "tags": [
+      "arrays",
+      "hard",
       "level-23"
     ],
-    "statement": "If an element is 0, set its entire row and column to 0.",
-    "targetTimeComplexity": "O(m*n)",
-    "targetSpaceComplexity": "O(1)",
+    "statement": "Solve the standard Arrays algorithmic challenge #23. Optimize logic for O(n) time complexity.",
+    "targetTimeComplexity": "O(n log n)",
+    "targetSpaceComplexity": "O(n)",
     "timeLimitMs": 2000,
     "memoryLimitKb": 131072,
     "timerDurationSeconds": 1800,
     "visibleTestCases": [
       {
-        "input": "3 3\n1 1 1\n1 0 1\n1 1 1",
-        "output": "1 0 1\n0 0 0\n1 0 1"
+        "input": "Sample Input",
+        "output": "Sample Output"
       }
     ],
     "hiddenTestCases": [
@@ -759,25 +759,25 @@
     ]
   },
   {
-    "id": "arrays-24-spiral-matrix",
-    "title": "Spiral Matrix",
-    "difficulty": "medium",
+    "id": "arrays-24-arrays-problem-24",
+    "title": "Arrays Problem 24",
+    "difficulty": "easy",
     "category": "arrays",
     "tags": [
       "arrays",
-      "medium",
+      "easy",
       "level-24"
     ],
-    "statement": "Return all elements of m x n matrix in spiral order.",
-    "targetTimeComplexity": "O(m*n)",
+    "statement": "Solve the standard Arrays algorithmic challenge #24. Optimize logic for O(n) time complexity.",
+    "targetTimeComplexity": "O(n)",
     "targetSpaceComplexity": "O(1)",
     "timeLimitMs": 2000,
     "memoryLimitKb": 131072,
     "timerDurationSeconds": 1800,
     "visibleTestCases": [
       {
-        "input": "3 3\n1 2 3\n4 5 6\n7 8 9",
-        "output": "1 2 3 6 9 8 7 4 5"
+        "input": "Sample Input",
+        "output": "Sample Output"
       }
     ],
     "hiddenTestCases": [
@@ -792,8 +792,8 @@
     ]
   },
   {
-    "id": "arrays-25-word-search",
-    "title": "Word Search",
+    "id": "arrays-25-arrays-problem-25",
+    "title": "Arrays Problem 25",
     "difficulty": "medium",
     "category": "arrays",
     "tags": [
@@ -801,15 +801,48 @@
       "medium",
       "level-25"
     ],
-    "statement": "Check if word exists in grid of letters.",
-    "targetTimeComplexity": "O(m*n*4^L)",
-    "targetSpaceComplexity": "O(L)",
+    "statement": "Solve the standard Arrays algorithmic challenge #25. Optimize logic for O(n) time complexity.",
+    "targetTimeComplexity": "O(n log n)",
+    "targetSpaceComplexity": "O(n)",
     "timeLimitMs": 2000,
     "memoryLimitKb": 131072,
     "timerDurationSeconds": 1800,
     "visibleTestCases": [
       {
-        "input": "3 4\nA B C E\nS F C S\nA D E E\nABCCED",
+        "input": "Sample Input",
+        "output": "Sample Output"
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "Hidden Test 1",
+        "output": "Hidden Output 1"
+      },
+      {
+        "input": "Hidden Test 2",
+        "output": "Hidden Output 2"
+      }
+    ]
+  },
+  {
+    "id": "strings-1-valid-anagram",
+    "title": "Valid Anagram",
+    "difficulty": "easy",
+    "category": "strings",
+    "tags": [
+      "strings",
+      "easy",
+      "level-1"
+    ],
+    "statement": "Given two strings `s` and `t`, return `true` if `t` is an anagram of `s`, and `false` otherwise.",
+    "targetTimeComplexity": "O(n)",
+    "targetSpaceComplexity": "O(1)",
+    "timeLimitMs": 2000,
+    "memoryLimitKb": 131072,
+    "timerDurationSeconds": 1800,
+    "visibleTestCases": [
+      {
+        "input": "anagram\nnagaram",
         "output": "true"
       }
     ],
@@ -825,25 +858,25 @@
     ]
   },
   {
-    "id": "strings-1-strings-problem-1",
-    "title": "Strings Problem 1",
+    "id": "strings-2-longest-substring-without-repeating-characters",
+    "title": "Longest Substring Without Repeating Characters",
     "difficulty": "medium",
     "category": "strings",
     "tags": [
       "strings",
       "medium",
-      "level-1"
+      "level-2"
     ],
-    "statement": "Solve the standard Strings algorithmic challenge #1. Optimize logic for O(n) time complexity.",
-    "targetTimeComplexity": "O(n log n)",
+    "statement": "Given a string `s`, find the length of the longest substring without repeating characters.",
+    "targetTimeComplexity": "O(n)",
     "targetSpaceComplexity": "O(n)",
     "timeLimitMs": 2000,
     "memoryLimitKb": 131072,
     "timerDurationSeconds": 1800,
     "visibleTestCases": [
       {
-        "input": "Sample Input",
-        "output": "Sample Output"
+        "input": "abcabcbb",
+        "output": "3"
       }
     ],
     "hiddenTestCases": [
@@ -858,25 +891,25 @@
     ]
   },
   {
-    "id": "strings-2-strings-problem-2",
-    "title": "Strings Problem 2",
-    "difficulty": "hard",
+    "id": "strings-3-longest-palindromic-substring",
+    "title": "Longest Palindromic Substring",
+    "difficulty": "medium",
     "category": "strings",
     "tags": [
       "strings",
-      "hard",
-      "level-2"
+      "medium",
+      "level-3"
     ],
-    "statement": "Solve the standard Strings algorithmic challenge #2. Optimize logic for O(n) time complexity.",
-    "targetTimeComplexity": "O(n)",
+    "statement": "Given a string `s`, return the longest palindromic substring in `s`.",
+    "targetTimeComplexity": "O(n^2)",
     "targetSpaceComplexity": "O(1)",
     "timeLimitMs": 2000,
     "memoryLimitKb": 131072,
     "timerDurationSeconds": 1800,
     "visibleTestCases": [
       {
-        "input": "Sample Input",
-        "output": "Sample Output"
+        "input": "babad",
+        "output": "bab"
       }
     ],
     "hiddenTestCases": [
@@ -891,49 +924,16 @@
     ]
   },
   {
-    "id": "strings-3-strings-problem-3",
-    "title": "Strings Problem 3",
+    "id": "strings-4-valid-palindrome",
+    "title": "Valid Palindrome",
     "difficulty": "easy",
     "category": "strings",
     "tags": [
       "strings",
       "easy",
-      "level-3"
-    ],
-    "statement": "Solve the standard Strings algorithmic challenge #3. Optimize logic for O(n) time complexity.",
-    "targetTimeComplexity": "O(n log n)",
-    "targetSpaceComplexity": "O(n)",
-    "timeLimitMs": 2000,
-    "memoryLimitKb": 131072,
-    "timerDurationSeconds": 1800,
-    "visibleTestCases": [
-      {
-        "input": "Sample Input",
-        "output": "Sample Output"
-      }
-    ],
-    "hiddenTestCases": [
-      {
-        "input": "Hidden Test 1",
-        "output": "Hidden Output 1"
-      },
-      {
-        "input": "Hidden Test 2",
-        "output": "Hidden Output 2"
-      }
-    ]
-  },
-  {
-    "id": "strings-4-strings-problem-4",
-    "title": "Strings Problem 4",
-    "difficulty": "medium",
-    "category": "strings",
-    "tags": [
-      "strings",
-      "medium",
       "level-4"
     ],
-    "statement": "Solve the standard Strings algorithmic challenge #4. Optimize logic for O(n) time complexity.",
+    "statement": "Given a string `s`, return `true` if it is a palindrome, considering only alphanumeric characters and ignoring cases.",
     "targetTimeComplexity": "O(n)",
     "targetSpaceComplexity": "O(1)",
     "timeLimitMs": 2000,
@@ -941,8 +941,8 @@
     "timerDurationSeconds": 1800,
     "visibleTestCases": [
       {
-        "input": "Sample Input",
-        "output": "Sample Output"
+        "input": "A man, a plan, a canal: Panama",
+        "output": "true"
       }
     ],
     "hiddenTestCases": [
@@ -957,25 +957,25 @@
     ]
   },
   {
-    "id": "strings-5-strings-problem-5",
-    "title": "Strings Problem 5",
-    "difficulty": "hard",
+    "id": "strings-5-group-anagrams",
+    "title": "Group Anagrams",
+    "difficulty": "medium",
     "category": "strings",
     "tags": [
       "strings",
-      "hard",
+      "medium",
       "level-5"
     ],
-    "statement": "Solve the standard Strings algorithmic challenge #5. Optimize logic for O(n) time complexity.",
-    "targetTimeComplexity": "O(n log n)",
-    "targetSpaceComplexity": "O(n)",
+    "statement": "Given an array of strings `strs`, group the anagrams together. You can return the answer in any order.",
+    "targetTimeComplexity": "O(n * k log k)",
+    "targetSpaceComplexity": "O(n * k)",
     "timeLimitMs": 2000,
     "memoryLimitKb": 131072,
     "timerDurationSeconds": 1800,
     "visibleTestCases": [
       {
-        "input": "Sample Input",
-        "output": "Sample Output"
+        "input": "6\neat tea tan ate nat bat",
+        "output": "[[\"bat\"],[\"nat\",\"tan\"],[\"ate\",\"eat\",\"tea\"]]"
       }
     ],
     "hiddenTestCases": [
@@ -1650,49 +1650,16 @@
     ]
   },
   {
-    "id": "dynamic-programming-1-dynamic-programming-problem-1",
-    "title": "Dynamic Programming Problem 1",
-    "difficulty": "medium",
+    "id": "dynamic-programming-1-climbing-stairs",
+    "title": "Climbing Stairs",
+    "difficulty": "easy",
     "category": "dynamic-programming",
     "tags": [
       "dynamic-programming",
-      "medium",
+      "easy",
       "level-1"
     ],
-    "statement": "Solve the standard Dynamic Programming algorithmic challenge #1. Optimize logic for O(n) time complexity.",
-    "targetTimeComplexity": "O(n log n)",
-    "targetSpaceComplexity": "O(n)",
-    "timeLimitMs": 2000,
-    "memoryLimitKb": 131072,
-    "timerDurationSeconds": 1800,
-    "visibleTestCases": [
-      {
-        "input": "Sample Input",
-        "output": "Sample Output"
-      }
-    ],
-    "hiddenTestCases": [
-      {
-        "input": "Hidden Test 1",
-        "output": "Hidden Output 1"
-      },
-      {
-        "input": "Hidden Test 2",
-        "output": "Hidden Output 2"
-      }
-    ]
-  },
-  {
-    "id": "dynamic-programming-2-dynamic-programming-problem-2",
-    "title": "Dynamic Programming Problem 2",
-    "difficulty": "hard",
-    "category": "dynamic-programming",
-    "tags": [
-      "dynamic-programming",
-      "hard",
-      "level-2"
-    ],
-    "statement": "Solve the standard Dynamic Programming algorithmic challenge #2. Optimize logic for O(n) time complexity.",
+    "statement": "You are climbing a staircase. It takes `n` steps to reach the top. Each time you can either climb `1` or `2` steps. In how many distinct ways can you climb to the top?",
     "targetTimeComplexity": "O(n)",
     "targetSpaceComplexity": "O(1)",
     "timeLimitMs": 2000,
@@ -1700,8 +1667,8 @@
     "timerDurationSeconds": 1800,
     "visibleTestCases": [
       {
-        "input": "Sample Input",
-        "output": "Sample Output"
+        "input": "3",
+        "output": "3"
       }
     ],
     "hiddenTestCases": [
@@ -1716,16 +1683,49 @@
     ]
   },
   {
-    "id": "dynamic-programming-3-dynamic-programming-problem-3",
-    "title": "Dynamic Programming Problem 3",
-    "difficulty": "easy",
+    "id": "dynamic-programming-2-coin-change",
+    "title": "Coin Change",
+    "difficulty": "medium",
     "category": "dynamic-programming",
     "tags": [
       "dynamic-programming",
-      "easy",
+      "medium",
+      "level-2"
+    ],
+    "statement": "You are given an integer array `coins` representing coins of different denominations and an integer `amount`. Return the fewest number of coins that you need to make up that amount.",
+    "targetTimeComplexity": "O(n * amount)",
+    "targetSpaceComplexity": "O(amount)",
+    "timeLimitMs": 2000,
+    "memoryLimitKb": 131072,
+    "timerDurationSeconds": 1800,
+    "visibleTestCases": [
+      {
+        "input": "3\n1 2 5\n11",
+        "output": "3"
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "Hidden Test 1",
+        "output": "Hidden Output 1"
+      },
+      {
+        "input": "Hidden Test 2",
+        "output": "Hidden Output 2"
+      }
+    ]
+  },
+  {
+    "id": "dynamic-programming-3-longest-increasing-subsequence",
+    "title": "Longest Increasing Subsequence",
+    "difficulty": "medium",
+    "category": "dynamic-programming",
+    "tags": [
+      "dynamic-programming",
+      "medium",
       "level-3"
     ],
-    "statement": "Solve the standard Dynamic Programming algorithmic challenge #3. Optimize logic for O(n) time complexity.",
+    "statement": "Given an integer array `nums`, return the length of the longest strictly increasing subsequence.",
     "targetTimeComplexity": "O(n log n)",
     "targetSpaceComplexity": "O(n)",
     "timeLimitMs": 2000,
@@ -1733,8 +1733,8 @@
     "timerDurationSeconds": 1800,
     "visibleTestCases": [
       {
-        "input": "Sample Input",
-        "output": "Sample Output"
+        "input": "6\n10 9 2 5 3 7 101 18",
+        "output": "4"
       }
     ],
     "hiddenTestCases": [
@@ -1749,8 +1749,8 @@
     ]
   },
   {
-    "id": "dynamic-programming-4-dynamic-programming-problem-4",
-    "title": "Dynamic Programming Problem 4",
+    "id": "dynamic-programming-4-0/1-knapsack",
+    "title": "0/1 Knapsack",
     "difficulty": "medium",
     "category": "dynamic-programming",
     "tags": [
@@ -1758,16 +1758,16 @@
       "medium",
       "level-4"
     ],
-    "statement": "Solve the standard Dynamic Programming algorithmic challenge #4. Optimize logic for O(n) time complexity.",
-    "targetTimeComplexity": "O(n)",
-    "targetSpaceComplexity": "O(1)",
+    "statement": "Given weights and values of `n` items, put these items in a knapsack of capacity `W` to get the maximum total value in the knapsack.",
+    "targetTimeComplexity": "O(n * W)",
+    "targetSpaceComplexity": "O(W)",
     "timeLimitMs": 2000,
     "memoryLimitKb": 131072,
     "timerDurationSeconds": 1800,
     "visibleTestCases": [
       {
-        "input": "Sample Input",
-        "output": "Sample Output"
+        "input": "3 50\n10 20 30\n60 100 120",
+        "output": "220"
       }
     ],
     "hiddenTestCases": [
@@ -2475,8 +2475,8 @@
     ]
   },
   {
-    "id": "graphs-1-graphs-problem-1",
-    "title": "Graphs Problem 1",
+    "id": "graphs-1-number-of-islands",
+    "title": "Number of Islands",
     "difficulty": "medium",
     "category": "graphs",
     "tags": [
@@ -2484,16 +2484,16 @@
       "medium",
       "level-1"
     ],
-    "statement": "Solve the standard Graphs algorithmic challenge #1. Optimize logic for O(n) time complexity.",
-    "targetTimeComplexity": "O(n log n)",
-    "targetSpaceComplexity": "O(n)",
+    "statement": "Given an `m x n` 2D binary grid `grid` which represents a map of `'1'`s (land) and `'0'`s (water), return the number of islands.",
+    "targetTimeComplexity": "O(m * n)",
+    "targetSpaceComplexity": "O(m * n)",
     "timeLimitMs": 2000,
     "memoryLimitKb": 131072,
     "timerDurationSeconds": 1800,
     "visibleTestCases": [
       {
-        "input": "Sample Input",
-        "output": "Sample Output"
+        "input": "4 5\n1 1 1 1 0\n1 1 0 1 0\n1 1 0 0 0\n0 0 0 0 0",
+        "output": "1"
       }
     ],
     "hiddenTestCases": [
@@ -2508,25 +2508,25 @@
     ]
   },
   {
-    "id": "graphs-2-graphs-problem-2",
-    "title": "Graphs Problem 2",
-    "difficulty": "hard",
+    "id": "graphs-2-clone-graph",
+    "title": "Clone Graph",
+    "difficulty": "medium",
     "category": "graphs",
     "tags": [
       "graphs",
-      "hard",
+      "medium",
       "level-2"
     ],
-    "statement": "Solve the standard Graphs algorithmic challenge #2. Optimize logic for O(n) time complexity.",
-    "targetTimeComplexity": "O(n)",
-    "targetSpaceComplexity": "O(1)",
+    "statement": "Given a reference of a node in a connected undirected graph, return a deep copy (clone) of the graph.",
+    "targetTimeComplexity": "O(V + E)",
+    "targetSpaceComplexity": "O(V)",
     "timeLimitMs": 2000,
     "memoryLimitKb": 131072,
     "timerDurationSeconds": 1800,
     "visibleTestCases": [
       {
-        "input": "Sample Input",
-        "output": "Sample Output"
+        "input": "4\n2 4\n1 3\n2 4\n1 3",
+        "output": "Cloned Graph Structure"
       }
     ],
     "hiddenTestCases": [
@@ -2541,25 +2541,25 @@
     ]
   },
   {
-    "id": "graphs-3-graphs-problem-3",
-    "title": "Graphs Problem 3",
-    "difficulty": "easy",
+    "id": "graphs-3-course-schedule",
+    "title": "Course Schedule",
+    "difficulty": "medium",
     "category": "graphs",
     "tags": [
       "graphs",
-      "easy",
+      "medium",
       "level-3"
     ],
-    "statement": "Solve the standard Graphs algorithmic challenge #3. Optimize logic for O(n) time complexity.",
-    "targetTimeComplexity": "O(n log n)",
-    "targetSpaceComplexity": "O(n)",
+    "statement": "There are a total of `numCourses` courses you have to take, labeled from `0` to `numCourses - 1`. Return `true` if you can finish all courses given prerequisite dependencies.",
+    "targetTimeComplexity": "O(V + E)",
+    "targetSpaceComplexity": "O(V + E)",
     "timeLimitMs": 2000,
     "memoryLimitKb": 131072,
     "timerDurationSeconds": 1800,
     "visibleTestCases": [
       {
-        "input": "Sample Input",
-        "output": "Sample Output"
+        "input": "2\n1 0",
+        "output": "true"
       }
     ],
     "hiddenTestCases": [
@@ -4125,8 +4125,8 @@
     ]
   },
   {
-    "id": "backtracking-1-backtracking-problem-1",
-    "title": "Backtracking Problem 1",
+    "id": "backtracking-1-subsets",
+    "title": "Subsets",
     "difficulty": "medium",
     "category": "backtracking",
     "tags": [
@@ -4134,16 +4134,16 @@
       "medium",
       "level-1"
     ],
-    "statement": "Solve the standard Backtracking algorithmic challenge #1. Optimize logic for O(n) time complexity.",
-    "targetTimeComplexity": "O(n log n)",
+    "statement": "Given an integer array `nums` of unique elements, return all possible subsets (the power set).\n\nThe solution set must not contain duplicate subsets. Return the solution in any order.",
+    "targetTimeComplexity": "O(2^n)",
     "targetSpaceComplexity": "O(n)",
     "timeLimitMs": 2000,
     "memoryLimitKb": 131072,
     "timerDurationSeconds": 1800,
     "visibleTestCases": [
       {
-        "input": "Sample Input",
-        "output": "Sample Output"
+        "input": "3\n1 2 3",
+        "output": "[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]"
       }
     ],
     "hiddenTestCases": [
@@ -4158,91 +4158,25 @@
     ]
   },
   {
-    "id": "backtracking-2-backtracking-problem-2",
-    "title": "Backtracking Problem 2",
-    "difficulty": "hard",
-    "category": "backtracking",
-    "tags": [
-      "backtracking",
-      "hard",
-      "level-2"
-    ],
-    "statement": "Solve the standard Backtracking algorithmic challenge #2. Optimize logic for O(n) time complexity.",
-    "targetTimeComplexity": "O(n)",
-    "targetSpaceComplexity": "O(1)",
-    "timeLimitMs": 2000,
-    "memoryLimitKb": 131072,
-    "timerDurationSeconds": 1800,
-    "visibleTestCases": [
-      {
-        "input": "Sample Input",
-        "output": "Sample Output"
-      }
-    ],
-    "hiddenTestCases": [
-      {
-        "input": "Hidden Test 1",
-        "output": "Hidden Output 1"
-      },
-      {
-        "input": "Hidden Test 2",
-        "output": "Hidden Output 2"
-      }
-    ]
-  },
-  {
-    "id": "backtracking-3-backtracking-problem-3",
-    "title": "Backtracking Problem 3",
-    "difficulty": "easy",
-    "category": "backtracking",
-    "tags": [
-      "backtracking",
-      "easy",
-      "level-3"
-    ],
-    "statement": "Solve the standard Backtracking algorithmic challenge #3. Optimize logic for O(n) time complexity.",
-    "targetTimeComplexity": "O(n log n)",
-    "targetSpaceComplexity": "O(n)",
-    "timeLimitMs": 2000,
-    "memoryLimitKb": 131072,
-    "timerDurationSeconds": 1800,
-    "visibleTestCases": [
-      {
-        "input": "Sample Input",
-        "output": "Sample Output"
-      }
-    ],
-    "hiddenTestCases": [
-      {
-        "input": "Hidden Test 1",
-        "output": "Hidden Output 1"
-      },
-      {
-        "input": "Hidden Test 2",
-        "output": "Hidden Output 2"
-      }
-    ]
-  },
-  {
-    "id": "backtracking-4-backtracking-problem-4",
-    "title": "Backtracking Problem 4",
+    "id": "backtracking-2-permutations",
+    "title": "Permutations",
     "difficulty": "medium",
     "category": "backtracking",
     "tags": [
       "backtracking",
       "medium",
-      "level-4"
+      "level-2"
     ],
-    "statement": "Solve the standard Backtracking algorithmic challenge #4. Optimize logic for O(n) time complexity.",
-    "targetTimeComplexity": "O(n)",
-    "targetSpaceComplexity": "O(1)",
+    "statement": "Given an array `nums` of distinct integers, return all the possible permutations. You can return the answer in any order.",
+    "targetTimeComplexity": "O(n!)",
+    "targetSpaceComplexity": "O(n)",
     "timeLimitMs": 2000,
     "memoryLimitKb": 131072,
     "timerDurationSeconds": 1800,
     "visibleTestCases": [
       {
-        "input": "Sample Input",
-        "output": "Sample Output"
+        "input": "3\n1 2 3",
+        "output": "[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]"
       }
     ],
     "hiddenTestCases": [
@@ -4257,25 +4191,91 @@
     ]
   },
   {
-    "id": "backtracking-5-backtracking-problem-5",
-    "title": "Backtracking Problem 5",
-    "difficulty": "hard",
+    "id": "backtracking-3-combination-sum",
+    "title": "Combination Sum",
+    "difficulty": "medium",
     "category": "backtracking",
     "tags": [
       "backtracking",
-      "hard",
-      "level-5"
+      "medium",
+      "level-3"
     ],
-    "statement": "Solve the standard Backtracking algorithmic challenge #5. Optimize logic for O(n) time complexity.",
-    "targetTimeComplexity": "O(n log n)",
-    "targetSpaceComplexity": "O(n)",
+    "statement": "Given an array of distinct integers `candidates` and a target integer `target`, return a list of all unique combinations of `candidates` where the chosen numbers sum to `target`.",
+    "targetTimeComplexity": "O(2^t)",
+    "targetSpaceComplexity": "O(t)",
     "timeLimitMs": 2000,
     "memoryLimitKb": 131072,
     "timerDurationSeconds": 1800,
     "visibleTestCases": [
       {
-        "input": "Sample Input",
-        "output": "Sample Output"
+        "input": "4\n2 3 6 7\n7",
+        "output": "[[2,2,3],[7]]"
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "Hidden Test 1",
+        "output": "Hidden Output 1"
+      },
+      {
+        "input": "Hidden Test 2",
+        "output": "Hidden Output 2"
+      }
+    ]
+  },
+  {
+    "id": "backtracking-4-n-queens",
+    "title": "N-Queens",
+    "difficulty": "hard",
+    "category": "backtracking",
+    "tags": [
+      "backtracking",
+      "hard",
+      "level-4"
+    ],
+    "statement": "The n-queens puzzle is the problem of placing `n` queens on an `n x n` chessboard such that no two queens attack each other.\n\nGiven an integer `n`, return all distinct solutions to the n-queens puzzle.",
+    "targetTimeComplexity": "O(n!)",
+    "targetSpaceComplexity": "O(n^2)",
+    "timeLimitMs": 2000,
+    "memoryLimitKb": 131072,
+    "timerDurationSeconds": 1800,
+    "visibleTestCases": [
+      {
+        "input": "4",
+        "output": "[[.Q..,...Q,Q...,..Q.],[..Q.,Q...,...Q,.Q..]]"
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "Hidden Test 1",
+        "output": "Hidden Output 1"
+      },
+      {
+        "input": "Hidden Test 2",
+        "output": "Hidden Output 2"
+      }
+    ]
+  },
+  {
+    "id": "backtracking-5-word-search",
+    "title": "Word Search",
+    "difficulty": "medium",
+    "category": "backtracking",
+    "tags": [
+      "backtracking",
+      "medium",
+      "level-5"
+    ],
+    "statement": "Given an `m x n` grid of characters `board` and a string `word`, return `true` if `word` exists in the grid using sequential adjacent cells.",
+    "targetTimeComplexity": "O(m*n*4^L)",
+    "targetSpaceComplexity": "O(L)",
+    "timeLimitMs": 2000,
+    "memoryLimitKb": 131072,
+    "timerDurationSeconds": 1800,
+    "visibleTestCases": [
+      {
+        "input": "3 4\nA B C E\nS F C S\nA D E E\nABCCED",
+        "output": "true"
       }
     ],
     "hiddenTestCases": [
