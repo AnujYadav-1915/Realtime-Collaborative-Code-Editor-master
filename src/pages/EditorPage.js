@@ -2431,7 +2431,7 @@ const EditorPage = () => {
             )}
           </div>
 
-          {auth.currentUser ? (
+          {auth?.currentUser ? (
             <button
               type="button"
               onClick={() => setActiveToolModal("profile")}
