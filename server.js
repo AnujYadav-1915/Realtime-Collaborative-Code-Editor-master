@@ -1393,6 +1393,7 @@ app.get('/api/problems', (req, res) => {
             problems: paginated.map((problem) => ({
                 id: problem.id,
                 title: problem.title,
+                statement: problem.statement || '',
                 difficulty: problem.difficulty || 'medium',
                 category: problem.category || 'other',
                 tags: problem.tags || [],

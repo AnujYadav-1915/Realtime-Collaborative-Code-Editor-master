@@ -2293,9 +2293,18 @@ const EditorPage = () => {
       {/* 1. LEETCODE TOP NAVIGATION BAR */}
       <header className="leetcodeTopBar flex items-center justify-between px-4 py-2 border-b border-[#2d2d2d] bg-[#1c1c1c] z-50 select-none">
         <div className="flex items-center gap-3">
-          <a href="/" className="flex items-center gap-2 font-bold text-emerald-400 hover:opacity-90">
-            <span className="text-xl">⚡</span>
-            <span className="hidden sm:inline text-sm font-extrabold text-white">Sync Code</span>
+          <a href="/" className="flex items-center gap-2 font-bold hover:opacity-90 transition group">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-400 to-teal-600 shadow-md shadow-emerald-900/40">
+              <svg className="h-4 w-4 text-slate-950 font-bold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M16 3h5v5" />
+                <path d="M8 21H3v-5" />
+                <path d="M21 3L14 10" />
+                <path d="M3 21l7-7" />
+              </svg>
+            </div>
+            <span className="hidden sm:inline text-sm font-extrabold text-white tracking-wide group-hover:text-emerald-400 transition">
+              SYNC <span className="text-emerald-400">CODE</span>
+            </span>
           </a>
 
           <div className="h-4 w-[1px] bg-[#333333] mx-1" />
