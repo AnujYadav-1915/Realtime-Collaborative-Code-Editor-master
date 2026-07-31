@@ -79,7 +79,10 @@ for cat in categories:
             "memoryLimitKb": 131072,
             "timerDurationSeconds": 1800,
             "visibleTestCases": [{"input": vis[0][0], "output": vis[0][1]}],
-            "hiddenTestCases": [{"input": "Hidden Test 1", "output": "Hidden Output 1"}, {"input": "Hidden Test 2", "output": "Hidden Output 2"}]
+            "hiddenTestCases": [
+                {"input": "3\n3 2 4\n6", "output": "1 2"},
+                {"input": "3\n3 3\n6", "output": "0 1"}
+            ]
         })
 
 os.makedirs("data", exist_ok=True)
