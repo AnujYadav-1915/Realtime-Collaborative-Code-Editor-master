@@ -214,6 +214,7 @@ const defaultProblemLibrary = [
 
 const createDefaultRoomState = () => ({
     ownerUsername: '',
+    maxCapacity: 10,
     latestCode: '',
     problem: {
         title: '',
@@ -234,6 +235,7 @@ const createDefaultRoomState = () => ({
 
 const sanitizeRoomState = (roomState = createDefaultRoomState()) => ({
     ownerUsername: roomState.ownerUsername,
+    maxCapacity: roomState.maxCapacity || 10,
     latestCode: roomState.latestCode,
     problem: {
         ...roomState.problem,
@@ -2222,6 +2224,54 @@ app.get('/api/solution-notebook/compare', (req, res) => {
     }
 });
 
+app.post('/api/rooms/create', (req, res) => {
+    try {
+        const {roomId = '', maxCapacity = 10, ownerUsername = ''} = req.body || {};
+        const id = `${roomId}`.trim();
+        if (!id) {
+            return res.status(400).json({error: 'Room ID is required.'});
+        }
+
+        const capacity = Math.min(100, Math.max(2, parseInt(maxCapacity, 10) || 10));
+        roomStateMap[id] = roomStateMap[id] || createDefaultRoomState();
+        roomStateMap[id].maxCapacity = capacity;
+        if (ownerUsername) {
+            roomStateMap[id].ownerUsername = ownerUsername;
+        }
+        persistRoomStates(roomStateMap);
+
+        return res.status(201).json({
+            roomId: id,
+            maxCapacity: capacity,
+            ownerUsername: roomStateMap[id].ownerUsername || '',
+            message: `Room created with capacity of ${capacity} users.`,
+        });
+    } catch (error) {
+        return res.status(500).json({error: 'Failed to create room.'});
+    }
+});
+
+app.get('/api/rooms/:roomId/exists', (req, res) => {
+    try {
+        const roomId = req.params.roomId;
+        const exists = Boolean(roomId && roomStateMap[roomId]);
+        const state = exists ? roomStateMap[roomId] : null;
+        const currentOccupants = exists ? getAllConnectedClients(roomId).length : 0;
+        const maxCapacity = state?.maxCapacity || 10;
+        const isFull = currentOccupants >= maxCapacity;
+
+        return res.status(200).json({
+            exists,
+            roomId,
+            currentOccupants,
+            maxCapacity,
+            isFull,
+        });
+    } catch (error) {
+        return res.status(500).json({error: 'Failed to validate room.'});
+    }
+});
+
 app.post('/api/run', async (req, res) => {
     try {
         const {roomId, language, code, stdin = '', visibleTestCases = [], hiddenTestCases = [], timeLimitMs, memoryLimitKb, username = ''} = req.body;
@@ -2504,6 +2554,19 @@ io.on('connection', (socket) => {
             io.to(socket.id).emit(ACTIONS.JOIN_REJECTED, {
                 roomId,
                 reason: 'Room does not exist. Ask host for a valid room ID or create a new room first.',
+            });
+            return;
+        }
+
+        const roomState = roomStateMap[roomId];
+        const existingClients = getAllConnectedClients(roomId);
+        const maxCapacity = roomState.maxCapacity || 10;
+        const isRejoining = existingClients.some((client) => client.username === username);
+
+        if (!isRejoining && existingClients.length >= maxCapacity) {
+            io.to(socket.id).emit(ACTIONS.JOIN_REJECTED, {
+                roomId,
+                reason: `Room capacity limit reached (${existingClients.length}/${maxCapacity} participants).`,
             });
             return;
         }
