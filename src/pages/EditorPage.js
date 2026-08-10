@@ -246,8 +246,8 @@ const EditorPage = () => {
   const [nextRecommendedProblem, setNextRecommendedProblem] = useState(null);
   const [isLoadingNextRecommendation, setIsLoadingNextRecommendation] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-  const [showWhiteboard, setShowWhiteboard] = useState(false);
   const [whiteboardStrokes, setWhiteboardStrokes] = useState([]);
+  const [showRoomCreatedModal, setShowRoomCreatedModal] = useState(() => Boolean(location.state?.isNewRoom));
   const [whiteboardColor, setWhiteboardColor] = useState("#8B5CF6");
   const [whiteboardBrushSize, setWhiteboardBrushSize] = useState(2);
   const [voiceEnabled, setVoiceEnabled] = useState(false);
@@ -2737,6 +2737,80 @@ const EditorPage = () => {
                 📋 Copy Room Link / ID
               </button>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* ROOM CREATED ONBOARDING MODAL */}
+      {showRoomCreatedModal && (
+        <div className="fixed inset-0 z-[250] flex items-center justify-center bg-black/80 backdrop-blur-md p-4" onClick={() => setShowRoomCreatedModal(false)}>
+          <div className="relative w-full max-w-lg rounded-3xl border border-emerald-500/40 bg-[#121816] p-7 shadow-[0_25px_90px_rgba(0,0,0,0.9)] text-white space-y-5" onClick={(e) => e.stopPropagation()}>
+            <button type="button" onClick={() => setShowRoomCreatedModal(false)} className="absolute right-5 top-5 flex h-9 w-9 items-center justify-center rounded-full border border-emerald-500/20 bg-emerald-950/40 text-gray-400 hover:text-white hover:border-emerald-500 transition">
+              ✕
+            </button>
+
+            <div className="flex items-center gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 text-2xl shadow-lg shadow-emerald-950">
+                🎉
+              </div>
+              <div>
+                <span className="text-[11px] font-bold uppercase tracking-widest text-emerald-400 bg-emerald-950/80 px-2.5 py-0.5 rounded-full border border-emerald-700/50">
+                  Host Dashboard
+                </span>
+                <h3 className="text-xl font-extrabold tracking-tight text-white mt-1">Your Room is Live & Ready!</h3>
+              </div>
+            </div>
+
+            <p className="text-xs text-gray-300 leading-relaxed">
+              You are the <strong className="text-emerald-400">Host</strong> of this session. Share the room link or ID below with your peers to start real-time collaborative pair-programming.
+            </p>
+
+            <div className="grid grid-cols-2 gap-3 p-3.5 rounded-2xl border border-emerald-800/40 bg-[#0a0f0d]">
+              <div>
+                <span className="text-[10px] uppercase font-bold text-gray-400 block">Room Capacity</span>
+                <span className="text-sm font-bold text-emerald-400 mt-0.5 block">
+                  1 / {location.state?.maxCapacity || roomState?.maxCapacity || 10} Connected
+                </span>
+              </div>
+              <div>
+                <span className="text-[10px] uppercase font-bold text-gray-400 block">Host User</span>
+                <span className="text-sm font-bold text-gray-200 mt-0.5 block truncate">
+                  {profileName}
+                </span>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <div>
+                <label className="block text-[11px] font-semibold uppercase tracking-wider text-gray-400 mb-1.5">
+                  Room ID
+                </label>
+                <div className="flex items-center gap-2 rounded-xl border border-emerald-700/50 bg-[#0a0f0d] p-2.5">
+                  <input type="text" readOnly value={roomId || ''} className="flex-1 bg-transparent text-xs font-mono text-emerald-300 outline-none select-all" />
+                  <button type="button" onClick={() => { navigator.clipboard.writeText(roomId || ''); toast.success('Room ID copied!'); }} className="rounded-lg bg-emerald-800/70 hover:bg-emerald-700 text-emerald-200 px-3 py-1.5 text-xs font-semibold transition">
+                    Copy ID
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-semibold uppercase tracking-wider text-gray-400 mb-1.5">
+                  Shareable Invite Link
+                </label>
+                <div className="flex items-center gap-2 rounded-xl border border-emerald-700/50 bg-[#0a0f0d] p-2.5">
+                  <input type="text" readOnly value={window.location.href} className="flex-1 bg-transparent text-xs font-mono text-gray-300 outline-none truncate select-all" />
+                  <button type="button" onClick={() => { navigator.clipboard.writeText(window.location.href); toast.success('Invite link copied to clipboard!'); }} className="rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 text-xs font-bold transition">
+                    Copy Link
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-2 flex gap-3">
+              <button type="button" onClick={() => setShowRoomCreatedModal(false)} className="w-full rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white py-3 text-xs font-extrabold shadow-lg shadow-emerald-950 transition">
+                Start Coding Now ➔
+              </button>
+            </div>
           </div>
         </div>
       )}
